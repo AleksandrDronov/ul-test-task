@@ -129,18 +129,24 @@ export const AuctionDetailPageComponent = () => {
                   )}
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <Button asChild variant="outline">
-                  <Link to="/auctions/$auctionUuid/bets" params={{ auctionUuid }}>
-                    Смотреть ставки
-                  </Link>
-                </Button>
-                <Button asChild>
-                  <Link to="/auctions/$auctionUuid/bet" params={{ auctionUuid }}>
-                    {auction.trading.your.bet ? 'Изменить ставку' : 'Сделать ставку'}
-                  </Link>
-                </Button>
-              </div>
+              {(!auction.hideBetsHistory || auction.canSetBet) && (
+                <div className="flex flex-wrap gap-2">
+                  {!auction.hideBetsHistory && (
+                    <Button asChild variant="outline">
+                      <Link to="/auctions/$auctionUuid/bets" params={{ auctionUuid }}>
+                        Смотреть ставки
+                      </Link>
+                    </Button>
+                  )}
+                  {auction.canSetBet && (
+                    <Button asChild>
+                      <Link to="/auctions/$auctionUuid/bet" params={{ auctionUuid }}>
+                        {auction.trading.your.bet ? 'Изменить ставку' : 'Сделать ставку'}
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
 
             <DetailSectionComponent title="Основная информация">
