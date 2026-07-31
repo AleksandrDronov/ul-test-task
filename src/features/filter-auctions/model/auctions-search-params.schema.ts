@@ -110,6 +110,18 @@ const toOptionalBoolean = (value: unknown): boolean | undefined => {
   return undefined
 }
 
+const toNumeric = (value: unknown): number | undefined => {
+  if (typeof value === 'number') {
+    return value
+  }
+
+  if (typeof value === 'string') {
+    return Number(value)
+  }
+
+  return undefined
+}
+
 const toClampedInt = (
   value: unknown,
   { min, max, fallback }: { min: number, max: number, fallback: number },
@@ -118,8 +130,8 @@ const toClampedInt = (
     return fallback
   }
 
-  const numeric = typeof value === 'number' ? value : Number(value)
-  if (!Number.isFinite(numeric)) {
+  const numeric = toNumeric(value)
+  if (numeric === undefined || !Number.isFinite(numeric)) {
     return fallback
   }
 
@@ -132,8 +144,8 @@ const toOptionalNumber = (value: unknown): number | undefined => {
     return undefined
   }
 
-  const numeric = typeof value === 'number' ? value : Number(value)
-  if (!Number.isFinite(numeric)) {
+  const numeric = toNumeric(value)
+  if (numeric === undefined || !Number.isFinite(numeric)) {
     return undefined
   }
 
@@ -153,6 +165,71 @@ const toStatusCodes = (value: unknown): number[] | undefined => {
   return codes.length > 0 ? codes : undefined
 }
 
+const isValidDateTimeOffset = (offset: string): boolean => {
+  if (offset === 'Z') {
+    return true
+  }
+
+  const match = /^([+-])(\d{2}):(\d{2})$/.exec(offset)
+  if (!match) {
+    return false
+  }
+
+  const hours = Number(match[2])
+  const minutes = Number(match[3])
+
+  if (minutes > 59) {
+    return false
+  }
+
+  if (hours > 14) {
+    return false
+  }
+
+  if (hours === 14 && minutes > 0) {
+    return false
+  }
+
+  return true
+}
+
+const isValidDateTimeInstant = (dateTime: string): boolean => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/.exec(
+    dateTime,
+  )
+  if (!match) {
+    return false
+  }
+
+  const year = Number(match[1])
+  const month = Number(match[2])
+  const day = Number(match[3])
+  const hour = Number(match[4])
+  const minute = Number(match[5])
+  const second = Number(match[6])
+  const offset = match[7]
+
+  if (!isValidDateTimeOffset(offset)) {
+    return false
+  }
+
+  if (month < 1 || month > 12) {
+    return false
+  }
+
+  if (hour > 23 || minute > 59 || second > 59) {
+    return false
+  }
+
+  const maxDay = new Date(year, month, 0).getDate()
+  if (day < 1 || day > maxDay) {
+    return false
+  }
+
+  const timestamp = Date.parse(dateTime)
+  return Number.isFinite(timestamp)
+}
+
 const toOptionalDateTime = (value: unknown): string | undefined => {
   const dateTime = toOptionalString(value)
   if (!dateTime) {
@@ -160,6 +237,10 @@ const toOptionalDateTime = (value: unknown): string | undefined => {
   }
 
   if (!ISO_DATETIME_WITH_OFFSET.test(dateTime)) {
+    return undefined
+  }
+
+  if (!isValidDateTimeInstant(dateTime)) {
     return undefined
   }
 

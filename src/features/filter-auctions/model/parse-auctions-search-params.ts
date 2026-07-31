@@ -11,9 +11,13 @@ const DEFAULT_SEARCH_PARAMS: AuctionsSearchParams = {
 export const parseAuctionsSearchParams = (
   input: Record<string, unknown>,
 ): AuctionsSearchParams => {
-  const parsed = auctionsSearchParamsSchema.safeParse(input)
-  if (parsed.success) {
-    return parsed.data
+  try {
+    const parsed = auctionsSearchParamsSchema.safeParse(input)
+    if (parsed.success) {
+      return parsed.data
+    }
+  } catch {
+    // preprocess or schema edge cases must not escape the parser
   }
 
   return DEFAULT_SEARCH_PARAMS

@@ -59,4 +59,57 @@ describe('parseAuctionsSearchParams', () => {
     expect(result).toEqual({ page: 2, per_page: 20 })
     expect(result).not.toHaveProperty('foo')
   })
+
+  it('parses remaining untested filters', () => {
+    const result = parseAuctionsSearchParams({
+      load_city: ' Moscow ',
+      unload_city: 'Saint Petersburg',
+      load_date_from: '2026-01-15T10:30:00+03:00',
+      load_date_to: '2026-02-20T18:00:00Z',
+      is_bidder: 'false',
+      current_price_from: '500',
+      current_price_to: '1500.5',
+    })
+
+    expect(result.load_city).toBe('Moscow')
+    expect(result.unload_city).toBe('Saint Petersburg')
+    expect(result.load_date_from).toBe('2026-01-15T10:30:00+03:00')
+    expect(result.load_date_to).toBe('2026-02-20T18:00:00Z')
+    expect(result.is_bidder).toBe(false)
+    expect(result.current_price_from).toBe(500)
+    expect(result.current_price_to).toBe(1500.5)
+  })
+
+  it('returns fallback without throwing for wholly unusable or hostile input', () => {
+    const fallback = { page: 1, per_page: 20 }
+    const throwingValueOf = {
+      valueOf: () => {
+        throw new Error('valueOf failed')
+      },
+    }
+
+    expect(parseAuctionsSearchParams({ page: Symbol('page') })).toEqual(fallback)
+    expect(parseAuctionsSearchParams({ page: throwingValueOf })).toEqual(fallback)
+    expect(parseAuctionsSearchParams({ page: { nested: true } })).toEqual(fallback)
+    expect(parseAuctionsSearchParams({ status: [['Leading']] })).toEqual(fallback)
+    expect(parseAuctionsSearchParams(null as unknown as Record<string, unknown>)).toEqual(fallback)
+    expect(parseAuctionsSearchParams(42 as unknown as Record<string, unknown>)).toEqual(fallback)
+  })
+
+  it('drops impossible date-time values while preserving other valid filters', () => {
+    const result = parseAuctionsSearchParams({
+      page: '3',
+      cargo_num: 'ABC',
+      load_date_from: '2026-99-99T99:99:99+99:99',
+      load_date_to: '2026-01-15T10:30:00+03:00',
+    })
+
+    expect(result).toEqual({
+      page: 3,
+      per_page: 20,
+      cargo_num: 'ABC',
+      load_date_to: '2026-01-15T10:30:00+03:00',
+    })
+    expect(result.load_date_from).toBeUndefined()
+  })
 })
