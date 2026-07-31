@@ -155,7 +155,7 @@ export const AuctionDetailPageComponent = () => {
               <DetailFieldComponent label="КПП" value={auction.organizer.organizationKpp ?? '—'} />
             </DetailSectionComponent>
 
-            {auction.contacts.length > 0 && (
+            {!auction.hidePointsAddressAndContacts && auction.contacts.length > 0 && (
               <DetailSectionComponent title="Контакты">
                 <div className="space-y-3">
                   {auction.contacts.map((contact, index) => (

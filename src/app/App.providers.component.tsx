@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { ApiError } from '@/shared/api/api-error'
 import { Toaster } from '@/shared/ui/sonner'
+import { TooltipProvider } from '@/shared/ui/tooltip'
 
 /**
  * A 4xx `ApiError` (401/404/422) is a definitive answer, not a transient
@@ -32,8 +33,10 @@ type AppProvidersProps = {
 export const AppProviders = ({ children }: AppProvidersProps) => {
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      <Toaster />
+      <TooltipProvider>
+        {children}
+        <Toaster />
+      </TooltipProvider>
     </QueryClientProvider>
   )
 }

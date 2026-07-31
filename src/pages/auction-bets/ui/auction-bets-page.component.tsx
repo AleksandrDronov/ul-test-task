@@ -30,7 +30,9 @@ const PageSkeleton = () => (
 export const AuctionBetsPageComponent = () => {
   const { auctionUuid } = routeApi.useParams()
   const detailQuery = useAuctionDetailQuery(auctionUuid)
-  const betsQuery = useAuctionBetsQuery(auctionUuid)
+  const betsQuery = useAuctionBetsQuery(auctionUuid, undefined, {
+    enabled: detailQuery.isSuccess && !detailQuery.data.hideBetsHistory,
+  })
 
   const isNotFound = detailQuery.error instanceof ApiError && detailQuery.error.status === 404
 
