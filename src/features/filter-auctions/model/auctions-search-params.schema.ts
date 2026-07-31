@@ -165,6 +165,19 @@ const toStatusCodes = (value: unknown): number[] | undefined => {
   return codes.length > 0 ? codes : undefined
 }
 
+const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] as const
+
+const isLeapYear = (year: number): boolean =>
+  year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)
+
+const getDaysInMonth = (year: number, month: number): number => {
+  if (month === 2 && isLeapYear(year)) {
+    return 29
+  }
+
+  return DAYS_IN_MONTH[month - 1]
+}
+
 const isValidDateTimeOffset = (offset: string): boolean => {
   if (offset === 'Z') {
     return true
@@ -221,7 +234,7 @@ const isValidDateTimeInstant = (dateTime: string): boolean => {
     return false
   }
 
-  const maxDay = new Date(year, month, 0).getDate()
+  const maxDay = getDaysInMonth(year, month)
   if (day < 1 || day > maxDay) {
     return false
   }

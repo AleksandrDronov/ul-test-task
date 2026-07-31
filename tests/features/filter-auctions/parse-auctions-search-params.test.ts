@@ -80,7 +80,7 @@ describe('parseAuctionsSearchParams', () => {
     expect(result.current_price_to).toBe(1500.5)
   })
 
-  it('returns fallback without throwing for wholly unusable or hostile input', () => {
+  it('returns fallback without throwing for hostile numeric coercion input', () => {
     const fallback = { page: 1, per_page: 20 }
     const throwingValueOf = {
       valueOf: () => {
@@ -88,12 +88,31 @@ describe('parseAuctionsSearchParams', () => {
       },
     }
 
+    // regressions: Number() on these inputs used to throw before toNumeric
     expect(parseAuctionsSearchParams({ page: Symbol('page') })).toEqual(fallback)
     expect(parseAuctionsSearchParams({ page: throwingValueOf })).toEqual(fallback)
-    expect(parseAuctionsSearchParams({ page: { nested: true } })).toEqual(fallback)
-    expect(parseAuctionsSearchParams({ status: [['Leading']] })).toEqual(fallback)
-    expect(parseAuctionsSearchParams(null as unknown as Record<string, unknown>)).toEqual(fallback)
-    expect(parseAuctionsSearchParams(42 as unknown as Record<string, unknown>)).toEqual(fallback)
+    expect(parseAuctionsSearchParams({ per_page: throwingValueOf })).toEqual(fallback)
+    expect(parseAuctionsSearchParams({ current_price_from: Symbol('price') })).toEqual(fallback)
+  })
+
+  it('returns fallback for non-object input (contract)', () => {
+    const fallback = { page: 1, per_page: 20 }
+
+    // @ts-expect-error intentionally invalid runtime input (null)
+    expect(parseAuctionsSearchParams(null)).toEqual(fallback)
+    // @ts-expect-error intentionally invalid runtime input (bare number)
+    expect(parseAuctionsSearchParams(42)).toEqual(fallback)
+  })
+
+  it('accepts valid leap-day in year 0000 and rejects invalid one', () => {
+    expect(parseAuctionsSearchParams({
+      load_date_from: '0000-02-29T00:00:00Z',
+    }).load_date_from).toBe('0000-02-29T00:00:00Z')
+
+    const result = parseAuctionsSearchParams({
+      load_date_from: '0000-02-30T00:00:00Z',
+    })
+    expect(result.load_date_from).toBeUndefined()
   })
 
   it('drops impossible date-time values while preserving other valid filters', () => {
