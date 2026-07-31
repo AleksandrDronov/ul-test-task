@@ -1,5 +1,6 @@
 import type { components } from '@/shared/api/types/openapi'
 import { getAuctionStatusCode } from '@/shared/config/auction-status-map'
+import { toListStatusMobile } from './list-status-mobile'
 import { SEED_AUCTIONS } from './seed'
 
 type AuctionListRequest = components['schemas']['AuctionListRequest']
@@ -11,7 +12,6 @@ type BetItem = components['schemas']['BetItem']
 type BetListResponse = components['schemas']['BetListResponse']
 type ProblemDetail = components['schemas']['ProblemDetail']
 type ValidationProblem = components['schemas']['ValidationProblem']
-type ListStatusMobile = NonNullable<NonNullable<AuctionListItem['trading']>['status_mobile']>
 
 export type AuctionRecord = {
   detail: AuctionShowResponse
@@ -42,6 +42,9 @@ const FLOAT_EPSILON = 1e-6
 
 const round2 = (value: number): number => Math.round(value * 100) / 100
 const toNoVat = (value: number): number => round2(value / (1 + VAT_RATE))
+
+/** Matches the seed data's plain `YYYY-MM-DDTHH:mm:ss` timestamp format (no ms, no `Z`). */
+const formatTimestamp = (date: Date): string => date.toISOString().slice(0, 19)
 
 let auctions: AuctionRecord[] = cloneSeed()
 
@@ -78,19 +81,6 @@ const isOnStep = (price: number, max: number, step: number): boolean => {
   return Math.abs(stepsFromMax - Math.round(stepsFromMax)) < FLOAT_EPSILON
 }
 
-const toListStatusMobile = (status: components['schemas']['TradingStatus'] | undefined): ListStatusMobile => {
-  switch (status) {
-    case 'NotParticipating':
-    case 'Leading':
-    case 'Losing':
-    case 'Winner':
-    case 'Confirmed':
-      return status
-    default:
-      return 'Unknown'
-  }
-}
-
 const syncListItem = (record: AuctionRecord): void => {
   const { detail, listItem } = record
   const detailTrading = detail.trading
@@ -115,6 +105,29 @@ const syncListItem = (record: AuctionRecord): void => {
   }
 }
 
+/**
+ * Down-auction bet ranking: the lowest price wins, so `place` is assigned
+ * in ascending price order. Rejected/cancelled bets (`is_rejected: true`)
+ * are excluded from ranking and always carry `place: null` — this mirrors
+ * how the seed data represents them (e.g. bet id 2 on auction `...0501`).
+ * Places among ranked bets are contiguous starting at 1.
+ */
+const recomputePlaces = (bets: BetItem[]): void => {
+  const ranked = bets
+    .filter((bet) => !bet.is_rejected)
+    .sort((a, b) => (a.price_with_vat ?? 0) - (b.price_with_vat ?? 0))
+
+  ranked.forEach((bet, index) => {
+    bet.place = index + 1
+  })
+
+  bets.forEach((bet) => {
+    if (bet.is_rejected) {
+      bet.place = null
+    }
+  })
+}
+
 const applyAcceptedBet = (record: AuctionRecord, price: number): void => {
   const trading = record.detail.trading
   const step = trading.price?.step ?? 0
@@ -130,7 +143,7 @@ const applyAcceptedBet = (record: AuctionRecord, price: number): void => {
 
   const bet: BetItem = {
     id: nextId,
-    created_at: new Date().toISOString(),
+    created_at: formatTimestamp(new Date()),
     auction_id: record.detail.main.id ?? 0,
     subscriber_id: CURRENT_USER.subscriberId,
     contact_name: CURRENT_USER.contactName,
@@ -143,7 +156,7 @@ const applyAcceptedBet = (record: AuctionRecord, price: number): void => {
     transporter_comment: null,
     is_rejected: false,
     is_counter: false,
-    place: 1,
+    place: null,
     is_win: false,
     run_number: 0,
     cancel_reason: '',
@@ -156,6 +169,7 @@ const applyAcceptedBet = (record: AuctionRecord, price: number): void => {
   }
 
   record.bets.push(bet)
+  recomputePlaces(record.bets)
 
   trading.price = {
     ...trading.price,

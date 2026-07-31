@@ -6,6 +6,15 @@ import { getAuction, listAuctions, listBets, setBet } from './store'
 type AuctionListRequest = components['schemas']['AuctionListRequest']
 type SetBetRequest = components['schemas']['SetBetRequest']
 type ProblemDetail = components['schemas']['ProblemDetail']
+type ValidationProblem = components['schemas']['ValidationProblem']
+
+/**
+ * The OpenAPI error responses (`NotFound`, `Unauthorized`, `ServiceUnavailable`,
+ * `ValidationFailed`) all declare `application/problem+json`, not the default
+ * `application/json` that `HttpResponse.json` would otherwise set.
+ */
+const problemJson = (body: ProblemDetail | ValidationProblem, status: number) =>
+  HttpResponse.json(body, { status, headers: { 'Content-Type': 'application/problem+json' } })
 
 /**
  * Manual-testing error triggers (see task-5 brief resolution #5):
@@ -47,7 +56,7 @@ export const handlers = [
     const body = (await request.json()) as AuctionListRequest
 
     if (body.cargo_num === UNAUTHORIZED_CARGO_NUM) {
-      return HttpResponse.json(unauthorizedProblem(), { status: 401 })
+      return problemJson(unauthorizedProblem(), 401)
     }
 
     return HttpResponse.json(listAuctions(body))
@@ -57,12 +66,12 @@ export const handlers = [
     const auctionUuid = getPathParam(params.auctionUuid)
 
     if (auctionUuid === SERVICE_UNAVAILABLE_UUID) {
-      return HttpResponse.json(serviceUnavailableProblem(), { status: 503 })
+      return problemJson(serviceUnavailableProblem(), 503)
     }
 
     const auction = getAuction(auctionUuid)
     if (!auction) {
-      return HttpResponse.json(notFoundProblem(), { status: 404 })
+      return problemJson(notFoundProblem(), 404)
     }
 
     return HttpResponse.json(auction)
@@ -72,7 +81,7 @@ export const handlers = [
     const auctionUuid = getPathParam(params.auctionUuid)
 
     if (auctionUuid === SERVICE_UNAVAILABLE_UUID) {
-      return HttpResponse.json(serviceUnavailableProblem(), { status: 503 })
+      return problemJson(serviceUnavailableProblem(), 503)
     }
 
     const url = new URL(request.url)
@@ -80,7 +89,7 @@ export const handlers = [
 
     const result = listBets(auctionUuid, all)
     if (!result) {
-      return HttpResponse.json(notFoundProblem(), { status: 404 })
+      return problemJson(notFoundProblem(), 404)
     }
 
     return HttpResponse.json(result)
@@ -90,14 +99,14 @@ export const handlers = [
     const auctionUuid = getPathParam(params.auctionUuid)
 
     if (auctionUuid === SERVICE_UNAVAILABLE_UUID) {
-      return HttpResponse.json(serviceUnavailableProblem(), { status: 503 })
+      return problemJson(serviceUnavailableProblem(), 503)
     }
 
     const body = (await request.json()) as SetBetRequest
     const result = setBet(auctionUuid, body.price)
 
     if (!result.ok) {
-      return HttpResponse.json(result.body, { status: result.status })
+      return problemJson(result.body, result.status)
     }
 
     return new HttpResponse(null, { status: 200 })

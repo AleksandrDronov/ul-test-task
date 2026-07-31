@@ -115,6 +115,40 @@ describe('msw store: setBet', () => {
     expect(body.code).toBe('resource_not_found')
   })
 
+  it('recomputes places across the bet history after a new leading bet', () => {
+    // auction 501 seed: bet id 1 (48000, place 2), id 2 (47000, rejected, place null),
+    // id 3 (46000, place 1 — the seeded leader).
+    const before = listBets(ACTIVE_WITH_BETS_UUID, true)
+    expect(before?.bets.find((bet) => bet.id === 3)?.place).toBe(1)
+
+    const result = setBet(ACTIVE_WITH_BETS_UUID, 45000)
+    expect(result).toEqual({ ok: true })
+
+    const after = listBets(ACTIVE_WITH_BETS_UUID, true)
+    expect(after?.bets).toHaveLength(4)
+
+    // The previously-leading seeded bet is no longer place 1: the new, lower bid outranks it.
+    const previousLeader = after?.bets.find((bet) => bet.id === 3)
+    expect(previousLeader?.place).not.toBe(1)
+    expect(previousLeader?.place).toBe(2)
+
+    const newBet = after?.bets.find((bet) => bet.price_with_vat === 45000)
+    expect(newBet?.place).toBe(1)
+
+    const outbidBet = after?.bets.find((bet) => bet.id === 1)
+    expect(outbidBet?.place).toBe(3)
+
+    // Rejected bets stay excluded from ranking.
+    const rejectedBet = after?.bets.find((bet) => bet.id === 2)
+    expect(rejectedBet?.is_rejected).toBe(true)
+    expect(rejectedBet?.place).toBeNull()
+
+    // Places among ranked (non-rejected) bets are contiguous and unique.
+    const rankedPlaces = after?.bets.filter((bet) => !bet.is_rejected).map((bet) => bet.place)
+    expect(rankedPlaces).toEqual([3, 2, 1])
+    expect(new Set(rankedPlaces).size).toBe(rankedPlaces?.length)
+  })
+
   it('does not mutate state when a bet is rejected', () => {
     const before = getAuction(ACTIVE_WITH_BETS_UUID)
     setBet(ACTIVE_WITH_BETS_UUID, 44500)
@@ -188,6 +222,8 @@ describe('msw store: listAuctions', () => {
 
   it('filters by current_price_from / current_price_to', () => {
     const result = listAuctions({ current_price_from: 40000, current_price_to: 50000 })
+    // Seeded auctions with current price in [40000, 50000]: 501 (46000), 504 (42000), 507 (46500).
+    expect(result.data).toHaveLength(3)
     expect(result.data?.every((item) => {
       const current = item.trading?.price?.current
       return current !== undefined && current >= 40000 && current <= 50000

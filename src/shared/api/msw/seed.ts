@@ -1,4 +1,5 @@
 import type { components } from '@/shared/api/types/openapi'
+import { toListStatusMobile } from './list-status-mobile'
 import type { AuctionRecord } from './store'
 
 type AuctionShowMain = components['schemas']['AuctionShowMain']
@@ -9,27 +10,6 @@ type AuctionListItemTradingPrice = components['schemas']['AuctionListItemTrading
 type BetItem = components['schemas']['BetItem']
 type RoutePoint = components['schemas']['RoutePoint']
 type TradingStatus = components['schemas']['TradingStatus']
-type AuctionListItem = components['schemas']['AuctionListItem']
-type ListStatusMobile = NonNullable<NonNullable<AuctionListItem['trading']>['status_mobile']>
-
-/**
- * `AuctionListItemTrading.status_mobile` allows a narrower enum than the
- * detail-level `TradingStatus` (see task-5 brief note on enum asymmetry).
- * All values used by the seed data below already fall within the narrower
- * set, so this is a safe, exhaustive-by-construction mapping.
- */
-const toListStatusMobile = (status: TradingStatus): ListStatusMobile => {
-  switch (status) {
-    case 'NotParticipating':
-    case 'Leading':
-    case 'Losing':
-    case 'Winner':
-    case 'Confirmed':
-      return status
-    default:
-      return 'Unknown'
-  }
-}
 
 /** Shared organizer across all seeded auctions (single customer, "ЛИМ"). */
 const ORGANIZER: components['schemas']['AuctionShowOrganizer'] = {
