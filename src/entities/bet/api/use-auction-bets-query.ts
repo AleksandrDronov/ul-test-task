@@ -1,5 +1,5 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { auctionQueryKeys } from '@/entities/auction'
+import { betQueryKeys } from './bet.query-keys'
 import { mapBetListToVm } from '../model'
 import { fetchAuctionBets } from './bet.api'
 
@@ -13,7 +13,7 @@ export const auctionBetsQueryOptions = (
   options?: AuctionBetsQueryOptions,
 ) =>
   queryOptions({
-    queryKey: auctionQueryKeys.bets(auctionUuid, all),
+    queryKey: betQueryKeys.list(auctionUuid, all),
     queryFn: () => fetchAuctionBets(auctionUuid, all),
     select: (data) => mapBetListToVm(data.bets),
     enabled: options?.enabled,

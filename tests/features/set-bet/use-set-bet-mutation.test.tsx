@@ -3,14 +3,16 @@ import { renderHook, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { auctionQueryKeys } from '@/entities/auction'
+import { betQueryKeys } from '@/entities/bet/api/bet.query-keys'
+import { postSetBet } from '@/entities/bet/api/bet.api'
 import { useSetBetMutation } from '@/features/set-bet'
-import * as betApi from '@/entities/bet'
 
-vi.mock('@/entities/bet', () => ({
+vi.mock('@/entities/bet/api/bet.api', () => ({
   postSetBet: vi.fn(),
+  fetchAuctionBets: vi.fn(),
 }))
 
-const postSetBetMock = vi.mocked(betApi.postSetBet)
+const postSetBetMock = vi.mocked(postSetBet)
 
 const AUCTION_UUID = 'uuid-1'
 
@@ -28,9 +30,9 @@ describe('useSetBetMutation', () => {
     // default) - the invalidation must reach every one of these.
     const listKey = auctionQueryKeys.list({ page: 2, per_page: 10, cargo_num: '0001' })
     const detailKey = auctionQueryKeys.detail(AUCTION_UUID)
-    const betsDefaultKey = auctionQueryKeys.bets(AUCTION_UUID)
-    const betsAllKey = auctionQueryKeys.bets(AUCTION_UUID, true)
-    const otherAuctionBetsKey = auctionQueryKeys.bets('uuid-2')
+    const betsDefaultKey = betQueryKeys.list(AUCTION_UUID)
+    const betsAllKey = betQueryKeys.list(AUCTION_UUID, true)
+    const otherAuctionBetsKey = betQueryKeys.list('uuid-2')
 
     queryClient.setQueryData(listKey, { data: [], meta: {} })
     queryClient.setQueryData(detailKey, {})
