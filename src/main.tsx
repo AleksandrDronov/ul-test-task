@@ -1,8 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from '@tanstack/react-router'
-import { AppProviders } from '@/app/AppProviders'
-import { router } from '@/app/router'
+import { AppProviders, router } from '@/app'
 import './app/styles.css'
 
 const rootElement = document.getElementById('root')

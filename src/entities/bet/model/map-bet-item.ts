@@ -1,4 +1,4 @@
-import type { components } from '@/shared/api/types/openapi'
+import type { components } from '@/shared/api'
 import type { BetItemVm, BetListVm } from './bet.vm'
 
 type BetItem = components['schemas']['BetItem']

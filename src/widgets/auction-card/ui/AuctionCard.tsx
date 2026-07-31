@@ -3,12 +3,11 @@ import type {
   AuctionListCargoVm,
   AuctionListItemVm,
   AuctionListRoutePointVm,
-} from '@/entities/auction/model/auction-list.vm'
-import { usePrefetchAuction } from '@/features/prefetch-auction/model/use-prefetch-auction'
-import { AUCTION_STATUS_RU_LABEL, AUCTION_TYPE_RU_LABEL, TRADING_STATUS_RU_LABEL } from '@/shared/config/status-labels'
-import { formatDate, formatNumber, formatPrice, formatPricePerKm } from '@/shared/lib/format'
-import { Badge } from '@/shared/ui/badge'
-import { Button } from '@/shared/ui/button'
+} from '@/entities/auction'
+import { usePrefetchAuction } from '@/features/prefetch-auction'
+import { AUCTION_STATUS_RU_LABEL, AUCTION_TYPE_RU_LABEL, TRADING_STATUS_RU_LABEL } from '@/shared/config'
+import { formatDate, formatNumber, formatPrice, formatPricePerKm } from '@/shared/lib'
+import { Badge, Button } from '@/shared/ui'
 
 export type AuctionCardProps = {
   auction: AuctionListItemVm

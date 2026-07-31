@@ -1,4 +1,4 @@
-import type { components } from '@/shared/api/types/openapi'
+import type { components } from '@/shared/api'
 import type {
   AuctionListCargoVm,
   AuctionListItemVm,

@@ -3,8 +3,8 @@ import {
   dateToIsoRangeEnd,
   dateToIsoRangeStart,
   isoToDate,
-} from '@/shared/lib/date-input'
-import { DatePicker, type DatePickerProps } from '@/shared/ui/date-picker'
+} from '@/shared/lib'
+import { DatePicker, type DatePickerProps } from '@/shared/ui'
 import { FilterField } from './FilterField'
 
 export type DateRangeFilterProps = {

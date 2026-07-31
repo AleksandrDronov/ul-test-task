@@ -1,6 +1,6 @@
-import type { BetItemVm } from '@/entities/bet/model/bet.vm'
-import { formatDateTime, formatPrice } from '@/shared/lib/format'
-import { Badge } from '@/shared/ui/badge'
+import type { BetItemVm } from '@/entities/bet'
+import { formatDateTime, formatPrice } from '@/shared/lib'
+import { Badge } from '@/shared/ui'
 
 export type BetsTableProps = {
   bets: BetItemVm[]

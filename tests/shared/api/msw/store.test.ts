@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { getAuction, listAuctions, listBets, resetStore, setBet } from '@/shared/api/msw/store'
+import { getAuction, listAuctions, listBets, resetStore, setBet } from '@/shared/api/msw'
 
 const expectValidationError = (result: ReturnType<typeof setBet>) => {
   if (result.ok || result.status !== 422) {

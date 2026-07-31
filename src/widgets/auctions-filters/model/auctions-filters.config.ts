@@ -1,17 +1,17 @@
 import {
   AUC_TYPE_VALUES,
   TRADING_STATUS_VALUES,
-} from '@/features/filter-auctions/model/auctions-search-params.schema'
+} from '@/features/filter-auctions'
 import {
   AUCTION_STATUS_LABEL_BY_CODE,
   isAuctionStatusCode,
-} from '@/shared/config/auction-status-map'
+} from '@/shared/config'
 import {
   AUCTION_STATUS_RU_LABEL,
   AUCTION_TYPE_RU_LABEL,
   TRADING_STATUS_RU_LABEL,
-} from '@/shared/config/status-labels'
-import { type CheckboxFilterOption } from '@/widgets/auctions-filters/ui/CheckboxFilterFieldset'
+} from '@/shared/config'
+import { type CheckboxFilterOption } from '../ui/CheckboxFilterFieldset'
 
 /** Выводится из экспортированной константы (не из `openapi.d.ts`), чтобы виджеты не импортировали DTO-типы напрямую. */
 type TradingStatus = (typeof TRADING_STATUS_VALUES)[number]

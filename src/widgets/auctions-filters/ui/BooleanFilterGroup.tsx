@@ -1,6 +1,6 @@
 import { useId } from 'react'
-import { CheckboxOption } from '@/widgets/auctions-filters/ui/CheckboxFilterFieldset'
-import { type BooleanFilterOptionConfig } from '@/widgets/auctions-filters/model/auctions-filters.config'
+import { CheckboxOption } from './CheckboxFilterFieldset'
+import { type BooleanFilterOptionConfig } from '../model/auctions-filters.config'
 
 export type BooleanFilterGroupProps = {
   options: BooleanFilterOptionConfig[]

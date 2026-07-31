@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
-import type { AuctionDetailVm } from '@/entities/auction/model/auction-detail.vm'
-import { formatPrice } from '@/shared/lib/format'
-import { Button } from '@/shared/ui/button'
+import type { AuctionDetailVm } from '@/entities/auction'
+import { formatPrice } from '@/shared/lib'
+import { Button } from '@/shared/ui'
 
 export type AuctionSummaryProps = {
   auction: AuctionDetailVm

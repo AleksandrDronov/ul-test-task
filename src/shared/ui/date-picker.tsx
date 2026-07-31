@@ -3,9 +3,9 @@ import { ru as dateFnsRu } from 'date-fns/locale'
 import { CalendarIcon, ChevronDown, X } from 'lucide-react'
 import { type KeyboardEvent, type MouseEvent, useState } from 'react'
 import { ru as dayPickerRu } from 'react-day-picker/locale'
-import { cn } from '@/shared/lib/cn'
-import { Calendar } from '@/shared/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover'
+import { cn } from '@/shared/lib'
+import { Calendar } from './calendar'
+import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
 export type DatePickerProps = {
   id?: string

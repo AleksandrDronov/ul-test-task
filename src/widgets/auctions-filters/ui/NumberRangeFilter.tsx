@@ -1,6 +1,6 @@
 import { useId } from 'react'
-import { Input } from '@/shared/ui/input'
-import { FilterField } from '@/widgets/auctions-filters/ui/FilterField'
+import { Input } from '@/shared/ui'
+import { FilterField } from './FilterField'
 
 export type NumberRangeFilterProps = {
   fromLabel: string

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AuctionBetsPage } from '@/pages/auction-bets/ui/AuctionBetsPage'
+import { AuctionBetsPage } from '@/pages/auction-bets'
 
 /**
  * Завершающий `_` исключает этот роут из вложенности в `auctions.$auctionUuid.tsx`

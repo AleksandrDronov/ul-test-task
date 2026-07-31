@@ -1,8 +1,6 @@
-import { type AuctionsSearchParams } from "@/features/filter-auctions/model/auctions-search-params.schema";
-import { type AuctionsFilterPatch } from "@/features/filter-auctions/model/use-auctions-filters";
-import { CITY_NAMES } from "@/shared/api/msw/cities";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
+import { type AuctionsFilterPatch, type AuctionsSearchParams } from '@/features/filter-auctions'
+import { CITY_NAMES } from '@/shared/api/msw'
+import { Button, Input } from '@/shared/ui'
 import {
   BOOLEAN_FILTER_OPTIONS,
   CHECKBOX_FILTER_FIELDSETS,

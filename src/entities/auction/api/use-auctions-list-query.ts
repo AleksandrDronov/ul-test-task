@@ -1,5 +1,5 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import type { components } from '@/shared/api/types/openapi'
+import type { components } from '@/shared/api'
 import { mapAuctionListItemDtoToVm, mapAuctionListMetaToVm } from '../model/map-auction-list-item'
 import type { AuctionListVm } from '../model/auction-list.vm'
 import { fetchAuctionsList } from './auction.api'

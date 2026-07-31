@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { SEED_AUCTIONS } from '@/shared/api/msw/seed'
-import { mapAuctionDetailDtoToVm } from '@/entities/auction/model/map-auction-detail'
+import { SEED_AUCTIONS } from '@/shared/api/msw'
+import { mapAuctionDetailDtoToVm } from '@/entities/auction'
 
 const findDetailByCargoNum = (cargoNum: string) => {
   const record = SEED_AUCTIONS.find((item) => item.detail.main.cargo_num === cargoNum)

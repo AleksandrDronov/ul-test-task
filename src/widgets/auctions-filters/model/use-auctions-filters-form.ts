@@ -1,7 +1,6 @@
 import { useId } from 'react'
-import { type AuctionsSearchParams } from '@/features/filter-auctions/model/auctions-search-params.schema'
-import { type AuctionsFilterPatch } from '@/features/filter-auctions/model/use-auctions-filters'
-import { useDebouncedFilterField } from '@/shared/lib/use-debounced-filter-field'
+import { type AuctionsFilterPatch, type AuctionsSearchParams } from '@/features/filter-auctions'
+import { useDebouncedFilterField } from '@/shared/lib'
 
 type UseAuctionsFiltersFormParams = {
   filters: AuctionsSearchParams

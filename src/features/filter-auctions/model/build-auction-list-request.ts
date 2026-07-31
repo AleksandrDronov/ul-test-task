@@ -1,4 +1,4 @@
-import type { components } from '@/shared/api/types/openapi'
+import type { components } from '@/shared/api'
 import type { AuctionsSearchParams } from './auctions-search-params.schema'
 
 type AuctionListRequest = components['schemas']['AuctionListRequest']

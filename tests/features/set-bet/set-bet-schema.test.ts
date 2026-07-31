@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createSetBetSchema } from '@/features/set-bet/model/set-bet.schema'
+import { createSetBetSchema } from '@/features/set-bet'
 
 // Realistic trading params taken from the MSW seed, cargo_num '00000000509'
 // (min: 22000, max: 38000, step: 1000) - a `Down` auction.

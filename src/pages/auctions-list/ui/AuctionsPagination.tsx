@@ -1,5 +1,5 @@
-import type { AuctionListMetaVm } from '@/entities/auction/model/auction-list.vm'
-import { Button } from '@/shared/ui/button'
+import type { AuctionListMetaVm } from '@/entities/auction'
+import { Button } from '@/shared/ui'
 
 export type AuctionsPaginationProps = {
   meta: AuctionListMetaVm

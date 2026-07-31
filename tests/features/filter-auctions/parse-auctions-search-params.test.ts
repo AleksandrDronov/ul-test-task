@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseAuctionsSearchParams } from '@/features/filter-auctions/model/parse-auctions-search-params'
+import { parseAuctionsSearchParams } from '@/features/filter-auctions'
 
 describe('parseAuctionsSearchParams', () => {
   it('falls back to defaults for empty input', () => {

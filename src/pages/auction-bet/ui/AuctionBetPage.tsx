@@ -1,13 +1,10 @@
 import { getRouteApi, Link } from '@tanstack/react-router'
-import { useAuctionDetailQuery } from '@/entities/auction/api/use-auction-detail-query'
-import { SetBetForm } from '@/features/set-bet/ui/SetBetForm'
-import { DEFAULT_SEARCH_PARAMS } from '@/features/filter-auctions/model/parse-auctions-search-params'
-import { ApiError } from '@/shared/api/api-error'
-import { ApiErrorState } from '@/shared/ui/ApiErrorState'
-import { Button } from '@/shared/ui/button'
-import { EmptyState } from '@/shared/ui/EmptyState'
-import { Skeleton } from '@/shared/ui/skeleton'
-import { AuctionSummary } from '@/widgets/auction-summary/ui/AuctionSummary'
+import { useAuctionDetailQuery } from '@/entities/auction'
+import { DEFAULT_SEARCH_PARAMS } from '@/features/filter-auctions'
+import { SetBetForm } from '@/features/set-bet'
+import { ApiError } from '@/shared/api'
+import { ApiErrorState, Button, EmptyState, Skeleton } from '@/shared/ui'
+import { AuctionSummary } from '@/widgets/auction-summary'
 
 const routeApi = getRouteApi('/auctions_/$auctionUuid/bet')
 

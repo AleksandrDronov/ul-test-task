@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { SEED_AUCTIONS } from '@/shared/api/msw/seed'
-import { mapAuctionListItemDtoToVm } from '@/entities/auction/model/map-auction-list-item'
+import { SEED_AUCTIONS } from '@/shared/api/msw'
+import { mapAuctionListItemDtoToVm } from '@/entities/auction'
 
 const findListItemByCargoNum = (cargoNum: string) => {
   const record = SEED_AUCTIONS.find((item) => item.listItem.main?.cargo_num === cargoNum)

@@ -2,13 +2,11 @@ import { useId, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import type { AuctionDetailTradingPriceVm } from '@/entities/auction/model/auction-detail.vm'
-import { ApiError } from '@/shared/api/api-error'
-import { Button } from '@/shared/ui/button'
-import { Input } from '@/shared/ui/input'
-import { Label } from '@/shared/ui/label'
-import { useSetBetMutation } from '../api/use-set-bet-mutation'
-import { createSetBetSchema, type SetBetFormValues } from '../model/set-bet.schema'
+import type { AuctionDetailTradingPriceVm } from '@/entities/auction'
+import { ApiError } from '@/shared/api'
+import { Button, Input, Label } from '@/shared/ui'
+import { useSetBetMutation } from '../api'
+import { createSetBetSchema, type SetBetFormValues } from '../model'
 
 export type SetBetFormProps = {
   /** Аукцион, для которого размещается ставка. */

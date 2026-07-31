@@ -1,4 +1,4 @@
-import { Skeleton } from '@/shared/ui/skeleton'
+import { Skeleton } from '@/shared/ui'
 
 const CardSkeleton = () => (
   <div className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4">

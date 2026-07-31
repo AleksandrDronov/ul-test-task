@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
-import { cn } from '@/shared/lib/cn'
-import { Label } from '@/shared/ui/label'
+import { cn } from '@/shared/lib'
+import { Label } from '@/shared/ui'
 
 export type FilterFieldProps = {
   label: string

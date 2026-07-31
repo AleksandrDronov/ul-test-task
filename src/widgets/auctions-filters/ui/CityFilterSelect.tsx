@@ -1,12 +1,5 @@
 import { useId } from 'react'
-import { Label } from '@/shared/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/select'
+import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui'
 
 const ANY_CITY_VALUE = '__any__'
 

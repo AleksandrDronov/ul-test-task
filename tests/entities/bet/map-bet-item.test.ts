@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { SEED_AUCTIONS } from '@/shared/api/msw/seed'
-import { mapBetListToVm } from '@/entities/bet/model/map-bet-item'
+import { SEED_AUCTIONS } from '@/shared/api/msw'
+import { mapBetListToVm } from '@/entities/bet'
 
 const findBetsByCargoNum = (cargoNum: string) => {
   const record = SEED_AUCTIONS.find((item) => item.detail.main.cargo_num === cargoNum)

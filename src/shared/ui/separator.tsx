@@ -1,7 +1,7 @@
 import * as SeparatorPrimitive from '@radix-ui/react-separator'
 import type { ComponentPropsWithoutRef, ComponentRef } from 'react'
 import { forwardRef } from 'react'
-import { cn } from '@/shared/lib/cn'
+import { cn } from '@/shared/lib'
 
 type SeparatorProps = ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
 

@@ -1,4 +1,4 @@
-import type { components } from '@/shared/api/types/openapi'
+import type { components } from '@/shared/api'
 
 type AuctionStatus = components['schemas']['AuctionStatus']
 type TradingStatus = components['schemas']['TradingStatus']

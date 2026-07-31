@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { X } from 'lucide-react'
 import type { ComponentPropsWithoutRef, ComponentRef, HTMLAttributes } from 'react'
 import { forwardRef } from 'react'
-import { cn } from '@/shared/lib/cn'
+import { cn } from '@/shared/lib'
 
 const Sheet = SheetPrimitive.Root
 

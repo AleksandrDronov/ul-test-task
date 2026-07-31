@@ -1,5 +1,5 @@
 import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { apiRequest } from '@/shared/api/http-client'
+import { apiRequest } from '@/shared/api'
 
 describe('apiRequest headers', () => {
   let fetchMock: Mock<typeof fetch>

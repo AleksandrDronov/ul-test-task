@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildAuctionListRequest } from '@/features/filter-auctions/model/build-auction-list-request'
+import { buildAuctionListRequest } from '@/features/filter-auctions'
 
 describe('buildAuctionListRequest', () => {
   it('maps search params to OpenAPI request body', () => {

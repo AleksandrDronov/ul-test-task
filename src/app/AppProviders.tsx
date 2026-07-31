@@ -1,8 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
-import { ApiError } from '@/shared/api/api-error'
-import { Toaster } from '@/shared/ui/sonner'
-import { TooltipProvider } from '@/shared/ui/tooltip'
+import { ApiError } from '@/shared/api'
+import { Toaster, TooltipProvider } from '@/shared/ui'
 
 /**
  * 4xx `ApiError` (401/404/422) — окончательный ответ, а не временная ошибка;

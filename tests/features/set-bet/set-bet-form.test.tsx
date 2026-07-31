@@ -3,15 +3,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ApiError } from '@/shared/api/api-error'
-import { SetBetForm } from '@/features/set-bet/ui/SetBetForm'
-import type { AuctionDetailTradingPriceVm } from '@/entities/auction/model/auction-detail.vm'
-import * as betApi from '@/entities/bet/api/bet.api'
+import { ApiError } from '@/shared/api'
+import { SetBetForm } from '@/features/set-bet'
+import type { AuctionDetailTradingPriceVm } from '@/entities/auction'
+import * as betApi from '@/entities/bet'
 
 // Stub the API boundary (the mutation's actual network call), not React
 // Hook Form or the schema - we want to exercise real validation and real
 // form wiring, per the brief's testing guidance.
-vi.mock('@/entities/bet/api/bet.api', () => ({
+vi.mock('@/entities/bet', () => ({
   postSetBet: vi.fn(),
 }))
 

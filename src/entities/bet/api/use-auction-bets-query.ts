@@ -1,6 +1,6 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { auctionQueryKeys } from '@/entities/auction/api/auction.query-keys'
-import { mapBetListToVm } from '../model/map-bet-item'
+import { auctionQueryKeys } from '@/entities/auction'
+import { mapBetListToVm } from '../model'
 import { fetchAuctionBets } from './bet.api'
 
 type AuctionBetsQueryOptions = {

@@ -1,5 +1,5 @@
 import type { components } from '@/shared/api/types/openapi'
-import { getAuctionStatusCode } from '@/shared/config/auction-status-map'
+import { getAuctionStatusCode } from '@/shared/config'
 import { toListStatusMobile } from './list-status-mobile'
 import { SEED_AUCTIONS } from './seed'
 

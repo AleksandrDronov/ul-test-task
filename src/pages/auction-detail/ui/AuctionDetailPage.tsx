@@ -1,8 +1,8 @@
 import { getRouteApi, Link } from '@tanstack/react-router'
-import type { AuctionDetailRoutePointVm } from '@/entities/auction/model/auction-detail.vm'
-import { useAuctionDetailQuery } from '@/entities/auction/api/use-auction-detail-query'
-import { DEFAULT_SEARCH_PARAMS } from '@/features/filter-auctions/model/parse-auctions-search-params'
-import { ApiError } from '@/shared/api/api-error'
+import type { AuctionDetailRoutePointVm } from '@/entities/auction'
+import { useAuctionDetailQuery } from '@/entities/auction'
+import { DEFAULT_SEARCH_PARAMS } from '@/features/filter-auctions'
+import { ApiError } from '@/shared/api'
 import {
   AUCTION_STATUS_RU_LABEL,
   AUCTION_TYPE_RU_LABEL,
@@ -10,13 +10,9 @@ import {
   OPERATION_TYPE_RU_LABEL,
   PAYMENT_DELAY_TYPE_RU_LABEL,
   TRADING_STATUS_RU_LABEL,
-} from '@/shared/config/status-labels'
-import { formatDate, formatDateTime, formatNumber, formatPrice, formatPricePerKm, formatYesNo } from '@/shared/lib/format'
-import { ApiErrorState } from '@/shared/ui/ApiErrorState'
-import { Badge } from '@/shared/ui/badge'
-import { Button } from '@/shared/ui/button'
-import { EmptyState } from '@/shared/ui/EmptyState'
-import { Skeleton } from '@/shared/ui/skeleton'
+} from '@/shared/config'
+import { formatDate, formatDateTime, formatNumber, formatPrice, formatPricePerKm, formatYesNo } from '@/shared/lib'
+import { ApiErrorState, Badge, Button, EmptyState, Skeleton } from '@/shared/ui'
 import { DetailField, DetailSection } from './DetailSection'
 
 const routeApi = getRouteApi('/auctions/$auctionUuid')

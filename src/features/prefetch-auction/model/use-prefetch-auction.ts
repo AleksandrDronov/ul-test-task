@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
-import { auctionDetailQueryOptions } from '@/entities/auction/api/use-auction-detail-query'
+import { auctionDetailQueryOptions } from '@/entities/auction'
 
 /**
  * Не дублирует запрос при каждом повторном hover/focus на карточке (разрешение #4):

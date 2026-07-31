@@ -1,5 +1,5 @@
-import { apiRequest } from '@/shared/api/http-client'
-import type { components } from '@/shared/api/types/openapi'
+import { apiRequest } from '@/shared/api'
+import type { components } from '@/shared/api'
 
 type BetListResponse = components['schemas']['BetListResponse']
 type SetBetRequest = components['schemas']['SetBetRequest']

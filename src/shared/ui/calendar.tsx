@@ -5,8 +5,8 @@ import {
   useRef,
 } from 'react'
 import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker'
-import { cn } from '@/shared/lib/cn'
-import { Button, buttonVariants } from '@/shared/ui/button'
+import { cn } from '@/shared/lib'
+import { Button, buttonVariants } from './button'
 
 type CalendarProps = ComponentProps<typeof DayPicker> & {
   buttonVariant?: ComponentProps<typeof Button>['variant']

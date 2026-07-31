@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { auctionQueryKeys } from '@/entities/auction/api/auction.query-keys'
-import { postSetBet } from '@/entities/bet/api/bet.api'
+import { auctionQueryKeys } from '@/entities/auction'
+import { postSetBet } from '@/entities/bet'
 
 /**
  * При успехе инвалидирует все три ключи запросов через фабрику `auctionQueryKeys`

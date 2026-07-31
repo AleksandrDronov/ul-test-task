@@ -1,5 +1,5 @@
 import { Link, Outlet } from '@tanstack/react-router'
-import { DEFAULT_SEARCH_PARAMS } from '@/features/filter-auctions/model/parse-auctions-search-params'
+import { DEFAULT_SEARCH_PARAMS } from '@/features/filter-auctions'
 
 export const RootLayout = () => {
   return (

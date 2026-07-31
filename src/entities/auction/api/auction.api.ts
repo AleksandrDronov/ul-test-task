@@ -1,5 +1,5 @@
-import { apiRequest } from '@/shared/api/http-client'
-import type { components } from '@/shared/api/types/openapi'
+import { apiRequest } from '@/shared/api'
+import type { components } from '@/shared/api'
 
 type AuctionListRequest = components['schemas']['AuctionListRequest']
 type AuctionListResponseBase = components['schemas']['AuctionListResponseBase']

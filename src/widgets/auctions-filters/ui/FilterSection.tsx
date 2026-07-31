@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react'
-import { Separator } from '@/shared/ui/separator'
+import { Separator } from '@/shared/ui'
 
 export type FilterSectionProps = {
   children: ReactNode

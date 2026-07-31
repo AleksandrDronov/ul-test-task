@@ -1,13 +1,6 @@
 import { SlidersHorizontal } from 'lucide-react'
-import { useFiltersUiStore } from '@/features/filter-auctions/model/filters-ui.store'
-import { useAuctionsFilters } from '@/features/filter-auctions/model/use-auctions-filters'
-import { Button } from '@/shared/ui/button'
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from '@/shared/ui/sheet'
+import { useAuctionsFilters, useFiltersUiStore } from '@/features/filter-auctions'
+import { Button, Sheet, SheetContent, SheetHeader, SheetTitle } from '@/shared/ui'
 import { AuctionsFiltersForm } from './AuctionsFiltersForm'
 
 export const AuctionsFilters = () => {

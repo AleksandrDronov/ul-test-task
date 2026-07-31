@@ -2,11 +2,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderHook, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
-import { auctionQueryKeys } from '@/entities/auction/api/auction.query-keys'
-import { useSetBetMutation } from '@/features/set-bet/api/use-set-bet-mutation'
-import * as betApi from '@/entities/bet/api/bet.api'
+import { auctionQueryKeys } from '@/entities/auction'
+import { useSetBetMutation } from '@/features/set-bet'
+import * as betApi from '@/entities/bet'
 
-vi.mock('@/entities/bet/api/bet.api', () => ({
+vi.mock('@/entities/bet', () => ({
   postSetBet: vi.fn(),
 }))
 

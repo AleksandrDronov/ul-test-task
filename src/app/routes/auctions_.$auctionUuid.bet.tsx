@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AuctionBetPage } from '@/pages/auction-bet/ui/AuctionBetPage'
+import { AuctionBetPage } from '@/pages/auction-bet'
 
 /** См. `auctions_.$auctionUuid.bets.tsx` — почему этот сегмент вынесён из вложенности. */
 export const Route = createFileRoute('/auctions_/$auctionUuid/bet')({

@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import type { components } from '@/shared/api/types/openapi'
-import { isAuctionStatusCode } from '@/shared/config/auction-status-map'
+import type { components } from '@/shared/api'
+import { isAuctionStatusCode } from '@/shared/config'
 
 type TradingStatus = components['schemas']['TradingStatus']
 type AuctionListRequest = components['schemas']['AuctionListRequest']

@@ -1,4 +1,4 @@
-import { Label } from '@/shared/ui/label'
+import { Label } from '@/shared/ui'
 
 const toggleInArray = <Value,>(values: Value[] | undefined, value: Value): Value[] | undefined => {
   const set = new Set(values ?? [])
