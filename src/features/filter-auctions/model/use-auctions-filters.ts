@@ -6,22 +6,27 @@ const routeApi = getRouteApi('/')
 export type AuctionsFilterPatch = Partial<Omit<AuctionsSearchParams, 'page' | 'per_page'>>
 
 /**
- * The URL is the single source of truth for filter values (resolution #1).
- * Changing any filter resets the page to 1; `setPage` is the only way to
- * move `page` without touching the rest of the filters.
+ * URL — единственный источник правды для значений фильтров (разрешение #1).
+ * Изменение любого фильтра сбрасывает страницу на 1; `setPage` — единственный способ
+ * менять `page` без затрагивания остальных фильтров.
  */
-export const useAuctionsFilters = () => {
-  const filters = routeApi.useSearch()
+export const useAuctionsFilters = (): {
+  filters: AuctionsSearchParams
+  setFilters: (patch: AuctionsFilterPatch) => void
+  setPage: (page: number) => void
+  resetFilters: () => void
+} => {
+  const filters: AuctionsSearchParams = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
 
   const setFilters = (patch: AuctionsFilterPatch): void => {
     void navigate({
-      search: (prev) => ({ ...prev, ...patch, page: 1 }),
+      search: { ...filters, ...patch, page: 1 },
     })
   }
 
   const setPage = (page: number): void => {
-    void navigate({ search: (prev) => ({ ...prev, page }) })
+    void navigate({ search: { ...filters, page } })
   }
 
   const resetFilters = (): void => {

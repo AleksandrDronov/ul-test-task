@@ -8,9 +8,9 @@ export type AuctionSummaryProps = {
 }
 
 /**
- * Compact auction context reused on the bet-history and bet-form pages so
- * neither has to duplicate the full detail layout just to remind the user
- * which auction they're looking at (resolution: keep those pages focused).
+ * Компактный контекст аукциона для страниц истории ставок и формы ставки,
+ * чтобы не дублировать полный layout детальной страницы и напоминать пользователю,
+ * с каким аукционом он работает (разрешение: эти страницы остаются сфокусированными).
  */
 export const AuctionSummaryComponent = ({ auction }: AuctionSummaryProps) => {
   const loadPoint = auction.routes.at(0)

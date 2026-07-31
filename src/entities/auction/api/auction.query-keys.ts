@@ -3,9 +3,9 @@ import type { components } from '@/shared/api/types/openapi'
 type AuctionListRequest = components['schemas']['AuctionListRequest']
 
 /**
- * Single source of truth for every `auction.*` / `auctions.*` query key.
- * Task 7's `setBet` mutation and Task 8's prefetching must go through this
- * factory rather than repeating key literals (task-6 brief resolution #5).
+ * Единый источник правды для всех ключей запросов `auction.*` / `auctions.*`.
+ * Мутация `setBet` (Task 7) и prefetch (Task 8) должны использовать эту фабрику,
+ * а не дублировать литералы ключей (разрешение task-6 #5).
  */
 export const auctionQueryKeys = {
   list: (body: AuctionListRequest) => ['auctions.list', body] as const,

@@ -8,7 +8,7 @@ export type BetsTableProps = {
 
 export const BetsTableComponent = ({ bets }: BetsTableProps) => (
   <div className="overflow-x-auto rounded-lg border border-border">
-    <table className="w-full min-w-[640px] text-sm">
+    <table className="w-full min-w-160 text-sm">
       <thead className="bg-muted/50 text-left text-xs uppercase tracking-wide text-muted-foreground">
         <tr>
           <th scope="col" className="px-3 py-2 font-medium">

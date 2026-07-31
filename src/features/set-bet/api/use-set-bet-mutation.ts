@@ -3,17 +3,16 @@ import { auctionQueryKeys } from '@/entities/auction/api/auction.query-keys'
 import { postSetBet } from '@/entities/bet/api/bet.api'
 
 /**
- * On success, invalidates all three query keys through the
- * `auctionQueryKeys` factory (task-7 resolution #3) so the detail, the bets
- * list, and the auctions list all refetch without a reload:
+ * При успехе инвалидирует все три ключи запросов через фабрику `auctionQueryKeys`
+ * (разрешение task-7 #3), чтобы деталь, список ставок и список аукционов обновились без перезагрузки:
  *
- * - `list({})`: TanStack Query's default partial matching compares each key
- *   segment; an empty filter object has no own keys to fail the comparison,
- *   so it matches every cached `auctions.list` query regardless of filters.
- * - `detail(auctionUuid)`: exact match, this auction's detail query only.
- * - `bets(auctionUuid).slice(0, 2)`: dropping the trailing `all` segment so
- *   both the default (non-rejected) and `all=true` bets queries refetch,
- *   instead of only the exact variant this hook happens to be called from.
+ * - `list({})`: частичное сопоставление TanStack Query сравнивает сегменты ключа;
+ *   пустой объект фильтров не имеет собственных ключей для сравнения,
+ *   поэтому совпадает с любым закэшированным `auctions.list` независимо от фильтров.
+ * - `detail(auctionUuid)`: точное совпадение, только запрос детали этого аукциона.
+ * - `bets(auctionUuid).slice(0, 2)`: без завершающего сегмента `all`, чтобы
+ *   обновились и дефолтный (без отклонённых), и `all=true` варианты списка ставок,
+ *   а не только тот, из которого вызван этот хук.
  */
 export const useSetBetMutation = (auctionUuid: string) => {
   const queryClient = useQueryClient()

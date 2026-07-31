@@ -21,7 +21,7 @@ export const mapBetItemDtoToVm = (dto: BetItem): BetItemVm => ({
   transporterComment: dto.transporter_comment ?? null,
 })
 
-/** `participantsCount` = number of distinct `organization_id` values across the bets, not the bet count. */
+/** `participantsCount` — число уникальных `organization_id` среди ставок, а не количество ставок. */
 export const mapBetListToVm = (bets: BetItem[]): BetListVm => {
   const items = bets.map(mapBetItemDtoToVm)
 

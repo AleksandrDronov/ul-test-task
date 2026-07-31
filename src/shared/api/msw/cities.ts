@@ -1,7 +1,6 @@
 /**
- * Small city dictionary shared by the MSW seed data (route points) and by
- * Task 8's filter UI (city autocomplete/select). `gcId` mirrors the
- * `city_gc_id` field used on route points in the OpenAPI schema.
+ * Малый словарь городов для MSW seed (точки маршрута) и UI фильтров Task 8
+ * (autocomplete/select города). `gcId` соответствует полю `city_gc_id` в схеме OpenAPI.
  */
 export type City = {
   gcId: number

@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
 /**
- * Local, immediately-responsive input state that commits to `onCommit` only
- * after `delayMs` of inactivity (resolution #2: debounce text/price filter
- * inputs so typing doesn't fire a request per keystroke). When the external
- * value changes for a reason other than our own debounced commit (e.g. a
- * "reset filters" action), local state re-syncs to it.
+ * Локальное, мгновенно обновляемое состояние поля, которое передаёт значение в `onCommit`
+ * только после `delayMs` бездействия (разрешение #2: debounce для текстовых/ценовых полей,
+ * чтобы не отправлять запрос на каждый символ). Когда внешнее значение меняется по другой
+ * причине (например, «сбросить фильтры»), локальное состояние синхронизируется с ним.
+ * Просроченные коммиты, пришедшие когда пользователь уже ввёл новое значение, не должны
+ * перезаписывать локальный ввод.
  */
 export const useDebouncedFilterField = <Value>(
   externalValue: Value,
@@ -17,6 +18,7 @@ export const useDebouncedFilterField = <Value>(
   // pattern instead of a setState-in-effect, so an external reset (e.g. the
   // "reset filters" action) is reflected in the same render, not one tick late.
   const [syncedExternalValue, setSyncedExternalValue] = useState(externalValue)
+  const [lastCommitted, setLastCommitted] = useState(externalValue)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const onCommitRef = useRef(onCommit)
 
@@ -32,16 +34,22 @@ export const useDebouncedFilterField = <Value>(
   )
 
   if (externalValue !== syncedExternalValue) {
+    const isOwnStaleCommit = externalValue === lastCommitted && value !== lastCommitted
+
+    if (!isOwnStaleCommit) {
+      setValue(externalValue)
+      setLastCommitted(externalValue)
+    }
+
     setSyncedExternalValue(externalValue)
-    setValue(externalValue)
   }
 
   const handleChange = (next: Value): void => {
     setValue(next)
-    setSyncedExternalValue(next)
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
     timeoutRef.current = setTimeout(() => {
+      setLastCommitted(next)
       onCommitRef.current(next)
     }, delayMs)
   }

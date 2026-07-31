@@ -3,9 +3,8 @@ import { useCallback } from 'react'
 import { auctionDetailQueryOptions } from '@/entities/auction/api/use-auction-detail-query'
 
 /**
- * Keeps a hovered/focused card from re-triggering a fetch on every repeated
- * hover (resolution #4): as long as the cached detail data is younger than
- * this, `prefetchQuery` is a no-op.
+ * Не дублирует запрос при каждом повторном hover/focus на карточке (разрешение #4):
+ * пока кэшированные данные детали моложе этого значения, `prefetchQuery` — no-op.
  */
 const PREFETCH_STALE_TIME_MS = 30_000
 

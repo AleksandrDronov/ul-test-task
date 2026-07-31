@@ -7,10 +7,9 @@ type StatusMessage = {
 }
 
 /**
- * Per-status Russian copy (resolution #5): a raw HTTP status code must never
- * reach the user. Statuses without a bespoke entry fall back to the server's
- * own `title`/`message` (already Russian, see `parseApiError`), never to a
- * numeric code.
+ * Тексты по HTTP-статусу на русском (разрешение #5): сырой код статуса никогда
+ * не должен попадать к пользователю. Статусы без отдельного текста используют
+ * `title`/`message` сервера (уже на русском, см. `parseApiError`), а не числовой код.
  */
 const STATUS_MESSAGES: Record<number, StatusMessage> = {
   401: {

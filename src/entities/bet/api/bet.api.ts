@@ -7,7 +7,7 @@ type SetBetRequest = components['schemas']['SetBetRequest']
 export const fetchAuctionBets = (auctionUuid: string, all?: boolean): Promise<BetListResponse> =>
   apiRequest<BetListResponse>(`/auctions/${auctionUuid}/bets${all ? '?all=true' : ''}`)
 
-/** Task 7 owns the mutation hook; this is only the raw API call it wraps. */
+/** Хук мутации — задача 7; здесь только сырой API-вызов, который он оборачивает. */
 export const postSetBet = (auctionUuid: string, price: number): Promise<void> =>
   apiRequest(`/auctions/${auctionUuid}/bets`, {
     method: 'POST',

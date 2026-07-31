@@ -7,9 +7,8 @@ export type SetBetLimits = {
 }
 
 /**
- * Matches `isOnStep` in `src/shared/api/msw/store.ts`: the mock rejects a
- * price that isn't an exact whole number of `step`s down from `max`, using
- * the same epsilon to stay safe against floating-point rounding.
+ * Совпадает с `isOnStep` в `src/shared/api/msw/store.ts`: мок отклоняет цену,
+ * не кратную `step` от `max`, с тем же epsilon для защиты от ошибок float.
  */
 const FLOAT_EPSILON = 1e-6
 
@@ -20,10 +19,9 @@ const isOnStep = (price: number, max: number, step: number): boolean => {
 }
 
 /**
- * Client-side mirror of the mock's `setBet` validation order (see
- * task-5 brief resolution #4, replicated in `store.ts`'s doc comment):
- * positive -> above max -> below min -> off-step. `canSetBet` is not part of
- * this schema - it's a form-level disabled state (task-7 resolution #6).
+ * Клиентское зеркало порядка валидации мока `setBet` (разрешение #4 task-5,
+ * см. комментарий в `store.ts`): positive → выше max → ниже min → off-step.
+ * `canSetBet` не входит в схему — это disabled-состояние формы (разрешение task-7 #6).
  */
 export const createSetBetSchema = (limits: SetBetLimits) =>
   z.object({

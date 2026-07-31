@@ -35,7 +35,7 @@ export const formatDateTime = (value: string | null | undefined): string => {
 export const formatNumber = (value: number | null | undefined): string =>
   value === null || value === undefined ? EMPTY_VALUE_PLACEHOLDER : NUMBER_FORMATTER.format(value)
 
-/** No currency code is carried at the trading-price level in the ViewModel, so amounts render in rubles (₽). */
+/** В ViewModel на уровне торговой цены нет кода валюты, поэтому суммы отображаются в рублях (₽). */
 export const formatPrice = (value: number | null | undefined): string =>
   value === null || value === undefined ? EMPTY_VALUE_PLACEHOLDER : `${NUMBER_FORMATTER.format(value)} ₽`
 

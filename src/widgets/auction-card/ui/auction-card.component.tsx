@@ -41,9 +41,8 @@ const CargoPreview = ({ cargo }: { cargo: AuctionListCargoVm }) => (
 )
 
 /**
- * `AuctionListItemVm.primaryAction` already encodes the routing rule
- * (task-6 ViewModel); this widget only translates it into a destination, it
- * never recomputes eligibility itself.
+ * `AuctionListItemVm.primaryAction` уже содержит правило навигации (ViewModel task-6);
+ * этот виджет только преобразует его в destination и никогда сам не пересчитывает доступность.
  */
 const PrimaryActionButton = ({ auction }: { auction: AuctionListItemVm }) => {
   const { primaryAction, auctionUuid } = auction

@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
 /**
- * UI-only state: whether the mobile filters Sheet is open. Filter *values*
- * always live in the URL (resolution #1) — this store never mirrors them.
+ * Только UI-состояние: открыт ли Sheet с фильтрами на мобильных. Значения фильтров
+ * всегда в URL (разрешение #1) — этот стор их никогда не дублирует.
  */
 type FiltersUiStore = {
   filtersOpen: boolean

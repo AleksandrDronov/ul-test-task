@@ -1,4 +1,4 @@
-/** Bridges `<input type="date">` (plain `YYYY-MM-DD`) and the ISO-with-offset strings the API/schema expect. */
+/** Связывает `<input type="date">` (формат `YYYY-MM-DD`) с ISO-строками с offset, которые ожидают API и схема. */
 
 export const isoToDateInputValue = (iso: string | undefined): string => {
   if (!iso) return ''

@@ -25,9 +25,9 @@ export type SetBetResult =
   | { ok: false; status: 422; body: ValidationProblem }
 
 /**
- * The single mocked carrier acting as "the current user" across the app.
- * Kept in sync with the seed data's own bets so "my bet" logic is coherent
- * (see resolution #2 in the task-5 brief).
+ * Единственный замоканный перевозчик — «текущий пользователь» в приложении.
+ * Синхронизирован со ставками в seed data, чтобы логика «моя ставка» была согласована
+ * (разрешение #2 brief task-5).
  */
 const CURRENT_USER = {
   organizationId: 14,
@@ -43,7 +43,7 @@ const FLOAT_EPSILON = 1e-6
 const round2 = (value: number): number => Math.round(value * 100) / 100
 const toNoVat = (value: number): number => round2(value / (1 + VAT_RATE))
 
-/** Matches the seed data's plain `YYYY-MM-DDTHH:mm:ss` timestamp format (no ms, no `Z`). */
+/** Соответствует формату timestamp в seed data: `YYYY-MM-DDTHH:mm:ss` (без ms и `Z`). */
 const formatTimestamp = (date: Date): string => date.toISOString().slice(0, 19)
 
 let auctions: AuctionRecord[] = cloneSeed()
@@ -52,7 +52,7 @@ function cloneSeed(): AuctionRecord[] {
   return SEED_AUCTIONS.map((record) => structuredClone(record))
 }
 
-/** Resets the in-memory store to its seeded state. Intended for tests. */
+/** Сбрасывает in-memory стор к начальному seed-состоянию. Предназначено для тестов. */
 export const resetStore = (): void => {
   auctions = cloneSeed()
 }
@@ -106,11 +106,11 @@ const syncListItem = (record: AuctionRecord): void => {
 }
 
 /**
- * Down-auction bet ranking: the lowest price wins, so `place` is assigned
- * in ascending price order. Rejected/cancelled bets (`is_rejected: true`)
- * are excluded from ranking and always carry `place: null` — this mirrors
- * how the seed data represents them (e.g. bet id 2 on auction `...0501`).
- * Places among ranked bets are contiguous starting at 1.
+ * Ранжирование ставок на аукционе на понижение: побеждает минимальная цена,
+ * `place` назначается по возрастанию цены. Отклонённые/отменённые ставки
+ * (`is_rejected: true`) не участвуют в ранжировании и всегда имеют `place: null` —
+ * как в seed data (например, bet id 2 на аукционе `...0501`).
+ * Места у ранжированных ставок непрерывны, начиная с 1.
  */
 const recomputePlaces = (bets: BetItem[]): void => {
   const ranked = bets
@@ -194,13 +194,13 @@ const applyAcceptedBet = (record: AuctionRecord, price: number): void => {
 }
 
 /**
- * Validation order (see task-5 brief resolution #4):
- * 1. unknown auction -> 404
- * 2. `trading.can_set_bet === false` -> 422 (field: price)
- * 3. price <= 0 -> 422
- * 4. price above `max` -> 422
- * 5. price below `min` (when `min` is set) -> 422
- * 6. price not a whole multiple of `step` measured from `max` -> 422
+ * Порядок валидации (разрешение task-5 #4):
+ * 1. неизвестный аукцион → 404
+ * 2. `trading.can_set_bet === false` → 422 (поле: price)
+ * 3. price <= 0 → 422
+ * 4. price выше `max` → 422
+ * 5. price ниже `min` (когда `min` задан) → 422
+ * 6. price не кратна `step` от `max` → 422
  */
 export const setBet = (uuid: string, price: number): SetBetResult => {
   const record = findRecord(uuid)

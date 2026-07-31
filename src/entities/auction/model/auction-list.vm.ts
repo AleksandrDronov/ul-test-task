@@ -4,7 +4,7 @@ type AuctionType = components['schemas']['AuctionType']
 type AuctionStatus = components['schemas']['AuctionStatus']
 type AuctionListItem = components['schemas']['AuctionListItem']
 
-/** Narrower than the detail-level `TradingStatus` (see `AuctionListItemTrading.status_mobile`). */
+/** Уже, чем detail-level `TradingStatus` (см. `AuctionListItemTrading.status_mobile`). */
 export type ListStatusMobile = NonNullable<NonNullable<AuctionListItem['trading']>['status_mobile']>
 
 export type PrimaryAction =

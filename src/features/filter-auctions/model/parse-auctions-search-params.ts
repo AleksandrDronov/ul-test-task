@@ -3,7 +3,7 @@ import {
   type AuctionsSearchParams,
 } from './auctions-search-params.schema'
 
-/** Exported so links that reset the list (e.g. the header brand link) can navigate to the same defaults. */
+/** Экспортируется, чтобы ссылки сбрасывающие список (например, логотип в шапке) переходили к тем же значениям по умолчанию. */
 export const DEFAULT_SEARCH_PARAMS: AuctionsSearchParams = {
   page: 1,
   per_page: 20,

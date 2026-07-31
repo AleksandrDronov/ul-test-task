@@ -6,7 +6,7 @@ type TradingStatus = components['schemas']['TradingStatus']
 type AuctionListRequest = components['schemas']['AuctionListRequest']
 type AuctionAucType = NonNullable<AuctionListRequest['auc_type']>[number]
 
-/** Exported so the filters widget can render option lists from the same source of truth. */
+/** Экспортируется, чтобы виджет фильтров мог строить списки опций из того же источника правды. */
 export const TRADING_STATUS_VALUES = [
   'NotParticipating',
   'Leading',
@@ -154,13 +154,26 @@ const toOptionalNumber = (value: unknown): number | undefined => {
 }
 
 const toStatusCodes = (value: unknown): number[] | undefined => {
-  const tokens = toStringTokens(value)
-  if (!tokens) {
+  if (isBlank(value)) {
     return undefined
   }
 
-  const codes = tokens
-    .map((token) => Number(token))
+  const rawTokens: unknown[] = []
+
+  if (Array.isArray(value)) {
+    for (const item of value as readonly unknown[]) {
+      rawTokens.push(item)
+    }
+  } else if (typeof value === 'string') {
+    rawTokens.push(...splitToTokens(value))
+  } else if (typeof value === 'number') {
+    rawTokens.push(value)
+  } else {
+    return undefined
+  }
+
+  const codes = rawTokens
+    .map((token) => (typeof token === 'number' ? token : Number(token)))
     .filter((code) => Number.isInteger(code) && isAuctionStatusCode(code))
 
   return codes.length > 0 ? codes : undefined
@@ -261,6 +274,23 @@ const toOptionalDateTime = (value: unknown): string | undefined => {
   return dateTime
 }
 
+export type AuctionsSearchParams = {
+  page: number
+  per_page: number
+  cargo_num?: string
+  status?: Array<(typeof TRADING_STATUS_VALUES)[number]>
+  statuses?: number[]
+  auc_type?: Array<(typeof AUC_TYPE_VALUES)[number]>
+  load_city?: string
+  unload_city?: string
+  load_date_from?: string
+  load_date_to?: string
+  is_available?: boolean
+  is_bidder?: boolean
+  current_price_from?: number
+  current_price_to?: number
+}
+
 export const auctionsSearchParamsSchema = z.object({
   page: z.preprocess(
     (value) => toClampedInt(value, { min: 1, max: Number.MAX_SAFE_INTEGER, fallback: 1 }),
@@ -289,5 +319,3 @@ export const auctionsSearchParamsSchema = z.object({
   current_price_from: z.preprocess(toOptionalNumber, z.number().optional()),
   current_price_to: z.preprocess(toOptionalNumber, z.number().optional()),
 })
-
-export type AuctionsSearchParams = z.infer<typeof auctionsSearchParamsSchema>

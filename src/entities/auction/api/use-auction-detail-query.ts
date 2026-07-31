@@ -4,9 +4,9 @@ import { fetchAuctionDetail } from './auction.api'
 import { auctionQueryKeys } from './auction.query-keys'
 
 /**
- * Exported as reusable options (not just the hook) so Task 8's hover
- * prefetch can call `queryClient.prefetchQuery(auctionDetailQueryOptions(uuid))`
- * with the exact same key/fetcher the page's `useQuery` uses.
+ * Экспортируется как reusable options (не только хук), чтобы prefetch по hover в Task 8
+ * мог вызвать `queryClient.prefetchQuery(auctionDetailQueryOptions(uuid))`
+ * с тем же key/fetcher, что использует `useQuery` на странице.
  */
 export const auctionDetailQueryOptions = (auctionUuid: string) =>
   queryOptions({

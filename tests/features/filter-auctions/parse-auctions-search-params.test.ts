@@ -9,6 +9,10 @@ describe('parseAuctionsSearchParams', () => {
     })
   })
 
+  it('parses statuses from number arrays (navigate patch)', () => {
+    expect(parseAuctionsSearchParams({ statuses: [2, 3] }).statuses).toEqual([2, 3])
+  })
+
   it('parses known filters and drops invalid enum values', () => {
     const result = parseAuctionsSearchParams({
       page: '2',

@@ -5,11 +5,12 @@ type TradingStatus = components['schemas']['TradingStatus']
 type ListStatusMobile = NonNullable<NonNullable<AuctionListItem['trading']>['status_mobile']>
 
 /**
- * `AuctionListItemTrading.status_mobile` allows a narrower enum than the
- * detail-level `TradingStatus` (see task-5 brief note on enum asymmetry).
- * All values used by the seed data fall within the narrower set, so this
- * is a safe, exhaustive-by-construction mapping. Shared by `seed.ts`
- * (initial state) and `store.ts` (post-bet sync) so the two can't diverge.
+ * `AuctionListItemTrading.status_mobile` разрешает более узкий enum, чем
+ * detail-level `TradingStatus` (заметка brief task-5 об асимметрии enum).
+ * Все значения из seed data укладываются в узкий набор — безопасное,
+ * exhaustive-by-construction отображение. Используется в `seed.ts`
+ * (начальное состояние) и `store.ts` (синхронизация после ставки), чтобы
+ * они не расходились.
  */
 export const toListStatusMobile = (status: TradingStatus | undefined): ListStatusMobile => {
   switch (status) {

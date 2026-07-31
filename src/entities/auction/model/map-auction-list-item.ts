@@ -13,12 +13,11 @@ type AuctionListMeta = components['schemas']['AuctionListMeta']
 type AuctionStatus = components['schemas']['AuctionStatus']
 
 /**
- * `AuctionListItemTrading` carries no `hide_bets_history` flag — that only
- * exists on the detail response (see task-6 brief global constraints). As a
- * best-effort proxy at list level, bet history is treated as "not viewable
- * yet" only while the auction is still `Planning` (trading has not started,
- * so there is nothing to view); every other status is assumed viewable.
- * Flagged as a controller-visible assumption in the task-6 report.
+ * `AuctionListItemTrading` не содержит `hide_bets_history` — этот флаг только в ответе детали
+ * (глобальные ограничения task-6). На уровне списка как эвристика: история ставок
+ * «недоступна для просмотра» только пока аукцион в `Planning` (торги не начались,
+ * смотреть нечего); любой другой статус считается доступным для просмотра.
+ * Отмечено как допущение в отчёте task-6.
  */
 const isBetHistoryViewableFromListStatus = (status: AuctionStatus | undefined): boolean =>
   status !== 'Planning'

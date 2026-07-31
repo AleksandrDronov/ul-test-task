@@ -11,7 +11,7 @@ type BetItem = components['schemas']['BetItem']
 type RoutePoint = components['schemas']['RoutePoint']
 type TradingStatus = components['schemas']['TradingStatus']
 
-/** Shared organizer across all seeded auctions (single customer, "ЛИМ"). */
+/** Общий организатор для всех seed-аукционов (один заказчик — «ЛИМ»). */
 const ORGANIZER: components['schemas']['AuctionShowOrganizer'] = {
   subscriber_id: 98,
   subscriber_code: '12345',
@@ -42,9 +42,9 @@ const CONTACTS: components['schemas']['Contact'][] = [
 ]
 
 /**
- * Admitted carriers for every seeded auction. `id: 14` is the mocked
- * current user (see task-5 brief resolution #2); `id: 20` is a competing
- * carrier used to populate other bids.
+ * Допущенные перевозчики для каждого seed-аукциона. `id: 14` — замоканный
+ * текущий пользователь (разрешение task-5 #2); `id: 20` — конкурирующий перевозчик
+ * для других ставок.
  */
 const ADMITTED_ORGANIZATIONS: components['schemas']['AdmittedOrganization'][] = [
   {
@@ -954,18 +954,18 @@ const AUCTION_FINISHED_WINNER = buildAuction({
 })
 
 /**
- * Seeded auctions covering (see task-5 report for the full catalogue):
- * - 501: active, can bid, has other carriers' bets (incl. one rejected)
- * - 502: user already holds the leading bet
+ * Seed-аукционы покрывают (полный каталог — в отчёте task-5):
+ * - 501: активный, можно ставить, есть ставки других перевозчиков (включая отклонённую)
+ * - 502: пользователь уже держит лидирующую ставку
  * - 504: `can_set_bet: false`
  * - 505: `hide_bets_history: true`
- * - 506: zero bets (empty state)
+ * - 506: ноль ставок (пустое состояние)
  * - 507: `hide_points_address_and_contacts` + `no_view_cargo_price`
- * - 508: Planning status, not yet open for bids
- * - 509: Finished, user is the winner
+ * - 508: статус Planning, торги ещё не открыты
+ * - 509: завершён, пользователь — победитель
  *
- * uuid `...0503` is intentionally NOT seeded: it is reserved for the 503
- * error trigger handled directly in `handlers.ts`.
+ * uuid `...0503` намеренно не в seed: зарезервирован для триггера 503
+ * в `handlers.ts`.
  */
 export const SEED_AUCTIONS: AuctionRecord[] = [
   AUCTION_ACTIVE_WITH_BETS,

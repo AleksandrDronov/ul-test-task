@@ -2,15 +2,19 @@ import { useId } from 'react'
 import {
   AUC_TYPE_VALUES,
   TRADING_STATUS_VALUES,
+  type AuctionsSearchParams,
 } from '@/features/filter-auctions/model/auctions-search-params.schema'
 import {
   dateInputValueToIsoRangeEnd,
   dateInputValueToIsoRangeStart,
   isoToDateInputValue,
 } from '@/features/filter-auctions/model/date-input'
-import { useAuctionsFilters } from '@/features/filter-auctions/model/use-auctions-filters'
+import { type AuctionsFilterPatch } from '@/features/filter-auctions/model/use-auctions-filters'
 import { CITY_NAMES } from '@/shared/api/msw/cities'
-import { AUCTION_STATUS_LABEL_BY_CODE, isAuctionStatusCode } from '@/shared/config/auction-status-map'
+import {
+  AUCTION_STATUS_LABEL_BY_CODE,
+  isAuctionStatusCode,
+} from '@/shared/config/auction-status-map'
 import { AUCTION_TYPE_RU_LABEL, AUCTION_STATUS_RU_LABEL, TRADING_STATUS_RU_LABEL } from '@/shared/config/status-labels'
 import { useDebouncedFilterField } from '@/shared/lib/use-debounced-filter-field'
 import { Button } from '@/shared/ui/button'
@@ -25,7 +29,7 @@ import {
 } from '@/shared/ui/select'
 import { Separator } from '@/shared/ui/separator'
 
-/** Derived from the exported const (not `openapi.d.ts`) so widgets never import DTO types directly. */
+/** Выводится из экспортированной константы (не из `openapi.d.ts`), чтобы виджеты не импортировали DTO-типы напрямую. */
 type TradingStatus = (typeof TRADING_STATUS_VALUES)[number]
 
 const ANY_CITY_VALUE = '__any__'
@@ -67,7 +71,17 @@ const CheckboxOption = ({ id, label, checked, onChange }: CheckboxOptionProps) =
   </div>
 )
 
-export const AuctionsFiltersFormComponent = () => {
+export type AuctionsFiltersFormProps = {
+  filters: AuctionsSearchParams
+  setFilters: (patch: AuctionsFilterPatch) => void
+  resetFilters: () => void
+}
+
+export const AuctionsFiltersFormComponent = ({
+  filters,
+  setFilters,
+  resetFilters,
+}: AuctionsFiltersFormProps) => {
   const cargoNumId = useId()
   const priceFromId = useId()
   const priceToId = useId()
@@ -78,27 +92,25 @@ export const AuctionsFiltersFormComponent = () => {
   const availableOnlyId = useId()
   const myBidsOnlyId = useId()
 
-  const { filters, setFilters, resetFilters } = useAuctionsFilters()
-
-  const [cargoNum, setCargoNum] = useDebouncedFilterField(filters.cargo_num ?? '', (value) => {
+  const [cargoNum, setCargoNum] = useDebouncedFilterField<string>(filters.cargo_num ?? '', (value) => {
     setFilters({ cargo_num: value || undefined })
   })
 
-  const [priceFrom, setPriceFrom] = useDebouncedFilterField(
+  const [priceFrom, setPriceFrom] = useDebouncedFilterField<string>(
     filters.current_price_from?.toString() ?? '',
     (value) => {
       setFilters({ current_price_from: value === '' ? undefined : Number(value) })
     },
   )
 
-  const [priceTo, setPriceTo] = useDebouncedFilterField(
+  const [priceTo, setPriceTo] = useDebouncedFilterField<string>(
     filters.current_price_to?.toString() ?? '',
     (value) => {
       setFilters({ current_price_to: value === '' ? undefined : Number(value) })
     },
   )
 
-  const applyImmediate = (patch: Parameters<typeof setFilters>[0]): void => {
+  const applyImmediate = (patch: AuctionsFilterPatch): void => {
     setFilters(patch)
   }
 
@@ -115,6 +127,9 @@ export const AuctionsFiltersFormComponent = () => {
         <Input
           id={cargoNumId}
           value={cargoNum}
+          type="number"
+          inputMode="decimal"
+          min={0}
           onChange={(event) => {
             setCargoNum(event.target.value)
           }}

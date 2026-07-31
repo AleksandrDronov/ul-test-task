@@ -9,17 +9,17 @@ type ProblemDetail = components['schemas']['ProblemDetail']
 type ValidationProblem = components['schemas']['ValidationProblem']
 
 /**
- * The OpenAPI error responses (`NotFound`, `Unauthorized`, `ServiceUnavailable`,
- * `ValidationFailed`) all declare `application/problem+json`, not the default
- * `application/json` that `HttpResponse.json` would otherwise set.
+ * OpenAPI error responses (`NotFound`, `Unauthorized`, `ServiceUnavailable`,
+ * `ValidationFailed`) объявляют `application/problem+json`, а не дефолтный
+ * `application/json`, который иначе выставил `HttpResponse.json`.
  */
 const problemJson = (body: ProblemDetail | ValidationProblem, status: number) =>
   HttpResponse.json(body, { status, headers: { 'Content-Type': 'application/problem+json' } })
 
 /**
- * Manual-testing error triggers (see task-5 brief resolution #5):
- * - a list request with `cargo_num === '__401__'` returns 401
- * - the auction uuid below returns 503 from detail/bets/set-bet
+ * Триггеры ошибок для ручного тестирования (разрешение task-5 #5):
+ * - запрос списка с `cargo_num === '__401__'` возвращает 401
+ * - uuid ниже возвращает 503 из detail/bets/set-bet
  */
 const UNAUTHORIZED_CARGO_NUM = '__401__'
 const SERVICE_UNAVAILABLE_UUID = '00000000-0000-4000-8000-000000000503'

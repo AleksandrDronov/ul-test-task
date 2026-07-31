@@ -7,7 +7,7 @@ type OperationType = components['schemas']['OperationType']
 type BidMeasurementType = components['schemas']['BidMeasurementType']
 type PaymentDelayType = NonNullable<components['schemas']['PaymentDelayType']>
 
-/** Presentation-only Russian labels for enum values. Never used for filtering/business logic. */
+/** Русские подписи enum только для отображения. Никогда используются для фильтрации и бизнес-логики. */
 export const AUCTION_STATUS_RU_LABEL: Record<AuctionStatus, string> = {
   Planning: 'Планирование',
   Auction: 'Торги',

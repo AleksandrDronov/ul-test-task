@@ -11,11 +11,11 @@ import { useSetBetMutation } from '../api/use-set-bet-mutation'
 import { createSetBetSchema, type SetBetFormValues } from '../model/set-bet.schema'
 
 export type SetBetFormProps = {
-  /** The auction this bid is placed against. */
+  /** Аукцион, для которого размещается ставка. */
   auctionUuid: string
-  /** Trading price bounds this form validates the bid against (see `AuctionDetailVm.trading.price`). */
+  /** Границы торговой цены, против которых форма валидирует ставку (см. `AuctionDetailVm.trading.price`). */
   price: AuctionDetailTradingPriceVm
-  /** When `false`, the form renders disabled with an explanation instead of being absent (resolution #6). */
+  /** При `false` форма отображается disabled с пояснением, а не скрывается (разрешение #6). */
   canSetBet: boolean
 }
 
