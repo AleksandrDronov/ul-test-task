@@ -1,0 +1,62 @@
+import { describe, expect, it } from 'vitest'
+import { parseAuctionsSearchParams } from '@/features/filter-auctions/model/parse-auctions-search-params'
+
+describe('parseAuctionsSearchParams', () => {
+  it('falls back to defaults for empty input', () => {
+    expect(parseAuctionsSearchParams({})).toEqual({
+      page: 1,
+      per_page: 20,
+    })
+  })
+
+  it('parses known filters and drops invalid enum values', () => {
+    const result = parseAuctionsSearchParams({
+      page: '2',
+      per_page: '10',
+      cargo_num: '0001',
+      status: ['Leading', 'Nope'],
+      statuses: ['2', 'x'],
+      auc_type: ['Down', 'Bad'],
+      is_available: 'true',
+      current_price_from: '1000',
+    })
+
+    expect(result.page).toBe(2)
+    expect(result.per_page).toBe(10)
+    expect(result.cargo_num).toBe('0001')
+    expect(result.status).toEqual(['Leading'])
+    expect(result.statuses).toEqual([2])
+    expect(result.auc_type).toEqual(['Down'])
+    expect(result.is_available).toBe(true)
+    expect(result.current_price_from).toBe(1000)
+  })
+
+  it('clamps invalid page to 1', () => {
+    expect(parseAuctionsSearchParams({ page: '-5' }).page).toBe(1)
+  })
+
+  it('parses comma-separated array filters from a single string', () => {
+    const result = parseAuctionsSearchParams({
+      status: 'Leading,Losing',
+      auc_type: 'Down,Up',
+    })
+
+    expect(result.status).toEqual(['Leading', 'Losing'])
+    expect(result.auc_type).toEqual(['Down', 'Up'])
+  })
+
+  it('clamps per_page to 1..100', () => {
+    expect(parseAuctionsSearchParams({ per_page: '0' }).per_page).toBe(1)
+    expect(parseAuctionsSearchParams({ per_page: '200' }).per_page).toBe(100)
+  })
+
+  it('ignores unknown search params', () => {
+    const result = parseAuctionsSearchParams({
+      page: '2',
+      foo: 'bar',
+    })
+
+    expect(result).toEqual({ page: 2, per_page: 20 })
+    expect(result).not.toHaveProperty('foo')
+  })
+})
