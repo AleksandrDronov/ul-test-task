@@ -6,7 +6,8 @@ type TradingStatus = components['schemas']['TradingStatus']
 type AuctionListRequest = components['schemas']['AuctionListRequest']
 type AuctionAucType = NonNullable<AuctionListRequest['auc_type']>[number]
 
-const TRADING_STATUS_VALUES = [
+/** Exported so the filters widget can render option lists from the same source of truth. */
+export const TRADING_STATUS_VALUES = [
   'NotParticipating',
   'Leading',
   'Losing',
@@ -18,7 +19,7 @@ const TRADING_STATUS_VALUES = [
   'Unknown',
 ] as const satisfies readonly TradingStatus[]
 
-const AUC_TYPE_VALUES = [
+export const AUC_TYPE_VALUES = [
   'Request',
   'Up',
   'Down',

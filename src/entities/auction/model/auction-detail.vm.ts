@@ -94,6 +94,14 @@ export type AuctionDetailYourVm = {
   win: boolean
 }
 
+export type AuctionDetailAdmittedOrganizationVm = {
+  id: number | null
+  name: string | null
+  fullName: string | null
+  inn: string | null
+  isMain: boolean
+}
+
 export type AuctionDetailTradingVm = {
   status: AuctionStatus | null
   statusMobile: TradingStatus | null
@@ -114,6 +122,7 @@ export type AuctionDetailVm = {
   cargo: AuctionDetailCargoVm
   payment: AuctionDetailPaymentVm
   trading: AuctionDetailTradingVm
+  admittedOrganizations: AuctionDetailAdmittedOrganizationVm[]
   canSetBet: boolean
   hideBetsHistory: boolean
   hidePointsAddressAndContacts: boolean

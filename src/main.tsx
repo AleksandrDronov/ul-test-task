@@ -1,6 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { RouterProvider } from '@tanstack/react-router'
 import { AppProviders } from '@/app/App.providers.component'
+import { router } from '@/app/router'
 import './app/styles.css'
 
 const rootElement = document.getElementById('root')
@@ -20,10 +22,7 @@ void enableMocking().then(() => {
   createRoot(rootElement).render(
     <StrictMode>
       <AppProviders>
-        <main className="min-h-screen bg-background p-8 text-foreground">
-          <h1 className="text-2xl font-semibold">Грузовые аукционы</h1>
-          <p className="mt-2 text-muted-foreground">Приложение в разработке</p>
-        </main>
+        <RouterProvider router={router} />
       </AppProviders>
     </StrictMode>,
   )

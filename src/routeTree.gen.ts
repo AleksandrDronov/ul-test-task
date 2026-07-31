@@ -9,27 +9,118 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './app/routes/__root'
+import { Route as IndexRouteImport } from './app/routes/index'
+import { Route as AuctionsAuctionUuidRouteImport } from './app/routes/auctions.$auctionUuid'
+import { Route as AuctionsAuctionUuidBetRouteImport } from './app/routes/auctions_.$auctionUuid.bet'
+import { Route as AuctionsAuctionUuidBetsRouteImport } from './app/routes/auctions_.$auctionUuid.bets'
 
-export interface FileRoutesByFullPath {}
-export interface FileRoutesByTo {}
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuctionsAuctionUuidRoute = AuctionsAuctionUuidRouteImport.update({
+  id: '/auctions/$auctionUuid',
+  path: '/auctions/$auctionUuid',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuctionsAuctionUuidBetRoute = AuctionsAuctionUuidBetRouteImport.update({
+  id: '/auctions_/$auctionUuid/bet',
+  path: '/auctions/$auctionUuid/bet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuctionsAuctionUuidBetsRoute = AuctionsAuctionUuidBetsRouteImport.update({
+  id: '/auctions_/$auctionUuid/bets',
+  path: '/auctions/$auctionUuid/bets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/auctions/$auctionUuid': typeof AuctionsAuctionUuidRoute
+  '/auctions/$auctionUuid/bet': typeof AuctionsAuctionUuidBetRoute
+  '/auctions/$auctionUuid/bets': typeof AuctionsAuctionUuidBetsRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/auctions/$auctionUuid': typeof AuctionsAuctionUuidRoute
+  '/auctions/$auctionUuid/bet': typeof AuctionsAuctionUuidBetRoute
+  '/auctions/$auctionUuid/bets': typeof AuctionsAuctionUuidBetsRoute
+}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/auctions/$auctionUuid': typeof AuctionsAuctionUuidRoute
+  '/auctions_/$auctionUuid/bet': typeof AuctionsAuctionUuidBetRoute
+  '/auctions_/$auctionUuid/bets': typeof AuctionsAuctionUuidBetsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths:
+    | '/'
+    | '/auctions/$auctionUuid'
+    | '/auctions/$auctionUuid/bet'
+    | '/auctions/$auctionUuid/bets'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to:
+    | '/'
+    | '/auctions/$auctionUuid'
+    | '/auctions/$auctionUuid/bet'
+    | '/auctions/$auctionUuid/bets'
+  id:
+    | '__root__'
+    | '/'
+    | '/auctions/$auctionUuid'
+    | '/auctions_/$auctionUuid/bet'
+    | '/auctions_/$auctionUuid/bets'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AuctionsAuctionUuidRoute: typeof AuctionsAuctionUuidRoute
+  AuctionsAuctionUuidBetRoute: typeof AuctionsAuctionUuidBetRoute
+  AuctionsAuctionUuidBetsRoute: typeof AuctionsAuctionUuidBetsRoute
 }
 
-const rootRouteChildren: RootRouteChildren = {}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auctions/$auctionUuid': {
+      id: '/auctions/$auctionUuid'
+      path: '/auctions/$auctionUuid'
+      fullPath: '/auctions/$auctionUuid'
+      preLoaderRoute: typeof AuctionsAuctionUuidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auctions_/$auctionUuid/bet': {
+      id: '/auctions_/$auctionUuid/bet'
+      path: '/auctions/$auctionUuid/bet'
+      fullPath: '/auctions/$auctionUuid/bet'
+      preLoaderRoute: typeof AuctionsAuctionUuidBetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auctions_/$auctionUuid/bets': {
+      id: '/auctions_/$auctionUuid/bets'
+      path: '/auctions/$auctionUuid/bets'
+      fullPath: '/auctions/$auctionUuid/bets'
+      preLoaderRoute: typeof AuctionsAuctionUuidBetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AuctionsAuctionUuidRoute: AuctionsAuctionUuidRoute,
+  AuctionsAuctionUuidBetRoute: AuctionsAuctionUuidBetRoute,
+  AuctionsAuctionUuidBetsRoute: AuctionsAuctionUuidBetsRoute,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()

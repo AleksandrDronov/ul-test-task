@@ -1,5 +1,6 @@
 import type { components } from '@/shared/api/types/openapi'
 import type {
+  AuctionDetailAdmittedOrganizationVm,
   AuctionDetailCargoVm,
   AuctionDetailContactVm,
   AuctionDetailMainVm,
@@ -17,6 +18,7 @@ type RoutePoint = components['schemas']['RoutePoint']
 type CarRequirements = components['schemas']['CarRequirements']
 type AuctionShowTradingPrice = components['schemas']['AuctionShowTradingPrice']
 type AuctionShowTradingYour = components['schemas']['AuctionShowTradingYour']
+type AdmittedOrganization = components['schemas']['AdmittedOrganization']
 
 const mapMain = (main: AuctionShowResponse['main']): AuctionDetailMainVm => ({
   id: main.id ?? null,
@@ -109,6 +111,16 @@ const mapYour = (your: AuctionShowTradingYour | undefined): AuctionDetailYourVm 
   win: your?.win ?? false,
 })
 
+const mapAdmittedOrganization = (
+  organization: AdmittedOrganization,
+): AuctionDetailAdmittedOrganizationVm => ({
+  id: organization.id ?? null,
+  name: organization.name ?? null,
+  fullName: organization.full_name ?? null,
+  inn: organization.inn ?? null,
+  isMain: organization.is_main ?? false,
+})
+
 const mapTrading = (trading: AuctionShowResponse['trading']): AuctionDetailTradingVm => ({
   status: trading.status ?? null,
   statusMobile: trading.status_mobile ?? null,
@@ -129,6 +141,7 @@ export const mapAuctionDetailDtoToVm = (dto: AuctionShowResponse): AuctionDetail
   cargo: mapCargo(dto.cargo),
   payment: mapPayment(dto.payment),
   trading: mapTrading(dto.trading),
+  admittedOrganizations: dto.admitted_organizations.map(mapAdmittedOrganization),
   // Absent restriction flags → not applied; absent can_set_bet → bidding not offered.
   canSetBet: dto.trading.can_set_bet ?? false,
   hideBetsHistory: dto.hide_bets_history ?? dto.trading.hide_bets_history ?? false,

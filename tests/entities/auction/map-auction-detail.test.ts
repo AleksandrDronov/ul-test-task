@@ -47,6 +47,19 @@ describe('mapAuctionDetailDtoToVm', () => {
     expect(vm.trading.your.lastBet).toBeNull()
   })
 
+  it('maps admitted organizations', () => {
+    const vm = mapAuctionDetailDtoToVm(findDetailByCargoNum('00000000501'))
+
+    expect(vm.admittedOrganizations.length).toBeGreaterThan(0)
+    expect(vm.admittedOrganizations[0]).toEqual({
+      id: 14,
+      name: 'ООО Перевозчик',
+      fullName: 'Общество с ограниченной ответственностью Перевозчик',
+      inn: '9616244307',
+      isMain: true,
+    })
+  })
+
   it('maps absent restriction flags and can_set_bet to false', () => {
     const detail = structuredClone(findDetailByCargoNum('00000000501'))
     delete detail.hide_bets_history
