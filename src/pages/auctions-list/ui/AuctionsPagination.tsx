@@ -6,7 +6,7 @@ export type AuctionsPaginationProps = {
   onPageChange: (page: number) => void
 }
 
-export const AuctionsPaginationComponent = ({ meta, onPageChange }: AuctionsPaginationProps) => {
+export const AuctionsPagination = ({ meta, onPageChange }: AuctionsPaginationProps) => {
   const currentPage = meta.currentPage ?? 1
   const lastPage = meta.lastPage ?? 1
 

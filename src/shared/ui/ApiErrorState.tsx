@@ -49,7 +49,7 @@ export type ApiErrorStateProps = {
   className?: string
 }
 
-export const ApiErrorStateComponent = ({ error, onRetry, className }: ApiErrorStateProps) => {
+export const ApiErrorState = ({ error, onRetry, className }: ApiErrorStateProps) => {
   const { title, message } = resolveMessage(error)
 
   return (

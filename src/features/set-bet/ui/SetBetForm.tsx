@@ -22,7 +22,7 @@ export type SetBetFormProps = {
 const CANNOT_BID_MESSAGE = 'Ставки по этому аукциону недоступны.'
 const GENERIC_ERROR_MESSAGE = 'Не удалось отправить ставку. Попробуйте ещё раз.'
 
-export const SetBetFormComponent = ({ auctionUuid, price, canSetBet }: SetBetFormProps) => {
+export const SetBetForm = ({ auctionUuid, price, canSetBet }: SetBetFormProps) => {
   const inputId = useId()
   const hintId = useId()
   const errorId = useId()

@@ -12,12 +12,12 @@ import {
   TRADING_STATUS_RU_LABEL,
 } from '@/shared/config/status-labels'
 import { formatDate, formatDateTime, formatNumber, formatPrice, formatPricePerKm, formatYesNo } from '@/shared/lib/format'
-import { ApiErrorStateComponent } from '@/shared/ui/api-error-state.component'
+import { ApiErrorState } from '@/shared/ui/ApiErrorState'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
-import { EmptyStateComponent } from '@/shared/ui/empty-state.component'
+import { EmptyState } from '@/shared/ui/EmptyState'
 import { Skeleton } from '@/shared/ui/skeleton'
-import { DetailFieldComponent, DetailSectionComponent } from './detail-section.component'
+import { DetailField, DetailSection } from './DetailSection'
 
 const routeApi = getRouteApi('/auctions/$auctionUuid')
 
@@ -83,7 +83,7 @@ const RoutePointCard = ({
   </div>
 )
 
-export const AuctionDetailPageComponent = () => {
+export const AuctionDetailPage = () => {
   const { auctionUuid } = routeApi.useParams()
   const query = useAuctionDetailQuery(auctionUuid)
 
@@ -95,13 +95,13 @@ export const AuctionDetailPageComponent = () => {
 
       {query.isError &&
         (isNotFound ? (
-          <EmptyStateComponent
+          <EmptyState
             title="Аукцион не найден"
             description="Возможно, он был удалён или ссылка неверна."
             action={<BackToListLink />}
           />
         ) : (
-          <ApiErrorStateComponent
+          <ApiErrorState
             error={query.error}
             onRetry={() => {
               void query.refetch()
@@ -149,20 +149,20 @@ export const AuctionDetailPageComponent = () => {
               )}
             </div>
 
-            <DetailSectionComponent title="Основная информация">
-              <DetailFieldComponent label="Номер заявки" value={auction.main.cargoNum ?? '—'} />
-              <DetailFieldComponent label="Дата груза" value={formatDate(auction.main.cargoDate)} />
-              <DetailFieldComponent label="Создан" value={formatDateTime(auction.main.createdAt)} />
-            </DetailSectionComponent>
+            <DetailSection title="Основная информация">
+              <DetailField label="Номер заявки" value={auction.main.cargoNum ?? '—'} />
+              <DetailField label="Дата груза" value={formatDate(auction.main.cargoDate)} />
+              <DetailField label="Создан" value={formatDateTime(auction.main.createdAt)} />
+            </DetailSection>
 
-            <DetailSectionComponent title="Организатор">
-              <DetailFieldComponent label="Организация" value={auction.organizer.organizationName ?? '—'} />
-              <DetailFieldComponent label="ИНН" value={auction.organizer.organizationInn ?? '—'} />
-              <DetailFieldComponent label="КПП" value={auction.organizer.organizationKpp ?? '—'} />
-            </DetailSectionComponent>
+            <DetailSection title="Организатор">
+              <DetailField label="Организация" value={auction.organizer.organizationName ?? '—'} />
+              <DetailField label="ИНН" value={auction.organizer.organizationInn ?? '—'} />
+              <DetailField label="КПП" value={auction.organizer.organizationKpp ?? '—'} />
+            </DetailSection>
 
             {!auction.hidePointsAddressAndContacts && auction.contacts.length > 0 && (
-              <DetailSectionComponent title="Контакты">
+              <DetailSection title="Контакты">
                 <div className="space-y-3">
                   {auction.contacts.map((contact, index) => (
                     <div key={index} className="text-sm">
@@ -173,10 +173,10 @@ export const AuctionDetailPageComponent = () => {
                     </div>
                   ))}
                 </div>
-              </DetailSectionComponent>
+              </DetailSection>
             )}
 
-            <DetailSectionComponent title="Маршрут">
+            <DetailSection title="Маршрут">
               <div className="space-y-3">
                 {auction.routes.map((point, index) => (
                   <RoutePointCard
@@ -186,34 +186,34 @@ export const AuctionDetailPageComponent = () => {
                   />
                 ))}
               </div>
-            </DetailSectionComponent>
+            </DetailSection>
 
-            <DetailSectionComponent title="Груз и требования к транспорту">
+            <DetailSection title="Груз и требования к транспорту">
               {!auction.noViewCargoPrice && (
-                <DetailFieldComponent label="Стоимость груза" value={auction.cargo.price ?? '—'} />
+                <DetailField label="Стоимость груза" value={auction.cargo.price ?? '—'} />
               )}
-              <DetailFieldComponent label="Тип кузова" value={auction.cargo.bodyType ?? '—'} />
-              <DetailFieldComponent label="Расстояние" value={`${formatNumber(auction.cargo.distance)} км`} />
-              <DetailFieldComponent label="Количество ТС" value={formatNumber(auction.cargo.truckCount)} />
-              <DetailFieldComponent label="Международная перевозка" value={formatYesNo(auction.cargo.isInternational)} />
-              <DetailFieldComponent label="Контейнерная перевозка" value={formatYesNo(auction.cargo.containered)} />
+              <DetailField label="Тип кузова" value={auction.cargo.bodyType ?? '—'} />
+              <DetailField label="Расстояние" value={`${formatNumber(auction.cargo.distance)} км`} />
+              <DetailField label="Количество ТС" value={formatNumber(auction.cargo.truckCount)} />
+              <DetailField label="Международная перевозка" value={formatYesNo(auction.cargo.isInternational)} />
+              <DetailField label="Контейнерная перевозка" value={formatYesNo(auction.cargo.containered)} />
               {auction.cargo.car && (
                 <>
-                  <DetailFieldComponent label="Тип ТС" value={auction.cargo.car.type ?? '—'} />
-                  <DetailFieldComponent label="Грузоподъёмность" value={`${formatNumber(auction.cargo.car.weight)} т`} />
-                  <DetailFieldComponent label="Объём кузова" value={`${formatNumber(auction.cargo.car.volume)} м³`} />
-                  <DetailFieldComponent
+                  <DetailField label="Тип ТС" value={auction.cargo.car.type ?? '—'} />
+                  <DetailField label="Грузоподъёмность" value={`${formatNumber(auction.cargo.car.weight)} т`} />
+                  <DetailField label="Объём кузова" value={`${formatNumber(auction.cargo.car.volume)} м³`} />
+                  <DetailField
                     label="Габариты (Ш×Д×В)"
                     value={`${formatNumber(auction.cargo.car.width)}×${formatNumber(auction.cargo.car.length)}×${formatNumber(auction.cargo.car.height)} м`}
                   />
                 </>
               )}
-            </DetailSectionComponent>
+            </DetailSection>
 
-            <DetailSectionComponent title="Условия оплаты">
-              <DetailFieldComponent label="Форма оплаты" value={auction.payment.form ?? '—'} />
-              <DetailFieldComponent label="Условие" value={auction.payment.condition ?? auction.payment.conditionPredefined ?? '—'} />
-              <DetailFieldComponent
+            <DetailSection title="Условия оплаты">
+              <DetailField label="Форма оплаты" value={auction.payment.form ?? '—'} />
+              <DetailField label="Условие" value={auction.payment.condition ?? auction.payment.conditionPredefined ?? '—'} />
+              <DetailField
                 label="Отсрочка"
                 value={
                   auction.payment.delay !== null
@@ -221,34 +221,34 @@ export const AuctionDetailPageComponent = () => {
                     : '—'
                 }
               />
-              <DetailFieldComponent label="Валюта" value={auction.payment.currencyCode ?? '—'} />
-              <DetailFieldComponent label="Предоплата" value={auction.payment.prepay ?? '—'} />
-            </DetailSectionComponent>
+              <DetailField label="Валюта" value={auction.payment.currencyCode ?? '—'} />
+              <DetailField label="Предоплата" value={auction.payment.prepay ?? '—'} />
+            </DetailSection>
 
-            <DetailSectionComponent title="Параметры торгов">
-              <DetailFieldComponent
+            <DetailSection title="Параметры торгов">
+              <DetailField
                 label="Единица измерения ставки"
                 value={auction.trading.bidMeasurementType ? BID_MEASUREMENT_TYPE_RU_LABEL[auction.trading.bidMeasurementType] : '—'}
               />
-              <DetailFieldComponent label="Начало торгов" value={formatDateTime(auction.trading.startTime)} />
-              <DetailFieldComponent label="Окончание торгов" value={formatDateTime(auction.trading.stopTime)} />
-              <DetailFieldComponent label="Встречные ставки" value={formatYesNo(auction.trading.allowCounterBets)} />
-              <DetailFieldComponent label="Текущая цена" value={formatPrice(auction.trading.price.current)} />
-              <DetailFieldComponent label="Доступно для ставки" value={formatPrice(auction.trading.price.available)} />
-              <DetailFieldComponent label="Минимальная цена" value={formatPrice(auction.trading.price.min)} />
-              <DetailFieldComponent label="Максимальная цена" value={formatPrice(auction.trading.price.max)} />
-              <DetailFieldComponent label="Шаг ставки" value={formatPrice(auction.trading.price.step)} />
-              <DetailFieldComponent label="Цена за км" value={formatPricePerKm(auction.trading.price.pricePerKm)} />
+              <DetailField label="Начало торгов" value={formatDateTime(auction.trading.startTime)} />
+              <DetailField label="Окончание торгов" value={formatDateTime(auction.trading.stopTime)} />
+              <DetailField label="Встречные ставки" value={formatYesNo(auction.trading.allowCounterBets)} />
+              <DetailField label="Текущая цена" value={formatPrice(auction.trading.price.current)} />
+              <DetailField label="Доступно для ставки" value={formatPrice(auction.trading.price.available)} />
+              <DetailField label="Минимальная цена" value={formatPrice(auction.trading.price.min)} />
+              <DetailField label="Максимальная цена" value={formatPrice(auction.trading.price.max)} />
+              <DetailField label="Шаг ставки" value={formatPrice(auction.trading.price.step)} />
+              <DetailField label="Цена за км" value={formatPricePerKm(auction.trading.price.pricePerKm)} />
               {auction.trading.your.bet && (
-                <DetailFieldComponent
+                <DetailField
                   label="Ваша последняя ставка"
                   value={`${formatPrice(auction.trading.your.lastBet)}${auction.trading.your.win ? ' · Победитель' : ''}`}
                 />
               )}
-            </DetailSectionComponent>
+            </DetailSection>
 
             {auction.admittedOrganizations.length > 0 && (
-              <DetailSectionComponent title="Допущенные организации">
+              <DetailSection title="Допущенные организации">
                 <div className="space-y-2">
                   {auction.admittedOrganizations.map((organization, index) => (
                     <div key={organization.id ?? index} className="flex flex-wrap items-center gap-2 text-sm">
@@ -258,7 +258,7 @@ export const AuctionDetailPageComponent = () => {
                     </div>
                   ))}
                 </div>
-              </DetailSectionComponent>
+              </DetailSection>
             )}
           </div>
         )

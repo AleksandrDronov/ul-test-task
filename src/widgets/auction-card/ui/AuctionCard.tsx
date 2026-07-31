@@ -74,7 +74,7 @@ const PrimaryActionButton = ({ auction }: { auction: AuctionListItemVm }) => {
   )
 }
 
-export const AuctionCardComponent = ({ auction }: AuctionCardProps) => {
+export const AuctionCard = ({ auction }: AuctionCardProps) => {
   const prefetch = usePrefetchAuction(auction.auctionUuid)
   const { load, unload } = auction.route
 

@@ -1,4 +1,22 @@
+import { format } from 'date-fns'
+
 /** Связывает `<input type="date">` (формат `YYYY-MM-DD`) с ISO-строками с offset, которые ожидают API и схема. */
+
+export const isoToDate = (iso: string | undefined): Date | undefined => {
+  if (!iso) return undefined
+  const date = new Date(iso)
+  return Number.isNaN(date.getTime()) ? undefined : date
+}
+
+export const dateToIsoRangeStart = (date: Date | undefined): string | undefined => {
+  if (!date) return undefined
+  return dateInputValueToIsoRangeStart(format(date, 'yyyy-MM-dd'))
+}
+
+export const dateToIsoRangeEnd = (date: Date | undefined): string | undefined => {
+  if (!date) return undefined
+  return dateInputValueToIsoRangeEnd(format(date, 'yyyy-MM-dd'))
+}
 
 export const isoToDateInputValue = (iso: string | undefined): string => {
   if (!iso) return ''

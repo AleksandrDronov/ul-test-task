@@ -7,7 +7,7 @@ export type EmptyStateProps = {
   className?: string
 }
 
-export const EmptyStateComponent = ({ title, description, action, className }: EmptyStateProps) => {
+export const EmptyState = ({ title, description, action, className }: EmptyStateProps) => {
   return (
     <div
       className={`flex flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-card p-8 text-center ${className ?? ''}`}

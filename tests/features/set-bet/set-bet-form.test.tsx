@@ -4,7 +4,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ApiError } from '@/shared/api/api-error'
-import { SetBetFormComponent } from '@/features/set-bet/ui/set-bet-form.component'
+import { SetBetForm } from '@/features/set-bet/ui/SetBetForm'
 import type { AuctionDetailTradingPriceVm } from '@/entities/auction/model/auction-detail.vm'
 import * as betApi from '@/entities/bet/api/bet.api'
 
@@ -39,11 +39,11 @@ const PRICE: AuctionDetailTradingPriceVm = {
   pricePerKm: 21.3,
 }
 
-const renderForm = (overrides: Partial<ComponentProps<typeof SetBetFormComponent>> = {}) => {
+const renderForm = (overrides: Partial<ComponentProps<typeof SetBetForm>> = {}) => {
   const queryClient = new QueryClient()
   return render(
     <QueryClientProvider client={queryClient}>
-      <SetBetFormComponent auctionUuid="uuid-1" price={PRICE} canSetBet {...overrides} />
+      <SetBetForm auctionUuid="uuid-1" price={PRICE} canSetBet {...overrides} />
     </QueryClientProvider>,
   )
 }
@@ -51,7 +51,7 @@ const renderForm = (overrides: Partial<ComponentProps<typeof SetBetFormComponent
 const getPriceInput = () => screen.getByLabelText('Ваша ставка')
 const getSubmitButton = () => screen.getByRole('button', { name: /сделать ставку/i })
 
-describe('SetBetFormComponent', () => {
+describe('SetBetForm', () => {
   beforeEach(() => {
     postSetBetMock.mockReset()
   })

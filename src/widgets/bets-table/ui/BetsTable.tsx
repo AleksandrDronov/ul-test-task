@@ -6,7 +6,7 @@ export type BetsTableProps = {
   bets: BetItemVm[]
 }
 
-export const BetsTableComponent = ({ bets }: BetsTableProps) => (
+export const BetsTable = ({ bets }: BetsTableProps) => (
   <div className="overflow-x-auto rounded-lg border border-border">
     <table className="w-full min-w-160 text-sm">
       <thead className="bg-muted/50 text-left text-xs uppercase tracking-wide text-muted-foreground">

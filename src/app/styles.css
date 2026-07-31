@@ -1,5 +1,52 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "react-day-picker/style.css";
+
+[data-slot="calendar"] {
+  --cell-size: 1.625rem;
+  --rdp-day-height: var(--cell-size);
+  --rdp-day-width: var(--cell-size);
+  --rdp-day_button-height: var(--cell-size);
+  --rdp-day_button-width: var(--cell-size);
+  --rdp-day_button-border: none;
+  --rdp-day_button-border-radius: 0.375rem;
+  --rdp-selected-border: none;
+  --rdp-accent-color: var(--primary);
+  --rdp-today-color: var(--foreground);
+  --rdp-weekday-padding: 0;
+  --rdp-nav-height: var(--cell-size);
+  --rdp-nav_button-height: var(--cell-size);
+  --rdp-nav_button-width: var(--cell-size);
+}
+
+[data-slot="calendar"] .rdp-selected {
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+[data-slot="calendar"] .rdp-selected .rdp-day_button {
+  border: none;
+}
+
+[data-slot="calendar"] .rdp-today:not(.rdp-outside) {
+  color: inherit;
+}
+
+[data-slot="calendar"] .rdp-day,
+[data-slot="calendar"] .rdp-day_button {
+  line-height: 1;
+}
+
+[data-slot="calendar"] .rdp-day_button {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+[data-slot="calendar"] .rdp-selected,
+[data-slot="calendar"] .rdp-selected .rdp-day_button {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
 
 @custom-variant dark (&:is(.dark *));
 

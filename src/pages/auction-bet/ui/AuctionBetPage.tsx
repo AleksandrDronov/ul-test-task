@@ -1,13 +1,13 @@
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { useAuctionDetailQuery } from '@/entities/auction/api/use-auction-detail-query'
-import { SetBetFormComponent } from '@/features/set-bet/ui/set-bet-form.component'
+import { SetBetForm } from '@/features/set-bet/ui/SetBetForm'
 import { DEFAULT_SEARCH_PARAMS } from '@/features/filter-auctions/model/parse-auctions-search-params'
 import { ApiError } from '@/shared/api/api-error'
-import { ApiErrorStateComponent } from '@/shared/ui/api-error-state.component'
+import { ApiErrorState } from '@/shared/ui/ApiErrorState'
 import { Button } from '@/shared/ui/button'
-import { EmptyStateComponent } from '@/shared/ui/empty-state.component'
+import { EmptyState } from '@/shared/ui/EmptyState'
 import { Skeleton } from '@/shared/ui/skeleton'
-import { AuctionSummaryComponent } from '@/widgets/auction-summary/ui/auction-summary.component'
+import { AuctionSummary } from '@/widgets/auction-summary/ui/AuctionSummary'
 
 const routeApi = getRouteApi('/auctions_/$auctionUuid/bet')
 
@@ -19,7 +19,7 @@ const BackToListLink = () => (
   </Button>
 )
 
-export const AuctionBetPageComponent = () => {
+export const AuctionBetPage = () => {
   const { auctionUuid } = routeApi.useParams()
   const query = useAuctionDetailQuery(auctionUuid)
 
@@ -38,13 +38,13 @@ export const AuctionBetPageComponent = () => {
 
       {query.isError &&
         (isNotFound ? (
-          <EmptyStateComponent
+          <EmptyState
             title="Аукцион не найден"
             description="Возможно, он был удалён или ссылка неверна."
             action={<BackToListLink />}
           />
         ) : (
-          <ApiErrorStateComponent
+          <ApiErrorState
             error={query.error}
             onRetry={() => {
               void query.refetch()
@@ -54,10 +54,10 @@ export const AuctionBetPageComponent = () => {
 
       {query.isSuccess && (
         <div className="space-y-6">
-          <AuctionSummaryComponent auction={query.data} />
+          <AuctionSummary auction={query.data} />
 
           <div className="rounded-lg border border-border bg-card p-4">
-            <SetBetFormComponent
+            <SetBetForm
               auctionUuid={auctionUuid}
               price={query.data.trading.price}
               canSetBet={query.data.canSetBet}

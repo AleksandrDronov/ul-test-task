@@ -3,12 +3,12 @@ import { useAuctionDetailQuery } from '@/entities/auction/api/use-auction-detail
 import { useAuctionBetsQuery } from '@/entities/bet/api/use-auction-bets-query'
 import { DEFAULT_SEARCH_PARAMS } from '@/features/filter-auctions/model/parse-auctions-search-params'
 import { ApiError } from '@/shared/api/api-error'
-import { ApiErrorStateComponent } from '@/shared/ui/api-error-state.component'
+import { ApiErrorState } from '@/shared/ui/ApiErrorState'
 import { Button } from '@/shared/ui/button'
-import { EmptyStateComponent } from '@/shared/ui/empty-state.component'
+import { EmptyState } from '@/shared/ui/EmptyState'
 import { Skeleton } from '@/shared/ui/skeleton'
-import { AuctionSummaryComponent } from '@/widgets/auction-summary/ui/auction-summary.component'
-import { BetsTableComponent } from '@/widgets/bets-table/ui/bets-table.component'
+import { AuctionSummary } from '@/widgets/auction-summary/ui/AuctionSummary'
+import { BetsTable } from '@/widgets/bets-table/ui/BetsTable'
 
 const routeApi = getRouteApi('/auctions_/$auctionUuid/bets')
 
@@ -27,7 +27,7 @@ const PageSkeleton = () => (
   </div>
 )
 
-export const AuctionBetsPageComponent = () => {
+export const AuctionBetsPage = () => {
   const { auctionUuid } = routeApi.useParams()
   const detailQuery = useAuctionDetailQuery(auctionUuid)
   const betsQuery = useAuctionBetsQuery(auctionUuid, undefined, {
@@ -44,13 +44,13 @@ export const AuctionBetsPageComponent = () => {
 
       {detailQuery.isError &&
         (isNotFound ? (
-          <EmptyStateComponent
+          <EmptyState
             title="Аукцион не найден"
             description="Возможно, он был удалён или ссылка неверна."
             action={<BackToListLink />}
           />
         ) : (
-          <ApiErrorStateComponent
+          <ApiErrorState
             error={detailQuery.error}
             onRetry={() => {
               void detailQuery.refetch()
@@ -60,30 +60,30 @@ export const AuctionBetsPageComponent = () => {
 
       {detailQuery.isSuccess && (
         <div className="space-y-6">
-          <AuctionSummaryComponent auction={detailQuery.data} />
+          <AuctionSummary auction={detailQuery.data} />
 
           {detailQuery.data.hideBetsHistory ? (
-            <EmptyStateComponent
+            <EmptyState
               title="История ставок скрыта"
               description="Организатор аукциона скрыл историю ставок для участников."
             />
           ) : betsQuery.isPending ? (
             <Skeleton className="h-64 w-full" />
           ) : betsQuery.isError ? (
-            <ApiErrorStateComponent
+            <ApiErrorState
               error={betsQuery.error}
               onRetry={() => {
                 void betsQuery.refetch()
               }}
             />
           ) : betsQuery.data.items.length === 0 ? (
-            <EmptyStateComponent title="Ставок пока нет" description="Как только появятся ставки, они отобразятся здесь." />
+            <EmptyState title="Ставок пока нет" description="Как только появятся ставки, они отобразятся здесь." />
           ) : (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
                 Участников: {betsQuery.data.participantsCount}
               </p>
-              <BetsTableComponent bets={betsQuery.data.items} />
+              <BetsTable bets={betsQuery.data.items} />
             </div>
           )}
         </div>

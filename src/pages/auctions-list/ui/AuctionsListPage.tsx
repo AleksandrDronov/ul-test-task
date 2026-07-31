@@ -2,17 +2,17 @@ import { getRouteApi } from '@tanstack/react-router'
 import { useAuctionsListQuery } from '@/entities/auction/api/use-auctions-list-query'
 import { buildAuctionListRequest } from '@/features/filter-auctions/model/build-auction-list-request'
 import { useAuctionsFilters } from '@/features/filter-auctions/model/use-auctions-filters'
-import { AuctionCardComponent } from '@/widgets/auction-card/ui/auction-card.component'
-import { AuctionsFiltersComponent } from '@/widgets/auctions-filters/ui/auctions-filters.component'
-import { ApiErrorStateComponent } from '@/shared/ui/api-error-state.component'
-import { EmptyStateComponent } from '@/shared/ui/empty-state.component'
+import { AuctionCard } from '@/widgets/auction-card/ui/AuctionCard'
+import { AuctionsFilters } from '@/widgets/auctions-filters/ui/AuctionsFilters'
+import { ApiErrorState } from '@/shared/ui/ApiErrorState'
+import { EmptyState } from '@/shared/ui/EmptyState'
 import { Button } from '@/shared/ui/button'
-import { AuctionsListSkeletonComponent } from './auctions-list-skeleton.component'
-import { AuctionsPaginationComponent } from './auctions-pagination.component'
+import { AuctionsListSkeleton } from './AuctionsListSkeleton'
+import { AuctionsPagination } from './AuctionsPagination'
 
 const routeApi = getRouteApi('/')
 
-export const AuctionsListPageComponent = () => {
+export const AuctionsListPage = () => {
   const search = routeApi.useSearch()
   const { setPage, resetFilters } = useAuctionsFilters()
 
@@ -25,14 +25,14 @@ export const AuctionsListPageComponent = () => {
 
       <div className="flex flex-col gap-6 md:flex-row md:items-start">
         <aside className="md:w-72 md:shrink-0">
-          <AuctionsFiltersComponent />
+          <AuctionsFilters />
         </aside>
 
         <div className="min-w-0 flex-1">
-          {query.isPending && <AuctionsListSkeletonComponent />}
+          {query.isPending && <AuctionsListSkeleton />}
 
           {query.isError && (
-            <ApiErrorStateComponent
+            <ApiErrorState
               error={query.error}
               onRetry={() => {
                 void query.refetch()
@@ -41,7 +41,7 @@ export const AuctionsListPageComponent = () => {
           )}
 
           {query.isSuccess && query.data.items.length === 0 && (
-            <EmptyStateComponent
+            <EmptyState
               title="Аукционы не найдены"
               description="Попробуйте изменить или сбросить фильтры поиска."
               action={
@@ -57,11 +57,11 @@ export const AuctionsListPageComponent = () => {
               <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {query.data.items.map((item, index) => (
                   <li key={item.auctionUuid ?? index}>
-                    <AuctionCardComponent auction={item} />
+                    <AuctionCard auction={item} />
                   </li>
                 ))}
               </ul>
-              <AuctionsPaginationComponent meta={query.data.meta} onPageChange={setPage} />
+              <AuctionsPagination meta={query.data.meta} onPageChange={setPage} />
             </>
           )}
         </div>
