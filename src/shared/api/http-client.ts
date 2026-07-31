@@ -2,17 +2,19 @@ import { API_BASE_URL } from './base-url'
 import { parseApiError } from './api-error'
 
 export const apiRequest = async <T>(path: string, init?: RequestInit): Promise<T> => {
-  const extraHeaders = init?.headers
-    ? Object.fromEntries(new Headers(init.headers))
-    : {}
+  const headers = new Headers(init?.headers)
+
+  if (!headers.has('accept')) {
+    headers.set('Accept', 'application/json')
+  }
+
+  if (init?.body && !headers.has('content-type')) {
+    headers.set('Content-Type', 'application/json')
+  }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
-    headers: {
-      Accept: 'application/json',
-      ...(init?.body ? { 'Content-Type': 'application/json' } : {}),
-      ...extraHeaders,
-    },
+    headers,
   })
 
   if (!response.ok) {
