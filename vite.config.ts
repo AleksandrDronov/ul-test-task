@@ -8,7 +8,14 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
-  plugins: [tanstackRouter({ routesDirectory: './src/app/routes' }), react(), tailwindcss()],
+  plugins: [
+    tanstackRouter({
+      routesDirectory: './src/app/routes',
+      autoCodeSplitting: true,
+    }),
+    react(),
+    tailwindcss(),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(rootDir, './src'),
