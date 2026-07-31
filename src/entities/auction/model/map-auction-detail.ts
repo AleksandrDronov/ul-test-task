@@ -129,6 +129,7 @@ export const mapAuctionDetailDtoToVm = (dto: AuctionShowResponse): AuctionDetail
   cargo: mapCargo(dto.cargo),
   payment: mapPayment(dto.payment),
   trading: mapTrading(dto.trading),
+  // Absent restriction flags → not applied; absent can_set_bet → bidding not offered.
   canSetBet: dto.trading.can_set_bet ?? false,
   hideBetsHistory: dto.hide_bets_history ?? dto.trading.hide_bets_history ?? false,
   hidePointsAddressAndContacts: dto.trading.hide_points_address_and_contacts ?? false,

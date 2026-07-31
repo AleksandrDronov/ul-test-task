@@ -57,4 +57,17 @@ describe('mapAuctionListItemDtoToVm', () => {
 
     expect(vm.pricePerKm).toBeNull()
   })
+
+  it('maps absent can_set_bet and hide_points_address_and_contacts to false', () => {
+    const item = structuredClone(findListItemByCargoNum('00000000501'))
+    if (item.trading) {
+      delete item.trading.can_set_bet
+      delete item.trading.hide_points_address_and_contacts
+    }
+
+    const vm = mapAuctionListItemDtoToVm(item)
+
+    expect(vm.canSetBet).toBe(false)
+    expect(vm.hidePointsAddressAndContacts).toBe(false)
+  })
 })

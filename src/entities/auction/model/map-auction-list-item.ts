@@ -63,6 +63,7 @@ const mapCargo = (cargo: AuctionListItem['cargo']): AuctionListCargoVm => ({
 export const mapAuctionListItemDtoToVm = (dto: AuctionListItem): AuctionListItemVm => {
   const { main, trading, route } = dto
 
+  // Absent restriction flags → not applied; absent can_set_bet → bidding not offered.
   const canSetBet = trading?.can_set_bet ?? false
   const hasBet = trading?.your?.bet ?? false
   const historyViewable = isBetHistoryViewableFromListStatus(trading?.status)

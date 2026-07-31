@@ -46,4 +46,20 @@ describe('mapAuctionDetailDtoToVm', () => {
     expect(vm.trading.your.bet).toBe(false)
     expect(vm.trading.your.lastBet).toBeNull()
   })
+
+  it('maps absent restriction flags and can_set_bet to false', () => {
+    const detail = structuredClone(findDetailByCargoNum('00000000501'))
+    delete detail.hide_bets_history
+    delete detail.trading.can_set_bet
+    delete detail.trading.hide_bets_history
+    delete detail.trading.hide_points_address_and_contacts
+    delete detail.trading.no_view_cargo_price
+
+    const vm = mapAuctionDetailDtoToVm(detail)
+
+    expect(vm.canSetBet).toBe(false)
+    expect(vm.hideBetsHistory).toBe(false)
+    expect(vm.hidePointsAddressAndContacts).toBe(false)
+    expect(vm.noViewCargoPrice).toBe(false)
+  })
 })
