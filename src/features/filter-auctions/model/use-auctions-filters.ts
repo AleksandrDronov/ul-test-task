@@ -6,14 +6,19 @@ const routeApi = getRouteApi('/')
 export type AuctionsFilterPatch = Partial<Omit<AuctionsSearchParams, 'page' | 'per_page'>>
 
 /**
- * URL — единственный источник правды для значений фильтров (разрешение #1).
- * Изменение любого фильтра сбрасывает страницу на 1; `setPage` — единственный способ
- * менять `page` без затрагивания остальных фильтров.
+ * Синхронизирует фильтры списка аукционов с URL (search-параметры маршрута `/`).
+ * Единственный источник правды для значений фильтров — адресная строка.
+ *
+ * @returns Текущие фильтры и действия для их изменения через навигацию.
  */
 export const useAuctionsFilters = (): {
+  /** Актуальные search-параметры списка аукционов. */
   filters: AuctionsSearchParams
+  /** Применяет патч к фильтрам и сбрасывает страницу на первую. */
   setFilters: (patch: AuctionsFilterPatch) => void
+  /** Переключает страницу, сохраняя остальные фильтры. */
   setPage: (page: number) => void
+  /** Сбрасывает все фильтры, оставляя только `per_page`, и возвращает на первую страницу. */
   resetFilters: () => void
 } => {
   const filters: AuctionsSearchParams = routeApi.useSearch()

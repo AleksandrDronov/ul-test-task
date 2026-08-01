@@ -3,6 +3,13 @@ import type { AuctionsSearchParams } from './auctions-search-params.schema'
 
 type AuctionListRequest = components['schemas']['AuctionListRequest']
 
+/**
+ * Собирает тело запроса списка аукционов из search-параметров маршрута.
+ * В запрос попадают только заданные фильтры: пустые массивы и `undefined` опускаются.
+ *
+ * @param params — валидированные search-параметры страницы списка аукционов.
+ * @returns Объект `AuctionListRequest` для API.
+ */
 export const buildAuctionListRequest = (
   params: AuctionsSearchParams,
 ): AuctionListRequest => {
