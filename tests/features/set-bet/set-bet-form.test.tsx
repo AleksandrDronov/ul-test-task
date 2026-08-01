@@ -41,29 +41,61 @@ const PRICE: AuctionDetailTradingPriceVm = {
 
 const renderForm = (overrides: Partial<ComponentProps<typeof SetBetForm>> = {}) => {
   const queryClient = new QueryClient()
-  return render(
+  const baseProps = { auctionUuid: 'uuid-1', price: PRICE, canSetBet: true, ...overrides }
+
+  const Wrapper = (props: ComponentProps<typeof SetBetForm>) => (
     <QueryClientProvider client={queryClient}>
-      <SetBetForm auctionUuid="uuid-1" price={PRICE} canSetBet {...overrides} />
-    </QueryClientProvider>,
+      <SetBetForm {...props} />
+    </QueryClientProvider>
   )
+
+  const view = render(<Wrapper {...baseProps} />)
+
+  return {
+    ...view,
+    rerenderForm: (nextOverrides: Partial<ComponentProps<typeof SetBetForm>> = {}) =>
+      view.rerender(<Wrapper {...baseProps} {...nextOverrides} />),
+  }
 }
 
 const getPriceInput = () => screen.getByLabelText('Ваша ставка')
 const getSubmitButton = () => screen.getByRole('button', { name: /сделать ставку/i })
+const getAvailablePriceButton = () =>
+  screen.getByRole('button', { name: /45\s?000\s?₽/i })
 
 describe('SetBetForm', () => {
   beforeEach(() => {
     postSetBetMock.mockReset()
   })
 
+  it('prefills the input with the available price', () => {
+    renderForm()
+
+    expect(getPriceInput()).toHaveValue(45000)
+    expect(screen.getByText(/Доступная цена: 45\s?000\s?₽/)).toBeInTheDocument()
+    expect(screen.getByText(/от 30\s?000\s?₽ до 50\s?000\s?₽/)).toBeInTheDocument()
+  })
+
   it('shows the field error for an invalid price and does not call the mutation', async () => {
     const user = userEvent.setup()
     renderForm()
 
+    await user.clear(getPriceInput())
     await user.type(getPriceInput(), '100')
     await user.click(getSubmitButton())
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Цена не может быть меньше 30000.')
+    expect(postSetBetMock).not.toHaveBeenCalled()
+  })
+
+  it('shows a validation error when the price field is empty', async () => {
+    const user = userEvent.setup()
+    renderForm()
+
+    await user.clear(getPriceInput())
+    await user.click(getSubmitButton())
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Введите цену ставки.')
     expect(postSetBetMock).not.toHaveBeenCalled()
   })
 
@@ -72,12 +104,22 @@ describe('SetBetForm', () => {
     const user = userEvent.setup()
     renderForm()
 
-    await user.type(getPriceInput(), '45000')
     await user.click(getSubmitButton())
 
     await waitFor(() => {
       expect(postSetBetMock).toHaveBeenCalledWith('uuid-1', 45000)
     })
+  })
+
+  it('fills the available price when the quick-bid button is clicked', async () => {
+    const user = userEvent.setup()
+    renderForm()
+
+    await user.clear(getPriceInput())
+    await user.type(getPriceInput(), '100')
+    await user.click(getAvailablePriceButton())
+
+    expect(getPriceInput()).toHaveValue(45000)
   })
 
   it('maps a 422 price field error from the server onto the field', async () => {
@@ -93,12 +135,54 @@ describe('SetBetForm', () => {
     const user = userEvent.setup()
     renderForm()
 
-    await user.type(getPriceInput(), '45000')
     await user.click(getSubmitButton())
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'Ставки по этому аукциону недоступны.',
     )
+  })
+
+  it('shows a persistent error state for non-field API failures', async () => {
+    postSetBetMock.mockRejectedValue(
+      new ApiError({
+        status: 503,
+        code: 'service_unavailable',
+        title: 'Сервис временно недоступен',
+        message: 'Попробуйте повторить запрос через некоторое время.',
+        fieldErrors: [],
+      }),
+    )
+    const user = userEvent.setup()
+    renderForm()
+
+    await user.click(getSubmitButton())
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Сервис временно недоступен')
+    expect(screen.getByRole('button', { name: /повторить попытку/i })).toBeInTheDocument()
+  })
+
+  it('revalidates against updated price limits after the price prop changes', async () => {
+    const user = userEvent.setup()
+    const { rerenderForm } = renderForm()
+
+    rerenderForm({
+      price: {
+        ...PRICE,
+        available: 34000,
+        min: 34000,
+      },
+    })
+
+    await waitFor(() => {
+      expect(getPriceInput()).toHaveValue(34000)
+    })
+
+    await user.clear(getPriceInput())
+    await user.type(getPriceInput(), '33500')
+    await user.click(getSubmitButton())
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Цена не может быть меньше 34000.')
+    expect(postSetBetMock).not.toHaveBeenCalled()
   })
 
   it('renders disabled with an explanation and blocks submission when canSetBet is false', async () => {

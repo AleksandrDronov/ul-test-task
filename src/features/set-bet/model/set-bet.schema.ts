@@ -25,7 +25,12 @@ const isOnStep = (price: number, max: number, step: number): boolean => {
  */
 export const createSetBetSchema = (limits: SetBetLimits) =>
   z.object({
-    price: z.number({ invalid_type_error: 'Введите цену ставки.' }).superRefine((price, ctx) => {
+    price: z
+      .number({
+        required_error: 'Введите цену ставки.',
+        invalid_type_error: 'Введите цену ставки.',
+      })
+      .superRefine((price, ctx) => {
       if (price <= 0) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Цена должна быть больше 0.' })
         return
