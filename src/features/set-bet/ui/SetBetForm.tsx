@@ -1,21 +1,26 @@
 import type { AuctionDetailTradingPriceVm } from '@/entities/auction'
+import type { components } from '@/shared/api/types/openapi'
 import { formatPrice } from '@/shared/lib'
 import { ApiErrorState, Button, Input, Label } from '@/shared/ui'
 import { useSetBetForm } from '../model/use-set-bet-form'
 
+type AuctionType = components['schemas']['AuctionType']
+
 export type SetBetFormProps = {
   auctionUuid: string
   price: AuctionDetailTradingPriceVm
+  aucType: AuctionType | null
   canSetBet: boolean
 }
 
 const CANNOT_BID_MESSAGE = 'Ставки по этому аукциону недоступны.'
 
-export const SetBetForm = ({ auctionUuid, price, canSetBet }: SetBetFormProps) => {
+export const SetBetForm = ({ auctionUuid, price, aucType, canSetBet }: SetBetFormProps) => {
   const {
     inputId,
     hintId,
     errorId,
+    limits,
     priceRegister,
     priceErrorMessage,
     isBusy,
@@ -24,7 +29,7 @@ export const SetBetForm = ({ auctionUuid, price, canSetBet }: SetBetFormProps) =
     onSubmit,
     handleUseAvailablePrice,
     handleRetrySubmit,
-  } = useSetBetForm({ auctionUuid, price })
+  } = useSetBetForm({ auctionUuid, price, aucType })
 
   const hasAvailablePrice = typeof price.available === 'number'
 
@@ -61,9 +66,9 @@ export const SetBetForm = ({ auctionUuid, price, canSetBet }: SetBetFormProps) =
             <Input
               id={inputId}
               type="number"
-              step={price.step ?? 'any'}
-              min={price.min ?? undefined}
-              max={price.max ?? undefined}
+              step={limits.step ?? price.step ?? 'any'}
+              min={limits.min ?? undefined}
+              max={limits.max ?? undefined}
               inputMode="decimal"
               autoComplete="off"
               aria-invalid={Boolean(priceErrorMessage)}
@@ -72,10 +77,10 @@ export const SetBetForm = ({ auctionUuid, price, canSetBet }: SetBetFormProps) =
             />
             <p id={hintId} className="text-sm text-muted-foreground">
               Доступная цена: {formatPrice(price.available)}, шаг: {formatPrice(price.step)}
-              {typeof price.min === 'number' && typeof price.max === 'number' && (
+              {typeof limits.min === 'number' && typeof limits.max === 'number' && (
                 <>
                   {' '}
-                  · от {formatPrice(price.min)} до {formatPrice(price.max)}
+                  · от {formatPrice(limits.min)} до {formatPrice(limits.max)}
                 </>
               )}
             </p>

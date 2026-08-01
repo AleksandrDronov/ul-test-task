@@ -41,7 +41,13 @@ const PRICE: AuctionDetailTradingPriceVm = {
 
 const renderForm = (overrides: Partial<ComponentProps<typeof SetBetForm>> = {}) => {
   const queryClient = new QueryClient()
-  const baseProps = { auctionUuid: 'uuid-1', price: PRICE, canSetBet: true, ...overrides }
+  const baseProps = {
+    auctionUuid: 'uuid-1',
+    price: PRICE,
+    aucType: 'Down' as const,
+    canSetBet: true,
+    ...overrides,
+  }
 
   const Wrapper = (props: ComponentProps<typeof SetBetForm>) => (
     <QueryClientProvider client={queryClient}>
@@ -74,7 +80,31 @@ describe('SetBetForm', () => {
 
     expect(getPriceInput()).toHaveValue(45000)
     expect(screen.getByText(/Доступная цена: 45\s?000\s?₽/)).toBeInTheDocument()
-    expect(screen.getByText(/от 30\s?000\s?₽ до 50\s?000\s?₽/)).toBeInTheDocument()
+    expect(screen.getByText(/от 30\s?000\s?₽ до 45\s?000\s?₽/)).toBeInTheDocument()
+  })
+
+  it('rejects a price above current minus step on a Down auction', async () => {
+    const user = userEvent.setup()
+    renderForm()
+
+    await user.clear(getPriceInput())
+    await user.type(getPriceInput(), '50000')
+    await user.click(getSubmitButton())
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Цена не может быть больше 45000.')
+    expect(postSetBetMock).not.toHaveBeenCalled()
+  })
+
+  it('rejects a price equal to current on a Down auction', async () => {
+    const user = userEvent.setup()
+    renderForm()
+
+    await user.clear(getPriceInput())
+    await user.type(getPriceInput(), '46000')
+    await user.click(getSubmitButton())
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Цена не может быть больше 45000.')
+    expect(postSetBetMock).not.toHaveBeenCalled()
   })
 
   it('shows the field error for an invalid price and does not call the mutation', async () => {

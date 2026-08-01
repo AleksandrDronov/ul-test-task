@@ -17,6 +17,7 @@ const expectNotFound = (result: ReturnType<typeof setBet>) => {
 
 const ACTIVE_WITH_BETS_UUID = '00000000-0000-4000-8000-000000000501'
 const USER_LEADING_UUID = '00000000-0000-4000-8000-000000000502'
+const UP_AUCTION_UUID = '00000000-0000-4000-8000-000000000510'
 const CANNOT_BID_UUID = '00000000-0000-4000-8000-000000000504'
 const HIDDEN_HISTORY_UUID = '00000000-0000-4000-8000-000000000505'
 const EMPTY_BETS_UUID = '00000000-0000-4000-8000-000000000506'
@@ -95,6 +96,45 @@ describe('msw store: setBet', () => {
     const body = expectValidationError(setBet(ACTIVE_WITH_BETS_UUID, 51000))
 
     expect(body.errors[0]).toMatchObject({ field: 'price', code: 'price_too_high' })
+  })
+
+  it('rejects a price above current minus step on a Down auction even when below start max', () => {
+    const body = expectValidationError(setBet(ACTIVE_WITH_BETS_UUID, 50000))
+
+    expect(body.errors[0]).toMatchObject({ field: 'price', code: 'price_too_high' })
+  })
+
+  it('rejects a price equal to current on a Down auction', () => {
+    const body = expectValidationError(setBet(ACTIVE_WITH_BETS_UUID, 46000))
+
+    expect(body.errors[0]).toMatchObject({ field: 'price', code: 'price_too_high' })
+  })
+
+  it('rejects a price below available on an Up auction even when above min', () => {
+    const body = expectValidationError(setBet(UP_AUCTION_UUID, 30000))
+
+    expect(body.errors[0]).toMatchObject({ field: 'price', code: 'price_too_low' })
+  })
+
+  it('accepts a valid Up auction bid and increases available by step', () => {
+    const result = setBet(UP_AUCTION_UUID, 32000)
+    expect(result).toEqual({ ok: true })
+
+    const after = getAuction(UP_AUCTION_UUID)
+    expect(after?.trading.price?.current).toBe(32000)
+    expect(after?.trading.price?.available).toBe(32500)
+    expect(after?.trading.your?.last_bet).toBe(32000)
+    expect(after?.trading.status_mobile).toBe('Leading')
+
+    const bets = listBets(UP_AUCTION_UUID, true)
+    const newBet = bets?.bets.find((bet) => bet.price_with_vat === 32000)
+    expect(newBet?.place).toBe(1)
+  })
+
+  it('rejects a price equal to current on an Up auction', () => {
+    const body = expectValidationError(setBet(UP_AUCTION_UUID, 31500))
+
+    expect(body.errors[0]).toMatchObject({ field: 'price', code: 'price_too_low' })
   })
 
   it('rejects a non-positive price', () => {

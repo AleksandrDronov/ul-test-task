@@ -3,10 +3,14 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import type { AuctionDetailTradingPriceVm } from '@/entities/auction'
+import type { components } from '@/shared/api/types/openapi'
 import { ApiError } from '@/shared/api'
+import { getSetBetLimits } from '@/shared/lib'
 import { useSetBetMutation } from '../api'
 import { createSetBetSchema, type SetBetFormValues } from './set-bet.schema'
 import { getDefaultBetPrice } from './get-default-bet-price'
+
+type AuctionType = components['schemas']['AuctionType']
 
 const GENERIC_ERROR_MESSAGE = 'Не удалось отправить ставку. Попробуйте ещё раз.'
 
@@ -21,6 +25,8 @@ export type UseSetBetFormParams = {
   auctionUuid: string
   /** Торговые ограничения цены: min, max, step и текущая доступная цена. */
   price: AuctionDetailTradingPriceVm
+  /** Тип аукциона — влияет на эффективные min/max для валидации. */
+  aucType: AuctionType | null
 }
 
 /**
@@ -31,17 +37,16 @@ export type UseSetBetFormParams = {
  * @returns Поля и обработчики для `SetBetForm`: id для a11y, register поля цены,
  *   сообщения об ошибках, флаги `isBusy`/`submitError` и обработчики submit/retry/available price.
  */
-export const useSetBetForm = ({ auctionUuid, price }: UseSetBetFormParams) => {
+export const useSetBetForm = ({ auctionUuid, price, aucType }: UseSetBetFormParams) => {
   const inputId = useId()
   const hintId = useId()
   const errorId = useId()
 
   const [submitError, setSubmitError] = useState<unknown>(null)
 
-  const schema = useMemo(
-    () => createSetBetSchema({ min: price.min, max: price.max, step: price.step }),
-    [price.min, price.max, price.step],
-  )
+  const limits = useMemo(() => getSetBetLimits(price, aucType), [price, aucType])
+
+  const schema = useMemo(() => createSetBetSchema(limits), [limits])
 
   const resolver = useMemo(() => zodResolver(schema), [schema])
 
@@ -64,7 +69,7 @@ export const useSetBetForm = ({ auctionUuid, price }: UseSetBetFormParams) => {
   useEffect(() => {
     reset({ price: getDefaultBetPrice(price) })
     clearErrors()
-  }, [price.min, price.max, price.step, price.available, reset, clearErrors, price])
+  }, [price, aucType, reset, clearErrors])
 
   const handleUseAvailablePrice = () => {
     if (typeof price.available !== 'number') return
@@ -114,7 +119,7 @@ export const useSetBetForm = ({ auctionUuid, price }: UseSetBetFormParams) => {
     inputId,
     hintId,
     errorId,
-    price,
+    limits,
     priceRegister,
     priceErrorMessage,
     isBusy,

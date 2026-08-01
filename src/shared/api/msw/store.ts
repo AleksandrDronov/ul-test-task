@@ -1,5 +1,11 @@
 import type { components } from '@/shared/api/types/openapi'
 import { getAuctionStatusCode } from '@/shared/config'
+import {
+  computeNextAvailablePrice,
+  getBetStepDirection,
+  getSetBetLimits,
+  isBetPriceOnStep,
+} from '@/shared/lib'
 import { toListStatusMobile } from './list-status-mobile'
 import { SEED_AUCTIONS } from './seed'
 
@@ -37,8 +43,9 @@ const CURRENT_USER = {
   contactName: 'Иванов Иван',
 } as const
 
+type AuctionType = components['schemas']['AuctionType']
+
 const VAT_RATE = 0.2
-const FLOAT_EPSILON = 1e-6
 
 const round2 = (value: number): number => Math.round(value * 100) / 100
 const toNoVat = (value: number): number => round2(value / (1 + VAT_RATE))
@@ -75,12 +82,6 @@ const priceFieldProblem = (message: string, code: string): ValidationProblem => 
   errors: [{ field: 'price', message, code }],
 })
 
-const isOnStep = (price: number, max: number, step: number): boolean => {
-  if (step <= 0) return true
-  const stepsFromMax = (max - price) / step
-  return Math.abs(stepsFromMax - Math.round(stepsFromMax)) < FLOAT_EPSILON
-}
-
 const syncListItem = (record: AuctionRecord): void => {
   const { detail, listItem } = record
   const detailTrading = detail.trading
@@ -107,16 +108,19 @@ const syncListItem = (record: AuctionRecord): void => {
 }
 
 /**
- * Ранжирование ставок на аукционе на понижение: побеждает минимальная цена,
- * `place` назначается по возрастанию цены. Отклонённые/отменённые ставки
- * (`is_rejected: true`) не участвуют в ранжировании и всегда имеют `place: null` —
- * как в seed data (например, bet id 2 на аукционе `...0501`).
- * Места у ранжированных ставок непрерывны, начиная с 1.
+ * Ранжирование ставок: на понижение побеждает минимальная цена, на повышение — максимальная.
+ * Отклонённые ставки не участвуют в ранжировании (`place: null`).
  */
-const recomputePlaces = (bets: BetItem[]): void => {
+const recomputePlaces = (bets: BetItem[], aucType: AuctionType | null | undefined): void => {
+  const isUp = aucType === 'Up'
+
   const ranked = bets
     .filter((bet) => !bet.is_rejected)
-    .sort((a, b) => (a.price_with_vat ?? 0) - (b.price_with_vat ?? 0))
+    .sort((a, b) => {
+      const aPrice = a.price_with_vat ?? 0
+      const bPrice = b.price_with_vat ?? 0
+      return isUp ? bPrice - aPrice : aPrice - bPrice
+    })
 
   ranked.forEach((bet, index) => {
     bet.place = index + 1
@@ -131,12 +135,14 @@ const recomputePlaces = (bets: BetItem[]): void => {
 
 const applyAcceptedBet = (record: AuctionRecord, price: number): void => {
   const trading = record.detail.trading
+  const aucType = record.detail.main?.auc_type
+  const stepDirection = getBetStepDirection(aucType)
   const step = trading.price?.step ?? 0
   const min = trading.price?.min ?? null
+  const max = trading.price?.max ?? null
   const distance = record.detail.cargo.distance ?? 0
 
-  const rawAvailable = price - step
-  const available = min !== null ? Math.max(rawAvailable, min) : rawAvailable
+  const available = computeNextAvailablePrice(price, step, stepDirection, min, max)
   const currentNoVat = toNoVat(price)
   const availableNoVat = toNoVat(available)
 
@@ -170,7 +176,7 @@ const applyAcceptedBet = (record: AuctionRecord, price: number): void => {
   }
 
   record.bets.push(bet)
-  recomputePlaces(record.bets)
+  recomputePlaces(record.bets, aucType)
 
   trading.price = {
     ...trading.price,
@@ -219,7 +225,10 @@ export const setBet = (uuid: string, price: number): SetBetResult => {
     }
   }
 
-  const { max, min, step } = trading.price ?? {}
+  const { max, min, step, stepReference, stepDirection } = getSetBetLimits(
+    trading.price ?? {},
+    record.detail.main?.auc_type,
+  )
 
   if (price <= 0) {
     return {
@@ -245,12 +254,20 @@ export const setBet = (uuid: string, price: number): SetBetResult => {
     }
   }
 
-  if (typeof max === 'number' && typeof step === 'number' && !isOnStep(price, max, step)) {
+  if (
+    typeof stepReference === 'number' &&
+    typeof step === 'number' &&
+    typeof stepDirection === 'string' &&
+    !isBetPriceOnStep(price, step, stepReference, stepDirection)
+  ) {
+    const stepAnchorLabel =
+      stepDirection === 'increasing' ? 'минимальной цены' : 'максимальной цены'
+
     return {
       ok: false,
       status: 422,
       body: priceFieldProblem(
-        `Цена должна быть кратна шагу ${String(step)} (считая от максимальной цены).`,
+        `Цена должна быть кратна шагу ${String(step)} (считая от ${stepAnchorLabel}).`,
         'invalid_step',
       ),
     }

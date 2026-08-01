@@ -1,22 +1,7 @@
 import { z } from 'zod'
+import { isBetPriceOnStep, type SetBetLimits } from '@/shared/lib'
 
-export type SetBetLimits = {
-  min?: number | null
-  max?: number | null
-  step?: number | null
-}
-
-/**
- * Совпадает с `isOnStep` в `src/shared/api/msw/store.ts`: мок отклоняет цену,
- * не кратную `step` от `max`, с тем же epsilon для защиты от ошибок float.
- */
-const FLOAT_EPSILON = 1e-6
-
-const isOnStep = (price: number, max: number, step: number): boolean => {
-  if (step <= 0) return true
-  const stepsFromMax = (max - price) / step
-  return Math.abs(stepsFromMax - Math.round(stepsFromMax)) < FLOAT_EPSILON
-}
+export type { SetBetLimits }
 
 /**
  * Клиентское зеркало порядка валидации мока `setBet` (разрешение #4 task-5,
@@ -36,7 +21,7 @@ export const createSetBetSchema = (limits: SetBetLimits) =>
         return
       }
 
-      const { min, max, step } = limits
+      const { min, max, step, stepReference, stepDirection } = limits
 
       if (typeof max === 'number' && price > max) {
         ctx.addIssue({
@@ -54,10 +39,18 @@ export const createSetBetSchema = (limits: SetBetLimits) =>
         return
       }
 
-      if (typeof max === 'number' && typeof step === 'number' && !isOnStep(price, max, step)) {
+      if (
+        typeof stepReference === 'number' &&
+        typeof step === 'number' &&
+        typeof stepDirection === 'string' &&
+        !isBetPriceOnStep(price, step, stepReference, stepDirection)
+      ) {
+        const stepAnchorLabel =
+          stepDirection === 'increasing' ? 'минимальной цены' : 'максимальной цены'
+
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: `Цена должна быть кратна шагу ${String(step)} (считая от максимальной цены).`,
+          message: `Цена должна быть кратна шагу ${String(step)} (считая от ${stepAnchorLabel}).`,
         })
       }
     }),

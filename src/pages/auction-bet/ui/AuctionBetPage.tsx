@@ -33,6 +33,7 @@ export const AuctionBetPage = () => {
               <SetBetForm
                 auctionUuid={auctionUuid}
                 price={auction.trading.price}
+                aucType={auction.main.aucType}
                 canSetBet={auction.canSetBet}
               />
             </div>
