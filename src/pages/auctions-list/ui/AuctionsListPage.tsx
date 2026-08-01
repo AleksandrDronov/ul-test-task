@@ -36,7 +36,7 @@ export const AuctionsListPage = () => {
           >
             {(data) => (
               <>
-                <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                <ul className="grid gap-4 lg:grid-cols-2">
                   {data.items.map((item, index) => (
                     <li key={item.auctionUuid ?? index}>
                       <AuctionCard auction={item} />

@@ -37,18 +37,14 @@ const RoutePoint = ({
 )
 
 const CargoPreview = ({ cargo }: { cargo: AuctionListCargoVm }) => (
-  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+  <div className="flex flex-wrap flex-col text-xs text-muted-foreground border-b border-border pb-4">
     <span>{cargo.name ?? 'Груз не указан'}</span>
-    {cargo.weight !== null && <span>{formatNumber(cargo.weight)} т</span>}
-    {cargo.volume !== null && <span>{formatNumber(cargo.volume)} м³</span>}
-    {cargo.bodyType && <span>{cargo.bodyType}</span>}
+    {cargo.weight !== null && <span>вес: {formatNumber(cargo.weight)} т</span>}
+    {cargo.volume !== null && <span>объем: {formatNumber(cargo.volume)} м³</span>}
+    {cargo.bodyType && <span>тип: {cargo.bodyType}</span>}
   </div>
 )
 
-/**
- * `AuctionListItemVm.primaryAction` уже содержит правило навигации (ViewModel task-6);
- * этот виджет только преобразует его в destination и никогда сам не пересчитывает доступность.
- */
 const PrimaryActionButton = ({ auction }: { auction: AuctionListItemVm }) => {
   const { primaryAction, auctionUuid } = auction
 
@@ -131,17 +127,19 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
 
       <CargoPreview cargo={auction.cargo} />
 
-      <div className="mt-auto flex items-end justify-between gap-3 border-t border-border pt-3">
+      <div className="mt-auto flex items-end justify-between gap-3">
         <div>
           <p className="text-lg font-semibold text-foreground">
             {formatPrice(auction.currentPrice)}
           </p>
           <p className="text-xs text-muted-foreground">{formatPricePerKm(auction.pricePerKm)}</p>
+        </div>
+        <div className="flex flex-col gap-1">
           {auction.hasBet && (
             <p className="mt-1 text-xs font-medium text-primary">Вы уже сделали ставку</p>
           )}
+          <PrimaryActionButton auction={auction} />
         </div>
-        <PrimaryActionButton auction={auction} />
       </div>
     </article>
   )
