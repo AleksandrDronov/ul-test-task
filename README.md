@@ -42,7 +42,7 @@ npm run generate:api  # перегенерация типов из openapi.aucti
 - **React Hook Form + Zod** — форма ставки с клиентской валидацией min/max/step
 - **Zustand** — только UI-состояние мобильного sheet фильтров (значения фильтров — в URL)
 
-Компоненты именуются `*.component.tsx`. Файлы маршрутов в `src/app/routes/` содержат только конфиг `createFileRoute`.
+Файлы маршрутов в `src/app/routes/` содержат только конфиг `createFileRoute`.
 
 ## Структура проекта
 
@@ -69,7 +69,7 @@ openapi.auctions.v0.json  # контракт API
 
 ## Тестирование
 
-Покрытие unit-тестами (69 тестов в 10 файлах):
+Покрытие unit-тестами (75 тестов в 10 файлах):
 
 - парсинг и сборка параметров фильтров (`features/filter-auctions`)
 - маппинг DTO → ViewModel (`entities/auction`, `entities/bet`)

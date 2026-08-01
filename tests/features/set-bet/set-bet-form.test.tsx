@@ -53,8 +53,9 @@ const renderForm = (overrides: Partial<ComponentProps<typeof SetBetForm>> = {}) 
 
   return {
     ...view,
-    rerenderForm: (nextOverrides: Partial<ComponentProps<typeof SetBetForm>> = {}) =>
-      view.rerender(<Wrapper {...baseProps} {...nextOverrides} />),
+    rerenderForm: (nextOverrides: Partial<ComponentProps<typeof SetBetForm>> = {}) => {
+      view.rerender(<Wrapper {...baseProps} {...nextOverrides} />)
+    },
   }
 }
 

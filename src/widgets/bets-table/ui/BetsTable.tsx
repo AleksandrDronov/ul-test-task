@@ -23,6 +23,9 @@ export const BetsTable = ({ bets }: BetsTableProps) => (
           <th scope="col" className="px-3 py-2 text-right font-medium">
             Цена с НДС
           </th>
+          <th scope="col" className="px-3 py-2 text-right font-medium">
+            Цена без НДС
+          </th>
           <th scope="col" className="px-3 py-2 font-medium">
             Статус
           </th>
@@ -42,11 +45,19 @@ export const BetsTable = ({ bets }: BetsTableProps) => (
             <td className="px-3 py-2 text-right font-medium text-foreground">
               {formatPrice(bet.priceWithVat)}
             </td>
+            <td className="px-3 py-2 text-right text-muted-foreground">
+              {formatPrice(bet.priceNoVat)}
+            </td>
             <td className="px-3 py-2">
-              <div className="flex flex-wrap gap-1">
-                {bet.isWin && <Badge>Победитель</Badge>}
-                {bet.isRejected && <Badge variant="destructive">Отклонена</Badge>}
-                {bet.isCounter && <Badge variant="outline">Встречная</Badge>}
+              <div className="flex flex-col gap-1">
+                <div className="flex flex-wrap gap-1">
+                  {bet.isWin && <Badge>Победитель</Badge>}
+                  {bet.isRejected && <Badge variant="destructive">Отклонена</Badge>}
+                  {bet.isCounter && <Badge variant="outline">Встречная</Badge>}
+                </div>
+                {bet.isRejected && bet.cancelReason && (
+                  <p className="text-xs text-muted-foreground">{bet.cancelReason}</p>
+                )}
               </div>
             </td>
           </tr>
