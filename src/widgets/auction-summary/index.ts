@@ -1,1 +1,1 @@
-export { AuctionSummary, type AuctionSummaryProps } from './ui'
+export { AuctionSummary } from './ui'

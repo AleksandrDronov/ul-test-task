@@ -1,1 +1,1 @@
-export { BetsTable, type BetsTableProps } from './BetsTable'
+export { BetsTable } from './BetsTable'

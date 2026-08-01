@@ -1,1 +1,1 @@
-export { AuctionSummary, type AuctionSummaryProps } from './AuctionSummary'
+export { AuctionSummary } from './AuctionSummary'

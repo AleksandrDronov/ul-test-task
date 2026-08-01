@@ -1,1 +1,1 @@
-export { AuctionCard, type AuctionCardProps } from './ui'
+export { AuctionCard } from './ui'

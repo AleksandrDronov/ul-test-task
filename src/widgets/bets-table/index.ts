@@ -1,1 +1,1 @@
-export { BetsTable, type BetsTableProps } from './ui'
+export { BetsTable } from './ui'

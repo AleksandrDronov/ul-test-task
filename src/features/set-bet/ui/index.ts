@@ -1,1 +1,1 @@
-export { SetBetForm, type SetBetFormProps } from './SetBetForm'
+export { SetBetForm } from './SetBetForm'

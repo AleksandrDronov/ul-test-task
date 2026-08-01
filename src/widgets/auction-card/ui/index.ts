@@ -1,1 +1,1 @@
-export { AuctionCard, type AuctionCardProps } from './AuctionCard'
+export { AuctionCard } from './AuctionCard'

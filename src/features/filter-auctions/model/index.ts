@@ -1,7 +1,6 @@
 export {
   TRADING_STATUS_VALUES,
   AUC_TYPE_VALUES,
-  auctionsSearchParamsSchema,
   type AuctionsSearchParams,
 } from './auctions-search-params.schema'
 export { buildAuctionListRequest } from './build-auction-list-request'

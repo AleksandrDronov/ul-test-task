@@ -1,2 +1,2 @@
-export type { BetItemVm, BetListVm } from './bet.vm'
-export { mapBetItemDtoToVm, mapBetListToVm } from './map-bet-item'
+export type { BetItemVm } from './bet.vm'
+export { mapBetListToVm } from './map-bet-item'
