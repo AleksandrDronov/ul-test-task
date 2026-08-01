@@ -8,11 +8,16 @@ export const AuctionsFilters = () => {
   const setFiltersOpen = useFiltersUiStore((state) => state.setFiltersOpen)
   const filterActions = useAuctionsFilters()
 
+  const handleResetFilters = (): void => {
+    filterActions.resetFilters()
+    setFiltersOpen(false)
+  }
+
   return (
     <>
       <div className="hidden rounded-lg border border-border bg-card p-4 md:block">
         <h2 className="mb-4 text-base font-semibold text-foreground">Фильтры</h2>
-        <AuctionsFiltersForm {...filterActions} />
+        <AuctionsFiltersForm {...filterActions} resetFilters={handleResetFilters} />
       </div>
 
       <div className="md:hidden">
@@ -34,7 +39,7 @@ export const AuctionsFilters = () => {
               <SheetTitle>Фильтры</SheetTitle>
             </SheetHeader>
             <div className="mt-4">
-              <AuctionsFiltersForm {...filterActions} />
+              <AuctionsFiltersForm {...filterActions} resetFilters={handleResetFilters} />
             </div>
           </SheetContent>
         </Sheet>

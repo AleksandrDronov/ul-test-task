@@ -1,3 +1,4 @@
+export { CITY_NAMES, CITIES, getCityByName, type City } from './cities'
 export {
   AUCTION_STATUS_CODE_BY_LABEL,
   AUCTION_STATUS_LABEL_BY_CODE,

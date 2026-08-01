@@ -1,30 +1,51 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+export type DebouncedFilterFieldResult<Value> = {
+  value: Value
+  onChange: (next: Value) => void
+  flush: () => void
+}
 
 /**
- * Локальное, мгновенно обновляемое состояние поля, которое передаёт значение в `onCommit`
- * только после `delayMs` бездействия (разрешение #2: debounce для текстовых/ценовых полей,
- * чтобы не отправлять запрос на каждый символ). Когда внешнее значение меняется по другой
- * причине (например, «сбросить фильтры»), локальное состояние синхронизируется с ним.
- * Просроченные коммиты, пришедшие когда пользователь уже ввёл новое значение, не должны
- * перезаписывать локальный ввод.
+ * Локальное состояние поля фильтра с отложенным применением (debounce).
+ *
+ * Поле мгновенно отражает ввод пользователя, а `onCommit` вызывается
+ * только после паузы в `delayMs` мс. Внешнее значение (`externalValue`)
+ * синхронизируется обратно в локальное состояние — например, при сбросе
+ * фильтров или навигации по URL — но не перезаписывает ввод, если
+ * ожидается собственный отложенный коммит.
+ *
+ * `flush` немедленно применяет текущее локальное значение (blur, Enter).
+ *
+ * @template Value — тип значения поля.
+ * @param externalValue — актуальное значение из внешнего источника (URL, store).
+ * @param onCommit — колбэк, вызываемый после debounce с финальным значением.
+ * @param delayMs — задержка перед коммитом в миллисекундах. По умолчанию 400.
  */
 export const useDebouncedFilterField = <Value>(
   externalValue: Value,
   onCommit: (value: Value) => void,
   delayMs = 400,
-): [Value, (next: Value) => void] => {
+): DebouncedFilterFieldResult<Value> => {
   const [value, setValue] = useState(externalValue)
-  // Mirrors the React-recommended "adjusting state when a prop changes"
-  // pattern instead of a setState-in-effect, so an external reset (e.g. the
-  // "reset filters" action) is reflected in the same render, not one tick late.
   const [syncedExternalValue, setSyncedExternalValue] = useState(externalValue)
   const [lastCommitted, setLastCommitted] = useState(externalValue)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const onCommitRef = useRef(onCommit)
+  const valueRef = useRef(value)
+  const lastCommittedRef = useRef(lastCommitted)
 
   useEffect(() => {
     onCommitRef.current = onCommit
   }, [onCommit])
+
+  useEffect(() => {
+    valueRef.current = value
+  }, [value])
+
+  useEffect(() => {
+    lastCommittedRef.current = lastCommitted
+  }, [lastCommitted])
 
   useEffect(
     () => () => {
@@ -44,15 +65,36 @@ export const useDebouncedFilterField = <Value>(
     setSyncedExternalValue(externalValue)
   }
 
-  const handleChange = (next: Value): void => {
-    setValue(next)
+  const commit = useCallback((next: Value): void => {
+    lastCommittedRef.current = next
+    setLastCommitted(next)
+    onCommitRef.current(next)
+  }, [])
 
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    timeoutRef.current = setTimeout(() => {
-      setLastCommitted(next)
-      onCommitRef.current(next)
-    }, delayMs)
-  }
+  const flush = useCallback((): void => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
 
-  return [value, handleChange]
+    const current = valueRef.current
+
+    if (current !== lastCommittedRef.current) {
+      commit(current)
+    }
+  }, [commit])
+
+  const onChange = useCallback(
+    (next: Value): void => {
+      setValue(next)
+
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      timeoutRef.current = setTimeout(() => {
+        commit(next)
+      }, delayMs)
+    },
+    [commit, delayMs],
+  )
+
+  return { value, onChange, flush }
 }

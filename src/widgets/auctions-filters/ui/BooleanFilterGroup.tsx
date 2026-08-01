@@ -1,14 +1,15 @@
 import { useId } from 'react'
+import { type AuctionsSearchParams } from '@/features/filter-auctions'
 import { CheckboxOption } from './CheckboxFilterFieldset'
-import { type BooleanFilterOptionConfig } from '../model/auctions-filters.config'
+import { type BooleanFilterFieldKey, type BooleanFilterOptionConfig } from '../model/auctions-filters.config'
 
 export type BooleanFilterGroupProps = {
   options: BooleanFilterOptionConfig[]
-  values: Record<BooleanFilterOptionConfig['key'], boolean | undefined>
-  onToggle: (key: BooleanFilterOptionConfig['key'], checked: boolean | undefined) => void
+  filters: Pick<AuctionsSearchParams, BooleanFilterFieldKey>
+  onToggle: (key: BooleanFilterFieldKey, checked: boolean | undefined) => void
 }
 
-export const BooleanFilterGroup = ({ options, values, onToggle }: BooleanFilterGroupProps) => {
+export const BooleanFilterGroup = ({ options, filters, onToggle }: BooleanFilterGroupProps) => {
   const idPrefix = useId()
 
   return (
@@ -18,9 +19,9 @@ export const BooleanFilterGroup = ({ options, values, onToggle }: BooleanFilterG
           key={option.key}
           id={`${idPrefix}-${option.key}`}
           label={option.label}
-          checked={values[option.key] ?? false}
+          checked={filters[option.key] ?? false}
           onChange={() => {
-            onToggle(option.key, values[option.key] ? undefined : true)
+            onToggle(option.key, filters[option.key] ? undefined : true)
           }}
         />
       ))}
