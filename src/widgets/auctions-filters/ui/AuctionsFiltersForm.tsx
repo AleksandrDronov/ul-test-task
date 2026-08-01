@@ -65,9 +65,8 @@ export const AuctionsFiltersForm = ({
             value={cargoNum.value}
             type="text"
             inputMode="numeric"
-            pattern="[0-9]*"
             onChange={(event) => {
-              cargoNum.onChange(event.target.value);
+              cargoNum.onChange(event.target.value.replace(/\D/g, ""));
             }}
             onBlur={cargoNum.flush}
             onKeyDown={(event) => {
@@ -92,11 +91,8 @@ export const AuctionsFiltersForm = ({
         </FilterSection>
       ))}
 
-      <FilterSection>
+      <FilterSection key="cities">
         <fieldset className="flex flex-col gap-5 border-0 p-0">
-          <legend className="mb-0 text-sm font-medium text-foreground">
-            Города
-          </legend>
           {CITY_FILTER_SELECTS.map((cityFilter) => (
             <CityFilterSelect
               key={cityFilter.key}
