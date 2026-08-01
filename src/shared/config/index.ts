@@ -15,3 +15,4 @@ export {
   BID_MEASUREMENT_TYPE_RU_LABEL,
   PAYMENT_DELAY_TYPE_RU_LABEL,
 } from './status-labels'
+export { DEFAULT_AUCTIONS_LIST_SEARCH } from './auctions-list-defaults'

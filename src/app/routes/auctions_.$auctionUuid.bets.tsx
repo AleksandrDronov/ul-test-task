@@ -1,4 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { auctionDetailQueryOptions } from '@/entities/auction'
+import { queryClient } from '@/app/query-client'
 import { AuctionBetsPage } from '@/pages/auction-bets'
 
 /**
@@ -8,5 +10,8 @@ import { AuctionBetsPage } from '@/pages/auction-bets'
  * `/auctions/$auctionUuid/bets` — отдельный полноэкранный экран, а не вкладка в layout детальной страницы.
  */
 export const Route = createFileRoute('/auctions_/$auctionUuid/bets')({
+  loader: async ({ params: { auctionUuid } }) => {
+    await queryClient.prefetchQuery(auctionDetailQueryOptions(auctionUuid))
+  },
   component: AuctionBetsPage,
 })

@@ -1,13 +1,12 @@
+import { BackToListLink, ApiErrorState, EmptyState } from '@/shared/ui'
 import { ApiError } from '@/shared/api'
-import { ApiErrorState, EmptyState } from '@/shared/ui'
-import { BackToListLink } from './BackToListLink'
 
-type AuctionDetailErrorProps = {
+type AuctionQueryErrorProps = {
   error: Error
   onRetry: () => void
 }
 
-export const AuctionDetailError = ({ error, onRetry }: AuctionDetailErrorProps) => {
+export const AuctionQueryError = ({ error, onRetry }: AuctionQueryErrorProps) => {
   const isNotFound = error instanceof ApiError && error.status === 404
 
   if (isNotFound) {

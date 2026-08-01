@@ -7,6 +7,17 @@ type AuctionBetsQueryOptions = {
   enabled?: boolean
 }
 
+/**
+ * Экспортируется как reusable options (не только хук), чтобы prefetch и loader
+ * могли вызвать `queryClient.prefetchQuery(auctionBetsQueryOptions(uuid))`
+ * с тем же key/fetcher, что использует `useQuery` на странице истории ставок.
+ *
+ * Ответ API маппится в `BetListVm` через `select`.
+ *
+ * @param auctionUuid — UUID аукциона.
+ * @param all — если `true`, запрашивает полный список ставок (`?all=true`).
+ * @param options — дополнительные настройки запроса (например, `enabled` для отложенной загрузки).
+ */
 export const auctionBetsQueryOptions = (
   auctionUuid: string,
   all?: boolean,
@@ -19,6 +30,14 @@ export const auctionBetsQueryOptions = (
     enabled: options?.enabled,
   })
 
+/**
+ * React Query-хук для загрузки списка ставок аукциона.
+ *
+ * @param auctionUuid — UUID аукциона.
+ * @param all — если `true`, запрашивает полный список ставок (`?all=true`).
+ * @param options — дополнительные настройки запроса (например, `enabled` для отложенной загрузки).
+ * @returns Результат `useQuery` с данными типа `BetListVm`.
+ */
 export const useAuctionBetsQuery = (
   auctionUuid: string,
   all?: boolean,

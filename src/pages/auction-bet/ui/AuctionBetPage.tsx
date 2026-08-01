@@ -1,26 +1,15 @@
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { useAuctionDetailQuery } from '@/entities/auction'
-import { DEFAULT_SEARCH_PARAMS } from '@/features/filter-auctions'
+import { AuctionQueryError } from '@/features/auction-error'
 import { SetBetForm } from '@/features/set-bet'
-import { ApiError } from '@/shared/api'
-import { ApiErrorState, Button, EmptyState, Skeleton } from '@/shared/ui'
+import { Skeleton } from '@/shared/ui'
 import { AuctionSummary } from '@/widgets/auction-summary'
 
 const routeApi = getRouteApi('/auctions_/$auctionUuid/bet')
 
-const BackToListLink = () => (
-  <Button asChild variant="outline">
-    <Link to="/" search={DEFAULT_SEARCH_PARAMS}>
-      Вернуться к списку аукционов
-    </Link>
-  </Button>
-)
-
 export const AuctionBetPage = () => {
   const { auctionUuid } = routeApi.useParams()
   const query = useAuctionDetailQuery(auctionUuid)
-
-  const isNotFound = query.error instanceof ApiError && query.error.status === 404
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 md:px-8">
@@ -33,21 +22,14 @@ export const AuctionBetPage = () => {
         </div>
       )}
 
-      {query.isError &&
-        (isNotFound ? (
-          <EmptyState
-            title="Аукцион не найден"
-            description="Возможно, он был удалён или ссылка неверна."
-            action={<BackToListLink />}
-          />
-        ) : (
-          <ApiErrorState
-            error={query.error}
-            onRetry={() => {
-              void query.refetch()
-            }}
-          />
-        ))}
+      {query.isError && (
+        <AuctionQueryError
+          error={query.error}
+          onRetry={() => {
+            void query.refetch()
+          }}
+        />
+      )}
 
       {query.isSuccess && (
         <div className="space-y-6">

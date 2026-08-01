@@ -1,8 +1,8 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { useAuctionDetailQuery } from '@/entities/auction'
+import { AuctionQueryError } from '@/features/auction-error'
 import { AsyncQueryView } from '@/shared/ui'
 import { AuctionDetailContent } from './AuctionDetailContent'
-import { AuctionDetailError } from './AuctionDetailError'
 import { PageSkeleton } from './PageSkeleton'
 
 const routeApi = getRouteApi('/auctions/$auctionUuid')
@@ -16,7 +16,7 @@ export const AuctionDetailPage = () => {
       <AsyncQueryView
         query={query}
         pending={<PageSkeleton />}
-        error={(error, retry) => <AuctionDetailError error={error} onRetry={retry} />}
+        error={(error, retry) => <AuctionQueryError error={error} onRetry={retry} />}
       >
         {(auction) => <AuctionDetailContent auction={auction} auctionUuid={auctionUuid} />}
       </AsyncQueryView>

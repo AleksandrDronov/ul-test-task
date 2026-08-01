@@ -1,5 +1,6 @@
 export { ApiErrorState, type ApiErrorStateProps } from './ApiErrorState'
 export { AsyncQueryView, type AsyncQueryViewProps } from './AsyncQueryView'
+export { BackToListLink } from './BackToListLink'
 export { Badge, badgeVariants } from './badge'
 export { Button, buttonVariants } from './button'
 export { Calendar, CalendarDayButton } from './calendar'

@@ -7,11 +7,6 @@ export type AuctionSummaryProps = {
   auction: AuctionDetailVm
 }
 
-/**
- * Компактный контекст аукциона для страниц истории ставок и формы ставки,
- * чтобы не дублировать полный layout детальной страницы и напоминать пользователю,
- * с каким аукционом он работает (разрешение: эти страницы остаются сфокусированными).
- */
 export const AuctionSummary = ({ auction }: AuctionSummaryProps) => {
   const loadPoint = auction.routes.at(0)
   const unloadPoint = auction.routes.at(-1)
