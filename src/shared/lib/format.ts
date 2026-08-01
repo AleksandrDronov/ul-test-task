@@ -37,9 +37,13 @@ export const formatNumber = (value: number | null | undefined): string =>
 
 /** В ViewModel на уровне торговой цены нет кода валюты, поэтому суммы отображаются в рублях (₽). */
 export const formatPrice = (value: number | null | undefined): string =>
-  value === null || value === undefined ? EMPTY_VALUE_PLACEHOLDER : `${NUMBER_FORMATTER.format(value)} ₽`
+  value === null || value === undefined
+    ? EMPTY_VALUE_PLACEHOLDER
+    : `${NUMBER_FORMATTER.format(value)} ₽`
 
 export const formatPricePerKm = (value: number | null | undefined): string =>
-  value === null || value === undefined ? EMPTY_VALUE_PLACEHOLDER : `${NUMBER_FORMATTER.format(value)} ₽/км`
+  value === null || value === undefined
+    ? EMPTY_VALUE_PLACEHOLDER
+    : `${NUMBER_FORMATTER.format(value)} ₽/км`
 
 export const formatYesNo = (value: boolean): string => (value ? 'Да' : 'Нет')

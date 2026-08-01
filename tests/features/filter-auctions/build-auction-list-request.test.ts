@@ -3,22 +3,24 @@ import { buildAuctionListRequest } from '@/features/filter-auctions'
 
 describe('buildAuctionListRequest', () => {
   it('maps search params to OpenAPI request body', () => {
-    expect(buildAuctionListRequest({
-      page: 2,
-      per_page: 10,
-      cargo_num: '0001',
-      status: ['Leading'],
-      statuses: [2],
-      auc_type: ['Down'],
-      load_city: 'Пермь',
-      unload_city: 'Москва',
-      load_date_from: '2026-05-26T00:00:00+03:00',
-      load_date_to: '2026-05-27T00:00:00+03:00',
-      is_available: true,
-      is_bidder: false,
-      current_price_from: 1000,
-      current_price_to: 50000,
-    })).toEqual({
+    expect(
+      buildAuctionListRequest({
+        page: 2,
+        per_page: 10,
+        cargo_num: '0001',
+        status: ['Leading'],
+        statuses: [2],
+        auc_type: ['Down'],
+        load_city: 'Пермь',
+        unload_city: 'Москва',
+        load_date_from: '2026-05-26T00:00:00+03:00',
+        load_date_to: '2026-05-27T00:00:00+03:00',
+        is_available: true,
+        is_bidder: false,
+        current_price_from: 1000,
+        current_price_to: 50000,
+      }),
+    ).toEqual({
       page: 2,
       per_page: 10,
       cargo_num: '0001',

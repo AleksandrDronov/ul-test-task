@@ -101,7 +101,8 @@ const syncListItem = (record: AuctionRecord): void => {
   }
 
   if (listItem.main) {
-    listItem.main.price_per_km = detailTrading.price?.price_per_km ?? listItem.main.price_per_km ?? null
+    listItem.main.price_per_km =
+      detailTrading.price?.price_per_km ?? listItem.main.price_per_km ?? null
   }
 }
 
@@ -221,7 +222,11 @@ export const setBet = (uuid: string, price: number): SetBetResult => {
   const { max, min, step } = trading.price ?? {}
 
   if (price <= 0) {
-    return { ok: false, status: 422, body: priceFieldProblem('Цена должна быть больше 0.', 'invalid_price') }
+    return {
+      ok: false,
+      status: 422,
+      body: priceFieldProblem('Цена должна быть больше 0.', 'invalid_price'),
+    }
   }
 
   if (typeof max === 'number' && price > max) {
@@ -244,7 +249,10 @@ export const setBet = (uuid: string, price: number): SetBetResult => {
     return {
       ok: false,
       status: 422,
-      body: priceFieldProblem(`Цена должна быть кратна шагу ${String(step)} (считая от максимальной цены).`, 'invalid_step'),
+      body: priceFieldProblem(
+        `Цена должна быть кратна шагу ${String(step)} (считая от максимальной цены).`,
+        'invalid_step',
+      ),
     }
   }
 
@@ -278,7 +286,11 @@ const citiesMatch = (candidate: string | undefined, filter: string | undefined):
   return candidate.localeCompare(filter, 'ru', { sensitivity: 'base' }) === 0
 }
 
-const dateWithinRange = (date: string | undefined, from: string | undefined, to: string | undefined): boolean => {
+const dateWithinRange = (
+  date: string | undefined,
+  from: string | undefined,
+  to: string | undefined,
+): boolean => {
   if (!from && !to) return true
   if (!date) return false
 
@@ -368,7 +380,9 @@ export const listAuctions = (body: AuctionListRequest): AuctionListResponseBase 
   const currentPage = Math.min(Math.max(requestedPage, 1), lastPage)
 
   const start = (currentPage - 1) * perPage
-  const data = filtered.slice(start, start + perPage).map((record) => structuredClone(record.listItem))
+  const data = filtered
+    .slice(start, start + perPage)
+    .map((record) => structuredClone(record.listItem))
 
   return { data, meta: buildMeta(filtered.length, currentPage, perPage) }
 }

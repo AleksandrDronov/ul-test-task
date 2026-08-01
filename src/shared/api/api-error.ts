@@ -43,11 +43,13 @@ export const parseApiError = async (response: Response): Promise<ApiError> => {
     if (typeof item !== 'object' || item === null) return []
     const e = item as Record<string, unknown>
     if (typeof e.field !== 'string' || typeof e.message !== 'string') return []
-    return [{
-      field: e.field,
-      message: e.message,
-      code: typeof e.code === 'string' ? e.code : undefined,
-    }]
+    return [
+      {
+        field: e.field,
+        message: e.message,
+        code: typeof e.code === 'string' ? e.code : undefined,
+      },
+    ]
   })
 
   return new ApiError({

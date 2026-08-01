@@ -15,17 +15,17 @@
 
 ## Решения человека (контроллер)
 
-| Решение | Выбор | Почему |
-|---------|-------|--------|
-| Архитектура | Strict FSD | Явные границы слоёв, тестируемые мапперы |
-| Фильтры | URL (TanStack Router search params), не localStorage | Шаринг ссылок, back/forward, единый source of truth |
-| UI-kit | shadcn + Tailwind | Быстрый старт, доступность Radix |
-| Роутинг | Отдельные маршруты (вариант A): list / detail / bets / bet | Чёткие URL, проще prefetch и состояния |
-| Типы API | openapi-typescript (вариант A) | Контракт из `openapi.auctions.v0.json` |
-| Client state | Zustand (только sheet), не MobX | Минимальный стор для UI chrome |
-| Флаги ограничений | UI gate по флагам, mock не redact'ит DTO | Соответствует design spec; проще отладка |
-| List primaryAction | Прокси `status !== 'Planning'` для viewBets | В list DTO нет `hide_bets_history`; осознанный компромисс |
-| Retry policy | 4xx не ретраятся в QueryClient | Иначе 404/422 «залипают» на skeleton |
+| Решение            | Выбор                                                      | Почему                                                    |
+| ------------------ | ---------------------------------------------------------- | --------------------------------------------------------- |
+| Архитектура        | Strict FSD                                                 | Явные границы слоёв, тестируемые мапперы                  |
+| Фильтры            | URL (TanStack Router search params), не localStorage       | Шаринг ссылок, back/forward, единый source of truth       |
+| UI-kit             | shadcn + Tailwind                                          | Быстрый старт, доступность Radix                          |
+| Роутинг            | Отдельные маршруты (вариант A): list / detail / bets / bet | Чёткие URL, проще prefetch и состояния                    |
+| Типы API           | openapi-typescript (вариант A)                             | Контракт из `openapi.auctions.v0.json`                    |
+| Client state       | Zustand (только sheet), не MobX                            | Минимальный стор для UI chrome                            |
+| Флаги ограничений  | UI gate по флагам, mock не redact'ит DTO                   | Соответствует design spec; проще отладка                  |
+| List primaryAction | Прокси `status !== 'Planning'` для viewBets                | В list DTO нет `hide_bets_history`; осознанный компромисс |
+| Retry policy       | 4xx не ретраятся в QueryClient                             | Иначе 404/422 «залипают» на skeleton                      |
 
 ## Отклонённые идеи
 

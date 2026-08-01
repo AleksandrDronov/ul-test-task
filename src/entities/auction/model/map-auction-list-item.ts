@@ -42,7 +42,9 @@ const resolvePrimaryAction = (params: {
   return { type: 'disabled', label: 'Ставка недоступна' }
 }
 
-const mapRoutePoint = (point: AuctionListItemRoutePoint | undefined): AuctionListRoutePointVm | null => {
+const mapRoutePoint = (
+  point: AuctionListItemRoutePoint | undefined,
+): AuctionListRoutePointVm | null => {
   if (!point) return null
 
   return {

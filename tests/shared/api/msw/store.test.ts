@@ -199,7 +199,14 @@ describe('msw store: listAuctions', () => {
   it('returns all seeded auctions with meta matching the full set on default pagination', () => {
     const result = listAuctions({ page: 1, per_page: 20 })
     expect(result.data).toHaveLength(8)
-    expect(result.meta).toMatchObject({ current_page: 1, per_page: 20, total: 8, last_page: 1, from: 1, to: 8 })
+    expect(result.meta).toMatchObject({
+      current_page: 1,
+      per_page: 20,
+      total: 8,
+      last_page: 1,
+      from: 1,
+      to: 8,
+    })
   })
 
   it('filters by cargo_num', () => {
@@ -224,10 +231,12 @@ describe('msw store: listAuctions', () => {
     const result = listAuctions({ current_price_from: 40000, current_price_to: 50000 })
     // Seeded auctions with current price in [40000, 50000]: 501 (46000), 504 (42000), 507 (46500).
     expect(result.data).toHaveLength(3)
-    expect(result.data?.every((item) => {
-      const current = item.trading?.price?.current
-      return current !== undefined && current >= 40000 && current <= 50000
-    })).toBe(true)
+    expect(
+      result.data?.every((item) => {
+        const current = item.trading?.price?.current
+        return current !== undefined && current >= 40000 && current <= 50000
+      }),
+    ).toBe(true)
   })
 
   it('paginates results', () => {

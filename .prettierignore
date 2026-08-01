@@ -1,0 +1,5 @@
+node_modules
+dist
+public/mockServiceWorker.js
+src/shared/api/types/openapi.d.ts
+src/routeTree.gen.ts

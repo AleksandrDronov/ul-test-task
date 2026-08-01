@@ -88,7 +88,9 @@ const mapPayment = (payment: AuctionShowResponse['payment']): AuctionDetailPayme
   prepay: payment.prepay ?? null,
 })
 
-const mapTradingPrice = (price: AuctionShowTradingPrice | undefined): AuctionDetailTradingVm['price'] => ({
+const mapTradingPrice = (
+  price: AuctionShowTradingPrice | undefined,
+): AuctionDetailTradingVm['price'] => ({
   start: price?.start ?? null,
   startNoVat: price?.start_no_vat ?? null,
   current: price?.current ?? null,

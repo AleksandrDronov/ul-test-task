@@ -109,9 +109,11 @@ describe('parseAuctionsSearchParams', () => {
   })
 
   it('accepts valid leap-day in year 0000 and rejects invalid one', () => {
-    expect(parseAuctionsSearchParams({
-      load_date_from: '0000-02-29T00:00:00Z',
-    }).load_date_from).toBe('0000-02-29T00:00:00Z')
+    expect(
+      parseAuctionsSearchParams({
+        load_date_from: '0000-02-29T00:00:00Z',
+      }).load_date_from,
+    ).toBe('0000-02-29T00:00:00Z')
 
     const result = parseAuctionsSearchParams({
       load_date_from: '0000-02-30T00:00:00Z',

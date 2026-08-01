@@ -74,7 +74,10 @@ export const AuctionBetsPage = () => {
               }}
             />
           ) : betsQuery.data.items.length === 0 ? (
-            <EmptyState title="Ставок пока нет" description="Как только появятся ставки, они отобразятся здесь." />
+            <EmptyState
+              title="Ставок пока нет"
+              description="Как только появятся ставки, они отобразятся здесь."
+            />
           ) : (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">

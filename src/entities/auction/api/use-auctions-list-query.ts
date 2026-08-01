@@ -32,4 +32,5 @@ export const auctionsListQueryOptions = (body: AuctionListRequest) =>
  * @param body — тело запроса списка аукционов (фильтры, пагинация).
  * @returns Результат `useQuery` с данными типа `AuctionListVm`.
  */
-export const useAuctionsListQuery = (body: AuctionListRequest) => useQuery(auctionsListQueryOptions(body))
+export const useAuctionsListQuery = (body: AuctionListRequest) =>
+  useQuery(auctionsListQueryOptions(body))

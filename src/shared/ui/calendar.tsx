@@ -1,9 +1,5 @@
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
-import {
-  type ComponentProps,
-  useEffect,
-  useRef,
-} from 'react'
+import { type ComponentProps, useEffect, useRef } from 'react'
 import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker'
 import { cn } from '@/shared/lib'
 import { Button, buttonVariants } from './button'
@@ -73,10 +69,7 @@ const Calendar = ({
             : '[&>svg]:text-muted-foreground flex h-6 items-center gap-0.5 rounded-md pl-1.5 pr-1 text-xs [&>svg]:size-3',
           defaultClassNames.caption_label,
         ),
-        month_grid: cn(
-          'w-auto border-collapse [table-layout:fixed]',
-          defaultClassNames.month_grid,
-        ),
+        month_grid: cn('w-auto border-collapse [table-layout:fixed]', defaultClassNames.month_grid),
         weekdays: cn('mb-0.5', defaultClassNames.weekdays),
         weekday: cn(
           'text-muted-foreground h-(--cell-size) w-(--cell-size) select-none p-0 text-center text-[0.6875rem] font-normal leading-none',
@@ -94,27 +87,29 @@ const Calendar = ({
         range_middle: cn('rounded-none', defaultClassNames.range_middle),
         range_end: cn('bg-accent rounded-r-md', defaultClassNames.range_end),
         today: cn('data-[selected=true]:rounded-none', defaultClassNames.today),
-        outside: cn('text-muted-foreground aria-selected:text-muted-foreground', defaultClassNames.outside),
+        outside: cn(
+          'text-muted-foreground aria-selected:text-muted-foreground',
+          defaultClassNames.outside,
+        ),
         disabled: cn('text-muted-foreground opacity-50', defaultClassNames.disabled),
         hidden: cn('invisible', defaultClassNames.hidden),
         ...classNames,
       }}
       components={{
         Root: ({ className: rootClassName, rootRef, ...rootProps }) => (
-          <div
-            data-slot="calendar"
-            ref={rootRef}
-            className={cn(rootClassName)}
-            {...rootProps}
-          />
+          <div data-slot="calendar" ref={rootRef} className={cn(rootClassName)} {...rootProps} />
         ),
         Chevron: ({ className: chevronClassName, orientation, ...chevronProps }) => {
           if (orientation === 'left') {
-            return <ChevronLeftIcon className={cn('size-3.5', chevronClassName)} {...chevronProps} />
+            return (
+              <ChevronLeftIcon className={cn('size-3.5', chevronClassName)} {...chevronProps} />
+            )
           }
 
           if (orientation === 'right') {
-            return <ChevronRightIcon className={cn('size-3.5', chevronClassName)} {...chevronProps} />
+            return (
+              <ChevronRightIcon className={cn('size-3.5', chevronClassName)} {...chevronProps} />
+            )
           }
 
           return <ChevronDownIcon className={cn('size-3', chevronClassName)} {...chevronProps} />

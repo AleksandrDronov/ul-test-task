@@ -125,7 +125,7 @@ const toNumeric = (value: unknown): number | undefined => {
 
 const toClampedInt = (
   value: unknown,
-  { min, max, fallback }: { min: number, max: number, fallback: number },
+  { min, max, fallback }: { min: number; max: number; fallback: number },
 ): number => {
   if (isBlank(value)) {
     return fallback
@@ -221,9 +221,8 @@ const isValidDateTimeOffset = (offset: string): boolean => {
 }
 
 const isValidDateTimeInstant = (dateTime: string): boolean => {
-  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/.exec(
-    dateTime,
-  )
+  const match =
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/.exec(dateTime)
   if (!match) {
     return false
   }
@@ -292,14 +291,18 @@ export type AuctionsSearchParams = {
 }
 
 export const auctionsSearchParamsSchema = z.object({
-  page: z.preprocess(
-    (value) => toClampedInt(value, { min: 1, max: Number.MAX_SAFE_INTEGER, fallback: 1 }),
-    z.number().int().min(1),
-  ).default(1),
-  per_page: z.preprocess(
-    (value) => toClampedInt(value, { min: 1, max: 100, fallback: 20 }),
-    z.number().int().min(1).max(100),
-  ).default(20),
+  page: z
+    .preprocess(
+      (value) => toClampedInt(value, { min: 1, max: Number.MAX_SAFE_INTEGER, fallback: 1 }),
+      z.number().int().min(1),
+    )
+    .default(1),
+  per_page: z
+    .preprocess(
+      (value) => toClampedInt(value, { min: 1, max: 100, fallback: 20 }),
+      z.number().int().min(1).max(100),
+    )
+    .default(20),
   cargo_num: z.preprocess(toOptionalString, z.string().optional()),
   status: z.preprocess(
     (value) => filterEnumTokens(TRADING_STATUS_VALUES, value),

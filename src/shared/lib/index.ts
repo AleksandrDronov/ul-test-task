@@ -7,7 +7,10 @@ export {
   formatPricePerKm,
   formatYesNo,
 } from './format'
-export { useDebouncedFilterField, type DebouncedFilterFieldResult } from './use-debounced-filter-field'
+export {
+  useDebouncedFilterField,
+  type DebouncedFilterFieldResult,
+} from './use-debounced-filter-field'
 export {
   isoToDate,
   dateToIsoRangeStart,

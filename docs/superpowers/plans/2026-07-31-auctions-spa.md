@@ -107,11 +107,13 @@ tests/
 ### Task 1: Scaffold проекта + FSD + tooling
 
 **Files:**
+
 - Create: `package.json`, `vite.config.ts`, `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`, `vitest.config.ts`, `index.html`, `eslint.config.js`, `.gitignore`, `src/main.tsx`, `src/app/styles.css`, `src/app/App.providers.component.tsx`, `src/shared/lib/cn.ts`, `src/shared/api/base-url.ts`
 - Create: empty FSD dirs with `.gitkeep` where needed
 - Modify: copy/keep `openapi.auctions.v0.json` at repo root
 
 **Interfaces:**
+
 - Produces: Vite app boots; `API_BASE_URL = '/api/v1'`; `cn()` helper; Vitest runnable; script `generate:api`
 
 - [ ] **Step 1: Initialize Vite React-TS app in repo root**
@@ -161,7 +163,7 @@ export default defineConfig({
 `src/app/styles.css`:
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 ```
 
 `src/shared/api/base-url.ts`:
@@ -223,10 +225,12 @@ EOF
 ### Task 2: HTTP client + ApiError
 
 **Files:**
+
 - Create: `src/shared/api/api-error.ts`, `src/shared/api/http-client.ts`
 - Test: optional smoke via types only (логика ошибок покрыта интеграционно позже)
 
 **Interfaces:**
+
 - Produces:
   - `class ApiError extends Error { status: number; code: string; title: string; message: string; fieldErrors?: Array<{ field: string; message: string; code?: string }> }`
   - `apiRequest<T>(path: string, init?: RequestInit): Promise<T>`
@@ -281,11 +285,13 @@ export const parseApiError = async (response: Response): Promise<ApiError> => {
     if (typeof item !== 'object' || item === null) return []
     const e = item as Record<string, unknown>
     if (typeof e.field !== 'string' || typeof e.message !== 'string') return []
-    return [{
-      field: e.field,
-      message: e.message,
-      code: typeof e.code === 'string' ? e.code : undefined,
-    }]
+    return [
+      {
+        field: e.field,
+        message: e.message,
+        code: typeof e.code === 'string' ? e.code : undefined,
+      },
+    ]
   })
 
   return new ApiError({
@@ -344,11 +350,13 @@ git commit -m "feat(api): add typed http client and ApiError"
 ### Task 3: Search params parser (TDD)
 
 **Files:**
+
 - Create: `src/features/filter-auctions/model/auctions-search-params.schema.ts`, `src/features/filter-auctions/model/parse-auctions-search-params.ts`
 - Create: `src/shared/config/auction-status-map.ts`
 - Test: `tests/features/filter-auctions/parse-auctions-search-params.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `type AuctionsSearchParams` — validated filters
   - `parseAuctionsSearchParams(input: Record<string, unknown>): AuctionsSearchParams`
@@ -412,11 +420,12 @@ Expected: FAIL (module not found)
 
 ```ts
 // src/features/filter-auctions/model/parse-auctions-search-params.ts
-import { auctionsSearchParamsSchema, type AuctionsSearchParams } from './auctions-search-params.schema'
+import {
+  auctionsSearchParamsSchema,
+  type AuctionsSearchParams,
+} from './auctions-search-params.schema'
 
-export const parseAuctionsSearchParams = (
-  input: Record<string, unknown>,
-): AuctionsSearchParams => {
+export const parseAuctionsSearchParams = (input: Record<string, unknown>): AuctionsSearchParams => {
   const parsed = auctionsSearchParamsSchema.safeParse(input)
   if (parsed.success) return parsed.data
   return { page: 1, per_page: 20 }
@@ -443,10 +452,12 @@ git commit -m "feat(filters): add zod search params parser"
 ### Task 4: Request builder (TDD)
 
 **Files:**
+
 - Create: `src/features/filter-auctions/model/build-auction-list-request.ts`
 - Test: `tests/features/filter-auctions/build-auction-list-request.test.ts`
 
 **Interfaces:**
+
 - Consumes: `AuctionsSearchParams`
 - Produces: `buildAuctionListRequest(params: AuctionsSearchParams): components['schemas']['AuctionListRequest']` — только определённые поля, без `undefined` ключей
 
@@ -458,22 +469,24 @@ import { buildAuctionListRequest } from '@/features/filter-auctions/model/build-
 
 describe('buildAuctionListRequest', () => {
   it('maps search params to OpenAPI request body', () => {
-    expect(buildAuctionListRequest({
-      page: 2,
-      per_page: 10,
-      cargo_num: '0001',
-      status: ['Leading'],
-      statuses: [2],
-      auc_type: ['Down'],
-      load_city: 'Пермь',
-      unload_city: 'Москва',
-      load_date_from: '2026-05-26T00:00:00+03:00',
-      load_date_to: '2026-05-27T00:00:00+03:00',
-      is_available: true,
-      is_bidder: false,
-      current_price_from: 1000,
-      current_price_to: 50000,
-    })).toEqual({
+    expect(
+      buildAuctionListRequest({
+        page: 2,
+        per_page: 10,
+        cargo_num: '0001',
+        status: ['Leading'],
+        statuses: [2],
+        auc_type: ['Down'],
+        load_city: 'Пермь',
+        unload_city: 'Москва',
+        load_date_from: '2026-05-26T00:00:00+03:00',
+        load_date_to: '2026-05-27T00:00:00+03:00',
+        is_available: true,
+        is_bidder: false,
+        current_price_from: 1000,
+        current_price_to: 50000,
+      }),
+    ).toEqual({
       page: 2,
       per_page: 10,
       cargo_num: '0001',
@@ -514,9 +527,7 @@ import type { AuctionsSearchParams } from './auctions-search-params.schema'
 
 type AuctionListRequest = components['schemas']['AuctionListRequest']
 
-export const buildAuctionListRequest = (
-  params: AuctionsSearchParams,
-): AuctionListRequest => {
+export const buildAuctionListRequest = (params: AuctionsSearchParams): AuctionListRequest => {
   const body: AuctionListRequest = {
     page: params.page,
     per_page: params.per_page,
@@ -559,10 +570,12 @@ git commit -m "feat(filters): add auction list request builder"
 ### Task 5: MSW store + handlers
 
 **Files:**
+
 - Create: `src/shared/api/msw/cities.ts`, `src/shared/api/msw/seed.ts`, `src/shared/api/msw/store.ts`, `src/shared/api/msw/handlers.ts`, `src/shared/api/msw/browser.ts`
 - Create: `public/mockServiceWorker.js` via `npx msw init public/ --save`
 
 **Interfaces:**
+
 - Produces:
   - `listAuctions(body): AuctionListResponseBase`
   - `getAuction(uuid): AuctionShowResponse | null`
@@ -628,10 +641,12 @@ git commit -m "feat(msw): add stateful auction mocks"
 ### Task 6: Entity mappers (TDD) + API + query keys
 
 **Files:**
+
 - Create: entity model/api files listed in file map
 - Test: `tests/entities/auction/map-auction-list-item.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `auctionQueryKeys = { list: (body) => ['auctions.list', body], detail: (id) => ['auction.detail', id], bets: (id, all?) => ['auction.bets', id, all] }`
   - `mapAuctionListItemDtoToVm(dto): AuctionListItemVm`
@@ -673,10 +688,12 @@ git commit -m "feat(entities): add auction/bet mappers and queries"
 ### Task 7: Set-bet Zod schema (TDD) + mutation + form
 
 **Files:**
+
 - Create: `src/features/set-bet/model/set-bet.schema.ts`, `src/features/set-bet/api/use-set-bet-mutation.ts`, `src/features/set-bet/ui/set-bet-form.component.tsx`
 - Test: `tests/features/set-bet/set-bet.schema.test.ts`
 
 **Interfaces:**
+
 - Produces: `createSetBetSchema(limits: { min?: number | null; max?: number | null; step?: number | null })`
 - Mutation `setBet`: onSuccess invalidate three keys; on 422 map `fieldErrors` to RHF
 
@@ -734,6 +751,7 @@ git commit -m "feat(set-bet): add validation schema form and mutation"
 ### Task 8: Router + pages + widgets
 
 **Files:**
+
 - Create: route tree under `src/app/routes/` (TanStack file routing) OR manual `router.tsx` with 4 routes
 - Create: all `pages/**/*.component.tsx` and `widgets/**/*.component.tsx`
 - Create: `src/features/prefetch-auction/model/use-prefetch-auction.ts`
@@ -741,6 +759,7 @@ git commit -m "feat(set-bet): add validation schema form and mutation"
 - Create: filters UI + sheet
 
 **Interfaces:**
+
 - Routes exactly as design table
 - Index route search: validate with `parseAuctionsSearchParams`
 - Prefetch: `queryClient.prefetchQuery` on card `onMouseEnter` / `onFocus`
@@ -768,6 +787,7 @@ git commit -m "feat(ui): add auction pages widgets and routes"
 ### Task 9: README + AI_USAGE + final verification
 
 **Files:**
+
 - Create: `README.md`, `AI_USAGE.md`
 
 - [ ] **Step 1: Write README** — install, `npm run dev`, architecture FSD, structure, testing commands, verified scenarios, limitations (MSW-only, no realtime)
@@ -786,13 +806,13 @@ Expected: all green, no TS errors.
 
 - [ ] **Step 4: Manual checklist**
 
-1. Список грузится, фильтр `cargo_num` меняет URL и результат  
-2. Hover prefetch не ломает UI  
-3. Детали показывают блоки  
-4. Ставка успешна → цена/история/статус обновляются без reload  
-5. 422 на неверном step  
-6. `hide_bets_history` аукцион  
-7. Mobile filters sheet  
+1. Список грузится, фильтр `cargo_num` меняет URL и результат
+2. Hover prefetch не ломает UI
+3. Детали показывают блоки
+4. Ставка успешна → цена/история/статус обновляются без reload
+5. 422 на неверном step
+6. `hide_bets_history` аукцион
+7. Mobile filters sheet
 
 - [ ] **Step 5: Commit**
 
@@ -804,23 +824,23 @@ git commit -m "docs: add README and AI_USAGE"
 
 ## Spec coverage checklist
 
-| Spec requirement | Task |
-|------------------|------|
-| FSD + `*.component.tsx` | 1, 8 |
-| openapi-typescript DTO | 1, 6 |
-| URL filters + Zod | 3 |
-| request builder | 4 |
-| MSW stateful + setBet side effects | 5 |
-| mappers VM | 6 |
-| query keys + invalidate | 6, 7 |
-| set bet RHF+Zod min/max/step | 7 |
-| pages list/detail/bets/bet | 8 |
-| skeleton/empty/error | 8 |
-| prefetch hover | 8 |
-| 401/404/422/503 handling | 2, 5, 8 |
-| tests ×4 | 3, 4, 6, 7 |
-| README + AI_USAGE | 9 |
-| build/lint clean | 9 |
+| Spec requirement                   | Task       |
+| ---------------------------------- | ---------- |
+| FSD + `*.component.tsx`            | 1, 8       |
+| openapi-typescript DTO             | 1, 6       |
+| URL filters + Zod                  | 3          |
+| request builder                    | 4          |
+| MSW stateful + setBet side effects | 5          |
+| mappers VM                         | 6          |
+| query keys + invalidate            | 6, 7       |
+| set bet RHF+Zod min/max/step       | 7          |
+| pages list/detail/bets/bet         | 8          |
+| skeleton/empty/error               | 8          |
+| prefetch hover                     | 8          |
+| 401/404/422/503 handling           | 2, 5, 8    |
+| tests ×4                           | 3, 4, 6, 7 |
+| README + AI_USAGE                  | 9          |
+| build/lint clean                   | 9          |
 
 ## Plan self-review notes
 
@@ -828,4 +848,4 @@ git commit -m "docs: add README and AI_USAGE"
 - `status_mobile` list vs detail enum asymmetry handled in mappers (narrow list enum).
 - List card does not show `step` (absent in list DTO).
 - Git commits gated by user permission / `git init`.
-`)
+  `)

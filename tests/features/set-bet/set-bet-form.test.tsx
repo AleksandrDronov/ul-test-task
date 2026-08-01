@@ -96,7 +96,9 @@ describe('SetBetForm', () => {
     await user.type(getPriceInput(), '45000')
     await user.click(getSubmitButton())
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('Ставки по этому аукциону недоступны.')
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Ставки по этому аукциону недоступны.',
+    )
   })
 
   it('renders disabled with an explanation and blocks submission when canSetBet is false', async () => {

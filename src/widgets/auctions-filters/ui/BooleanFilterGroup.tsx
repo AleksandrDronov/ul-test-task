@@ -1,7 +1,10 @@
 import { useId } from 'react'
 import { type AuctionsSearchParams } from '@/features/filter-auctions'
 import { CheckboxOption } from './CheckboxFilterFieldset'
-import { type BooleanFilterFieldKey, type BooleanFilterOptionConfig } from '../model/auctions-filters.config'
+import {
+  type BooleanFilterFieldKey,
+  type BooleanFilterOptionConfig,
+} from '../model/auctions-filters.config'
 
 export type BooleanFilterGroupProps = {
   options: BooleanFilterOptionConfig[]

@@ -5,7 +5,11 @@ import type {
   AuctionListRoutePointVm,
 } from '@/entities/auction'
 import { usePrefetchAuction } from '@/features/prefetch-auction'
-import { AUCTION_STATUS_RU_LABEL, AUCTION_TYPE_RU_LABEL, TRADING_STATUS_RU_LABEL } from '@/shared/config'
+import {
+  AUCTION_STATUS_RU_LABEL,
+  AUCTION_TYPE_RU_LABEL,
+  TRADING_STATUS_RU_LABEL,
+} from '@/shared/config'
 import { formatDate, formatNumber, formatPrice, formatPricePerKm } from '@/shared/lib'
 import { Badge, Button } from '@/shared/ui'
 
@@ -25,7 +29,9 @@ const RoutePoint = ({
   <div>
     <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
     <p className="font-medium text-foreground">{point?.city ?? '—'}</p>
-    {!hideAddress && point?.address && <p className="text-xs text-muted-foreground">{point.address}</p>}
+    {!hideAddress && point?.address && (
+      <p className="text-xs text-muted-foreground">{point.address}</p>
+    )}
     <p className="text-xs text-muted-foreground">{formatDate(point?.date)}</p>
   </div>
 )
@@ -101,7 +107,9 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
           )}
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1">
-          {auction.status && <Badge variant="secondary">{AUCTION_STATUS_RU_LABEL[auction.status]}</Badge>}
+          {auction.status && (
+            <Badge variant="secondary">{AUCTION_STATUS_RU_LABEL[auction.status]}</Badge>
+          )}
           {auction.statusMobile && (
             <Badge variant="outline">{TRADING_STATUS_RU_LABEL[auction.statusMobile]}</Badge>
           )}
@@ -109,17 +117,29 @@ export const AuctionCard = ({ auction }: AuctionCardProps) => {
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-sm">
-        <RoutePoint label="Погрузка" point={load} hideAddress={auction.hidePointsAddressAndContacts} />
-        <RoutePoint label="Выгрузка" point={unload} hideAddress={auction.hidePointsAddressAndContacts} />
+        <RoutePoint
+          label="Погрузка"
+          point={load}
+          hideAddress={auction.hidePointsAddressAndContacts}
+        />
+        <RoutePoint
+          label="Выгрузка"
+          point={unload}
+          hideAddress={auction.hidePointsAddressAndContacts}
+        />
       </div>
 
       <CargoPreview cargo={auction.cargo} />
 
       <div className="mt-auto flex items-end justify-between gap-3 border-t border-border pt-3">
         <div>
-          <p className="text-lg font-semibold text-foreground">{formatPrice(auction.currentPrice)}</p>
+          <p className="text-lg font-semibold text-foreground">
+            {formatPrice(auction.currentPrice)}
+          </p>
           <p className="text-xs text-muted-foreground">{formatPricePerKm(auction.pricePerKm)}</p>
-          {auction.hasBet && <p className="mt-1 text-xs font-medium text-primary">Вы уже сделали ставку</p>}
+          {auction.hasBet && (
+            <p className="mt-1 text-xs font-medium text-primary">Вы уже сделали ставку</p>
+          )}
         </div>
         <PrimaryActionButton auction={auction} />
       </div>

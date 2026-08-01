@@ -10,9 +10,7 @@ type AuctionListRequest = components['schemas']['AuctionListRequest']
  * @param params — валидированные search-параметры страницы списка аукционов.
  * @returns Объект `AuctionListRequest` для API.
  */
-export const buildAuctionListRequest = (
-  params: AuctionsSearchParams,
-): AuctionListRequest => {
+export const buildAuctionListRequest = (params: AuctionsSearchParams): AuctionListRequest => {
   const body: AuctionListRequest = {
     page: params.page,
     per_page: params.per_page,

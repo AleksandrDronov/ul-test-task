@@ -9,14 +9,14 @@ Production-ready SPA для списка аукционов, детальной 
 
 ## Решения (зафиксировано)
 
-| Тема | Выбор |
-|------|--------|
-| UI | Tailwind CSS + shadcn/ui (Radix) |
-| Клиентский UI-state | Zustand (точечно) |
-| Фильтры | URL search params + Zod fallback |
-| Типы DTO | `openapi-typescript` + ручные Zod/мапперы |
-| Архитектура | Strict FSD |
-| Маршруты | Отдельные path для list / detail / bets / bet |
+| Тема                | Выбор                                         |
+| ------------------- | --------------------------------------------- |
+| UI                  | Tailwind CSS + shadcn/ui (Radix)              |
+| Клиентский UI-state | Zustand (точечно)                             |
+| Фильтры             | URL search params + Zod fallback              |
+| Типы DTO            | `openapi-typescript` + ручные Zod/мапперы     |
+| Архитектура         | Strict FSD                                    |
+| Маршруты            | Отдельные path для list / detail / bets / bet |
 
 ## Стек
 
@@ -51,12 +51,12 @@ src/
 
 ## Маршруты
 
-| Path | Назначение |
-|------|------------|
-| `/` | Список аукционов + фильтры в search params |
-| `/auctions/$auctionUuid` | Детальная страница |
-| `/auctions/$auctionUuid/bets` | История ставок |
-| `/auctions/$auctionUuid/bet` | Форма ставки (deep-link) |
+| Path                          | Назначение                                 |
+| ----------------------------- | ------------------------------------------ |
+| `/`                           | Список аукционов + фильтры в search params |
+| `/auctions/$auctionUuid`      | Детальная страница                         |
+| `/auctions/$auctionUuid/bets` | История ставок                             |
+| `/auctions/$auctionUuid/bet`  | Форма ставки (deep-link)                   |
 
 `$auctionUuid` — `main.order_uid` (UUID) из list/detail; path param OpenAPI `auctionUuid`.
 
@@ -64,12 +64,12 @@ src/
 
 Базовый URL: `/api/v1` (как в OpenAPI `servers`).
 
-| Method | Path | Query key / mutation |
-|--------|------|----------------------|
-| POST | `/auctions/list` | `auctions.list` |
-| GET | `/auctions/{auctionUuid}` | `auction.detail` |
-| GET | `/auctions/{auctionUuid}/bets` | `auction.bets` |
-| POST | `/auctions/{auctionUuid}/bets` | mutation `setBet` |
+| Method | Path                           | Query key / mutation |
+| ------ | ------------------------------ | -------------------- |
+| POST   | `/auctions/list`               | `auctions.list`      |
+| GET    | `/auctions/{auctionUuid}`      | `auction.detail`     |
+| GET    | `/auctions/{auctionUuid}/bets` | `auction.bets`       |
+| POST   | `/auctions/{auctionUuid}/bets` | mutation `setBet`    |
 
 После успешного `setBet` инвалидировать: `auctions.list`, `auction.detail`, `auction.bets`.
 
@@ -199,4 +199,4 @@ Vitest:
 - Полный набор фильтров OpenAPI сверх минимального списка ТЗ (можно добавить позже без ломки builder)
 - E2E (Playwright) — опционально, не блокер
 - Git init/commit design doc — репозиторий ещё не инициализирован; коммит после `git init` по запросу
-`)
+  `)

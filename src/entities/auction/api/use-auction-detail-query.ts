@@ -15,4 +15,5 @@ export const auctionDetailQueryOptions = (auctionUuid: string) =>
     select: mapAuctionDetailDtoToVm,
   })
 
-export const useAuctionDetailQuery = (auctionUuid: string) => useQuery(auctionDetailQueryOptions(auctionUuid))
+export const useAuctionDetailQuery = (auctionUuid: string) =>
+  useQuery(auctionDetailQueryOptions(auctionUuid))

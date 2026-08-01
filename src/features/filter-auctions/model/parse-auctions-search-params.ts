@@ -9,9 +9,7 @@ export const DEFAULT_SEARCH_PARAMS: AuctionsSearchParams = {
   per_page: 20,
 }
 
-export const parseAuctionsSearchParams = (
-  input: Record<string, unknown>,
-): AuctionsSearchParams => {
+export const parseAuctionsSearchParams = (input: Record<string, unknown>): AuctionsSearchParams => {
   try {
     const parsed = auctionsSearchParamsSchema.safeParse(input)
     if (parsed.success) {

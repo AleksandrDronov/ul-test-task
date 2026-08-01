@@ -10,6 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "generate:api": "openapi-typescript openapi.auctions.v0.json -o src/shared/api/types/openapi.d.ts"
   },
   "dependencies": {
@@ -50,12 +52,14 @@
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.5",
     "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.8.0",
     "jsdom": "^29.1.1",
     "msw": "^2.15.0",
     "openapi-typescript": "^7.13.0",
+    "prettier": "^3.9.6",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.65.0",

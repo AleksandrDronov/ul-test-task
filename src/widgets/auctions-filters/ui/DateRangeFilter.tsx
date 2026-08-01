@@ -1,9 +1,5 @@
 import { useId } from 'react'
-import {
-  dateToIsoRangeEnd,
-  dateToIsoRangeStart,
-  isoToDate,
-} from '@/shared/lib'
+import { dateToIsoRangeEnd, dateToIsoRangeStart, isoToDate } from '@/shared/lib'
 import { DatePicker, type DatePickerProps } from '@/shared/ui'
 import { FilterField } from './FilterField'
 
@@ -41,20 +37,10 @@ export const DateRangeFilter = ({
   return (
     <div className="flex flex-col gap-2">
       <FilterField label={fromLabel} id={fromId} className="gap-1.5">
-        <DatePicker
-          id={fromId}
-          value={fromDate}
-          onChange={handleFromChange}
-          toDate={toDate}
-        />
+        <DatePicker id={fromId} value={fromDate} onChange={handleFromChange} toDate={toDate} />
       </FilterField>
       <FilterField label={toLabel} id={toId} className="gap-1.5">
-        <DatePicker
-          id={toId}
-          value={toDate}
-          onChange={handleToChange}
-          fromDate={fromDate}
-        />
+        <DatePicker id={toId} value={toDate} onChange={handleToChange} fromDate={fromDate} />
       </FilterField>
     </div>
   )

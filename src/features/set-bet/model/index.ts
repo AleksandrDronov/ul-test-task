@@ -1,5 +1,1 @@
-export {
-  createSetBetSchema,
-  type SetBetLimits,
-  type SetBetFormValues,
-} from './set-bet.schema'
+export { createSetBetSchema, type SetBetLimits, type SetBetFormValues } from './set-bet.schema'
