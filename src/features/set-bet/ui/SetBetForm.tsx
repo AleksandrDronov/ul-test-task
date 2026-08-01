@@ -16,6 +16,7 @@ export type SetBetFormProps = {
 const CANNOT_BID_MESSAGE = 'Ставки по этому аукциону недоступны.'
 
 export const SetBetForm = ({ auctionUuid, price, aucType, canSetBet }: SetBetFormProps) => {
+
   const {
     inputId,
     hintId,

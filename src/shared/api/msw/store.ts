@@ -135,7 +135,7 @@ const recomputePlaces = (bets: BetItem[], aucType: AuctionType | null | undefine
 
 const applyAcceptedBet = (record: AuctionRecord, price: number): void => {
   const trading = record.detail.trading
-  const aucType = record.detail.main?.auc_type
+  const aucType = record.detail.main.auc_type
   const stepDirection = getBetStepDirection(aucType)
   const step = trading.price?.step ?? 0
   const min = trading.price?.min ?? null
@@ -227,7 +227,7 @@ export const setBet = (uuid: string, price: number): SetBetResult => {
 
   const { max, min, step, stepReference, stepDirection } = getSetBetLimits(
     trading.price ?? {},
-    record.detail.main?.auc_type,
+    record.detail.main.auc_type,
   )
 
   if (price <= 0) {

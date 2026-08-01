@@ -3,15 +3,13 @@ import { auctionQueryKeys } from '@/entities/auction'
 import { postSetBet, betQueryKeys } from '@/entities/bet'
 
 /**
- * При успехе инвалидирует все три ключа запросов через `auctionQueryKeys` и `betQueryKeys`
- * (разрешение task-7 #3), чтобы деталь, список ставок и список аукционов обновились без перезагрузки:
+ * React Query-хук для размещения ставки на аукционе.
  *
- * - `list({})`: частичное сопоставление TanStack Query сравнивает сегменты ключа;
- *   пустой объект фильтров не имеет собственных ключей для сравнения,
- *   поэтому совпадает с любым закэшированным `auctions.list` независимо от фильтров.
- * - `detail(auctionUuid)`: точное совпадение, только запрос детали этого аукциона.
- * - `listPrefix(auctionUuid)`: без сегмента `all`, чтобы обновились и дефолтный
- *   (без отклонённых), и `all=true` варианты списка ставок.
+ * После успешного запроса инвалидирует список аукционов, детали текущего аукциона
+ * и все варианты списка ставок по `auctionUuid`.
+ *
+ * @param auctionUuid — UUID аукциона, на котором размещается ставка.
+ * @returns Результат `useMutation`; в `mutate`/`mutateAsync` передаётся сумма ставки (`price`).
  */
 export const useSetBetMutation = (auctionUuid: string) => {
   const queryClient = useQueryClient()

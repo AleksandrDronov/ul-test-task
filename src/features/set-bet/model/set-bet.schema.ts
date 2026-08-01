@@ -1,13 +1,6 @@
 import { z } from 'zod'
 import { isBetPriceOnStep, type SetBetLimits } from '@/shared/lib'
 
-export type { SetBetLimits }
-
-/**
- * Клиентское зеркало порядка валидации мока `setBet` (разрешение #4 task-5,
- * см. комментарий в `store.ts`): positive → выше max → ниже min → off-step.
- * `canSetBet` не входит в схему — это disabled-состояние формы (разрешение task-7 #6).
- */
 export const createSetBetSchema = (limits: SetBetLimits) =>
   z.object({
     price: z
@@ -56,4 +49,6 @@ export const createSetBetSchema = (limits: SetBetLimits) =>
     }),
   })
 
-export type SetBetFormValues = z.infer<ReturnType<typeof createSetBetSchema>>
+export type SetBetFormValues = {
+  price: number
+}

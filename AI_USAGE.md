@@ -84,5 +84,3 @@
 - Полнее OpenAPI-фильтры (все поля `AuctionListRequest`, если появятся в UI)
 - Выделить `isOnStep` / валидацию цены в `shared/lib` и переиспользовать в форме и MSW
 - Storybook для виджетов и состояний empty/error
-- Починить тесты `parse-auctions-search-params` под актуальный `per_page: 8`
-

@@ -1,11 +1,11 @@
-import { useEffect, useId, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useEffect, useId, useMemo, useState, type BaseSyntheticEvent } from 'react'
+import { useForm, type UseFormRegisterReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import type { AuctionDetailTradingPriceVm } from '@/entities/auction'
 import type { components } from '@/shared/api/types/openapi'
 import { ApiError } from '@/shared/api'
-import { getSetBetLimits } from '@/shared/lib'
+import { getSetBetLimits, type SetBetLimits } from '@/shared/lib'
 import { useSetBetMutation } from '../api'
 import { createSetBetSchema, type SetBetFormValues } from './set-bet.schema'
 import { getDefaultBetPrice } from './get-default-bet-price'
@@ -29,6 +29,21 @@ export type UseSetBetFormParams = {
   aucType: AuctionType | null
 }
 
+export type UseSetBetFormReturn = {
+  inputId: string
+  hintId: string
+  errorId: string
+  priceRegister: UseFormRegisterReturn<'price'>
+  limits: SetBetLimits
+  priceErrorMessage: string | undefined
+  isBusy: boolean
+  describedBy: string
+  submitError: unknown
+  onSubmit: (event?: BaseSyntheticEvent) => Promise<void>
+  handleUseAvailablePrice: () => void
+  handleRetrySubmit: () => void
+}
+
 /**
  * Логика формы размещения ставки: валидация через zod, отправка мутации,
  * обработка серверных ошибок 422 по полю `price` и состояние busy для UI.
@@ -37,7 +52,11 @@ export type UseSetBetFormParams = {
  * @returns Поля и обработчики для `SetBetForm`: id для a11y, register поля цены,
  *   сообщения об ошибках, флаги `isBusy`/`submitError` и обработчики submit/retry/available price.
  */
-export const useSetBetForm = ({ auctionUuid, price, aucType }: UseSetBetFormParams) => {
+export const useSetBetForm = ({
+  auctionUuid,
+  price,
+  aucType,
+}: UseSetBetFormParams): UseSetBetFormReturn => {
   const inputId = useId()
   const hintId = useId()
   const errorId = useId()
