@@ -198,14 +198,14 @@ describe('msw store: listAuctions', () => {
 
   it('returns all seeded auctions with meta matching the full set on default pagination', () => {
     const result = listAuctions({ page: 1, per_page: 20 })
-    expect(result.data).toHaveLength(8)
+    expect(result.data).toHaveLength(16)
     expect(result.meta).toMatchObject({
       current_page: 1,
       per_page: 20,
-      total: 8,
+      total: 16,
       last_page: 1,
       from: 1,
-      to: 8,
+      to: 16,
     })
   })
 

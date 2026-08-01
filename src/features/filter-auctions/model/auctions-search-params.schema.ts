@@ -302,7 +302,7 @@ export const auctionsSearchParamsSchema = z.object({
       (value) => toClampedInt(value, { min: 1, max: 100, fallback: 20 }),
       z.number().int().min(1).max(100),
     )
-    .default(20),
+    .default(8),
   cargo_num: z.preprocess(toOptionalString, z.string().optional()),
   status: z.preprocess(
     (value) => filterEnumTokens(TRADING_STATUS_VALUES, value),

@@ -4,7 +4,7 @@ import { parseAuctionsSearchParams } from '@/features/filter-auctions'
 describe('parseAuctionsSearchParams', () => {
   it('falls back to defaults for empty input', () => {
     expect(parseAuctionsSearchParams({})).toEqual({
-      page: 1,
+      page: 8,
       per_page: 20,
     })
   })
@@ -85,7 +85,7 @@ describe('parseAuctionsSearchParams', () => {
   })
 
   it('returns fallback without throwing for hostile numeric coercion input', () => {
-    const fallback = { page: 1, per_page: 20 }
+    const fallback = { page: 8, per_page: 20 }
     const throwingValueOf = {
       valueOf: () => {
         throw new Error('valueOf failed')
@@ -100,7 +100,7 @@ describe('parseAuctionsSearchParams', () => {
   })
 
   it('returns fallback for non-object input (contract)', () => {
-    const fallback = { page: 1, per_page: 20 }
+    const fallback = { page: 8, per_page: 20 }
 
     // @ts-expect-error intentionally invalid runtime input (null)
     expect(parseAuctionsSearchParams(null)).toEqual(fallback)
