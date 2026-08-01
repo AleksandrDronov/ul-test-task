@@ -4,8 +4,8 @@ import { parseAuctionsSearchParams } from '@/features/filter-auctions'
 describe('parseAuctionsSearchParams', () => {
   it('falls back to defaults for empty input', () => {
     expect(parseAuctionsSearchParams({})).toEqual({
-      page: 8,
-      per_page: 20,
+      page: 1,
+      per_page: 8,
     })
   })
 
@@ -60,7 +60,7 @@ describe('parseAuctionsSearchParams', () => {
       foo: 'bar',
     })
 
-    expect(result).toEqual({ page: 2, per_page: 20 })
+    expect(result).toEqual({ page: 2, per_page: 8 })
     expect(result).not.toHaveProperty('foo')
   })
 
@@ -85,7 +85,7 @@ describe('parseAuctionsSearchParams', () => {
   })
 
   it('returns fallback without throwing for hostile numeric coercion input', () => {
-    const fallback = { page: 8, per_page: 20 }
+    const fallback = { page: 1, per_page: 8 }
     const throwingValueOf = {
       valueOf: () => {
         throw new Error('valueOf failed')
@@ -100,7 +100,7 @@ describe('parseAuctionsSearchParams', () => {
   })
 
   it('returns fallback for non-object input (contract)', () => {
-    const fallback = { page: 8, per_page: 20 }
+    const fallback = { page: 1, per_page: 8 }
 
     // @ts-expect-error intentionally invalid runtime input (null)
     expect(parseAuctionsSearchParams(null)).toEqual(fallback)
@@ -131,8 +131,9 @@ describe('parseAuctionsSearchParams', () => {
 
     expect(result).toEqual({
       page: 3,
-      per_page: 20,
+      per_page: 8,
       cargo_num: 'ABC',
+      load_date_from: undefined,
       load_date_to: '2026-01-15T10:30:00+03:00',
     })
     expect(result.load_date_from).toBeUndefined()

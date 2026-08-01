@@ -299,7 +299,7 @@ export const auctionsSearchParamsSchema = z.object({
     .default(1),
   per_page: z
     .preprocess(
-      (value) => toClampedInt(value, { min: 1, max: 100, fallback: 20 }),
+      (value) => toClampedInt(value, { min: 1, max: 100, fallback: 8 }),
       z.number().int().min(1).max(100),
     )
     .default(8),
