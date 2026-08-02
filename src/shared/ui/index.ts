@@ -24,4 +24,3 @@ export {
 } from './Sheet'
 export { Skeleton } from './Skeleton'
 export { Toaster } from './Sonner'
-export { TooltipProvider } from './Tooltip'
