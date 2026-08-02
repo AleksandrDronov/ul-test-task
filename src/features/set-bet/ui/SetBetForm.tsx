@@ -1,5 +1,5 @@
 import type { AuctionDetailTradingPriceVm } from '@/entities/auction'
-import type { components } from '@/shared/api/types/openapi'
+import type { components } from '@/shared/api'
 import { formatPrice } from '@/shared/lib'
 import { ApiErrorState, Button, Input, Label } from '@/shared/ui'
 import { useSetBetForm } from '../model/use-set-bet-form'

@@ -1,4 +1,4 @@
-import { Skeleton } from '@/shared/ui'
+import { Skeleton } from './skeleton'
 
 export const RoutePendingFallback = () => (
   <div

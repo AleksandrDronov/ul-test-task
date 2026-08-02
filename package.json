@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint .",
+    "lint": "eslint . && npm run lint:fsd",
+    "lint:fsd": "steiger ./src",
+    "lint:fsd:watch": "steiger ./src --watch",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "generate:api": "openapi-typescript openapi.auctions.v0.json -o src/shared/api/types/openapi.d.ts"
@@ -42,6 +44,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@feature-sliced/steiger-plugin": "^0.7.0",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/router-plugin": "^1.168.23",
     "@testing-library/jest-dom": "^6.9.1",
@@ -60,6 +63,7 @@
     "msw": "^2.15.0",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.6",
+    "steiger": "^0.6.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.65.0",

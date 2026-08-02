@@ -1,3 +1,4 @@
+export { RoutePendingFallback } from './RoutePendingFallback'
 export { ApiErrorState } from './ApiErrorState'
 export { AsyncQueryView } from './AsyncQueryView'
 export { BackToListLink } from './BackToListLink'

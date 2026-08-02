@@ -1,6 +1,6 @@
 import { createRouter } from '@tanstack/react-router'
 import { routeTree } from '@/routeTree.gen'
-import { RoutePendingFallback } from './ui/RoutePendingFallback'
+import { RoutePendingFallback } from '@/shared/ui'
 
 export const router = createRouter({
   routeTree,
