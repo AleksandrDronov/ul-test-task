@@ -34,7 +34,10 @@ export const AuctionCardHeader = ({ auction, onPrefetch }: AuctionCardHeaderProp
       </div>
       <div className="relative z-10 flex shrink-0 flex-col items-end gap-1">
         {auction.status && (
-          <Badge variant="secondary" aria-label={`Статус аукциона: ${AUCTION_STATUS_RU_LABEL[auction.status]}`}>
+          <Badge
+            variant="secondary"
+            aria-label={`Статус аукциона: ${AUCTION_STATUS_RU_LABEL[auction.status]}`}
+          >
             {AUCTION_STATUS_RU_LABEL[auction.status]}
           </Badge>
         )}
