@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { DEFAULT_AUCTIONS_LIST_SEARCH } from '@/shared/config'
-import { Button } from './button'
+import { Button } from './Button'
 
 export const BackToListLink = () => (
   <Button asChild variant="outline">

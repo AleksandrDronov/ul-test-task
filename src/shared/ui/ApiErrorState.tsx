@@ -1,5 +1,5 @@
 import { ApiError } from '@/shared/api'
-import { Button } from './button'
+import { Button } from './Button'
 
 type StatusMessage = {
   title: string

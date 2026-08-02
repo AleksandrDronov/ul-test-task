@@ -4,8 +4,8 @@ import { CalendarIcon, ChevronDown, X } from 'lucide-react'
 import { type KeyboardEvent, type MouseEvent, useState } from 'react'
 import { ru as dayPickerRu } from 'react-day-picker/locale'
 import { cn } from '@/shared/lib'
-import { Calendar } from './calendar'
-import { Popover, PopoverContent, PopoverTrigger } from './popover'
+import { Calendar } from './Calendar'
+import { Popover, PopoverContent, PopoverTrigger } from './Popover'
 
 export type DatePickerProps = {
   id?: string

@@ -2,26 +2,26 @@ export { RoutePendingFallback } from './RoutePendingFallback'
 export { ApiErrorState } from './ApiErrorState'
 export { AsyncQueryView } from './AsyncQueryView'
 export { BackToListLink } from './BackToListLink'
-export { Badge } from './badge'
-export { Button } from './button'
-export { DatePicker, type DatePickerProps } from './date-picker'
+export { Badge } from './Badge'
+export { Button } from './Button'
+export { DatePicker, type DatePickerProps } from './DatePicker'
 export { EmptyState } from './EmptyState'
-export { Input } from './input'
-export { Label } from './label'
+export { Input } from './Input'
+export { Label } from './Label'
 export {
   Select,
   SelectValue,
   SelectTrigger,
   SelectContent,
   SelectItem,
-} from './select'
-export { Separator } from './separator'
+} from './Select'
+export { Separator } from './Separator'
 export {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-} from './sheet'
-export { Skeleton } from './skeleton'
-export { Toaster } from './sonner'
-export { TooltipProvider } from './tooltip'
+} from './Sheet'
+export { Skeleton } from './Skeleton'
+export { Toaster } from './Sonner'
+export { TooltipProvider } from './Tooltip'
