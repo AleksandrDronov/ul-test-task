@@ -11,13 +11,18 @@ npm run dev
 
 Приложение откроется на `http://localhost:5173`. MSW подключается автоматически в dev-режиме (`src/main.tsx`).
 
-Дополнительные команды:
+### Команды
 
 ```bash
-npm test          # unit-тесты (Vitest)
-npm run lint      # ESLint
-npm run build     # typecheck + production-сборка
-npm run preview   # предпросмотр production-сборки
+npm run dev           # dev-сервер (Vite)
+npm test              # unit-тесты (Vitest, однократный прогон)
+npm run test:watch    # unit-тесты в watch-режиме
+npm run lint          # ESLint + проверка FSD (Steiger)
+npm run lint:fsd      # только Steiger (границы слоёв FSD)
+npm run format        # Prettier — форматирование
+npm run format:check  # Prettier — проверка без записи
+npm run build         # typecheck + production-сборка
+npm run preview       # предпросмотр production-сборки
 npm run generate:api  # перегенерация типов из openapi.auctions.v0.json
 ```
 
@@ -29,18 +34,20 @@ npm run generate:api  # перегенерация типов из openapi.aucti
 | ---------- | ------------------------------------------------------------ |
 | `app`      | Роутер, провайдеры, глобальные стили                         |
 | `pages`    | Страницы-оркестраторы (fetch + состояния UI)                 |
-| `widgets`  | Крупные UI-блоки (карточка, фильтры, таблица ставок)         |
-| `features` | Пользовательские сценарии (фильтры, ставка, prefetch)        |
+| `widgets`  | Крупные UI-блоки (карточка, фильтры, таблица ставок, layout) |
+| `features` | Пользовательские сценарии (фильтры, ставка, prefetch, ошибки)|
 | `entities` | Доменные сущности (auction, bet), API-хуки, мапперы DTO → VM |
 | `shared`   | UI-kit, HTTP-клиент, MSW, утилиты, конфиг                    |
 
 **Ключевые решения:**
 
-- **TanStack Router** — file-based routing, фильтры списка в URL (`validateSearch` + Zod)
+- **TanStack Router** — file-based routing, `autoCodeSplitting` по маршрутам, фильтры списка в URL (`validateSearch` + Zod)
 - **TanStack Query** — кэш, prefetch при hover, инвалидация после ставки
 - **ViewModels** — UI не импортирует OpenAPI DTO напрямую; маппинг в `entities/*/model/`
-- **React Hook Form + Zod** — форма ставки с клиентской валидацией min/max/step
+- **React Hook Form + Zod** — форма ставки с клиентской валидацией min/max/step (логика шага в `shared/lib/get-set-bet-limits`)
 - **Zustand** — только UI-состояние мобильного sheet фильтров (значения фильтров — в URL)
+- **Sonner** — toast-уведомления об успешной ставке и ошибках
+- **Steiger** — линтер границ FSD (`lint:fsd`)
 
 Файлы маршрутов в `src/app/routes/` содержат только конфиг `createFileRoute`.
 
@@ -50,11 +57,11 @@ npm run generate:api  # перегенерация типов из openapi.aucti
 src/
 ├── app/                  # router, routes, providers, layout
 ├── pages/                # auctions-list, auction-detail, auction-bets, auction-bet
-├── widgets/              # auction-card, auctions-filters, bets-table, auction-summary
-├── features/             # filter-auctions, set-bet, prefetch-auction
+├── widgets/              # auction-card, auctions-filters, bets-table, auction-summary, root-layout
+├── features/             # filter-auctions, set-bet, prefetch-auction, auction-error
 ├── entities/             # auction, bet (api + model)
 └── shared/               # api (http, msw, openapi types), ui, lib, config
-tests/                    # unit-тесты (мапперы, схемы, MSW store, http-client)
+tests/                    # unit-тесты (мапперы, схемы, формы, MSW store, http-client)
 openapi.auctions.v0.json  # контракт API
 ```
 
@@ -69,13 +76,16 @@ openapi.auctions.v0.json  # контракт API
 
 ## Тестирование
 
-Покрытие unit-тестами (75 тестов в 10 файлах):
+Покрытие unit-тестами (**95 тестов** в **11 файлах** + type-тесты):
 
-- парсинг и сборка параметров фильтров (`features/filter-auctions`)
-- маппинг DTO → ViewModel (`entities/auction`, `entities/bet`)
-- схема валидации ставки (`features/set-bet`)
-- MSW store (setBet side effects, пагинация, 422)
-- HTTP-клиент (ApiError, problem+json)
+| Область | Что проверяется |
+| ------- | --------------- |
+| `features/filter-auctions` | парсинг и сборка параметров фильтров, типы `DEFAULT_SEARCH_PARAMS` |
+| `entities/auction` | маппинг list/detail DTO → ViewModel |
+| `entities/bet` | маппинг DTO → ViewModel |
+| `features/set-bet` | схема валидации, форма, мутация и инвалидация кэша |
+| `shared/lib` | расчёт лимитов ставки и проверка кратности шагу |
+| `shared/api` | HTTP-клиент (ApiError, problem+json), MSW store (setBet, пагинация, 422) |
 
 ```bash
 npm test
@@ -92,6 +102,7 @@ npm test
 5. 422 при неверном шаге цены (клиент + сервер)
 6. Аукцион с `hide_bets_history` — пустое состояние «история скрыта»
 7. Мобильные фильтры в Sheet (ширина ≤ md)
+8. 404 на деталях/ставках — отдельный empty state «Аукцион не найден»
 
 ### Seed-аукционы для ручных проверок
 
@@ -120,7 +131,7 @@ npm test
 ### MSW only
 
 - Нет реального API, авторизации, refresh-токенов, WebSocket/realtime
-- MSW включается **только в dev** (`import.meta.env.DEV`); production-сборка ходит на `API_BASE_URL` без мока
+- MSW включается **только в dev** (`import.meta.env.DEV`); production-сборка ходит на `API_BASE_URL` (`/api/v1`) без мока
 - In-memory store: данные сбрасываются при перезагрузке страницы
 
 ### Флаги ограничений — UI gate, не redaction
@@ -145,8 +156,7 @@ npm test
 
 - `status_mobile` в list DTO — урезанный enum относительно detail; маппер сужает тип
 - На карточке списка нет `step` (поле отсутствует в list DTO)
-- Vite предупреждает о размере main chunk > 500 kB (нет lazy routes)
 
 ## Стек
 
-React 19, TypeScript, Vite 8, TanStack Router/Query, Tailwind CSS 4, shadcn/ui (Radix), MSW 2, Zod, React Hook Form, Zustand, openapi-typescript, Vitest, ESLint.
+React 19, TypeScript, Vite 8, TanStack Router/Query, Tailwind CSS 4, shadcn/ui (Radix), Sonner, MSW 2, Zod, React Hook Form, Zustand, openapi-typescript, Vitest, ESLint, Steiger, Prettier.
