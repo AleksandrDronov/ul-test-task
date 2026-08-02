@@ -12,7 +12,6 @@
 
 ## Global Constraints
 
-- Все React-компоненты: суффикс `*.component.tsx`
 - Без `any` / `as any`
 - UI не импортирует DTO напрямую — только ViewModel
 - OpenAPI — единственный источник полей/enum/nullable
@@ -39,29 +38,28 @@ AI_USAGE.md
 src/
   main.tsx
   app/
-    App.providers.component.tsx
+    AppProviders.tsx
     styles.css
     router.tsx
   pages/
-    auctions-list/ui/auctions-list-page.component.tsx
-    auction-detail/ui/auction-detail-page.component.tsx
-    auction-bets/ui/auction-bets-page.component.tsx
-    auction-bet/ui/auction-bet-page.component.tsx
+    auctions-list/ui/AuctionsListPage.tsx
+    auction-detail/ui/AuctionDetailPage.tsx
+    auction-bets/ui/AuctionBetsPage.tsx
+    auction-bet/ui/AuctionBetPage.tsx
   widgets/
-    auction-card/ui/auction-card.component.tsx
-    auctions-filters/ui/auctions-filters.component.tsx
-    bets-table/ui/bets-table.component.tsx
-    auction-summary/ui/auction-summary.component.tsx
+    auction-card/ui/AuctionCard.tsx
+    auctions-filters/ui/AuctionsFilters.tsx
+    bets-table/ui/BetsTable.tsx
+    auction-summary/ui/AuctionSummary.tsx
   features/
     filter-auctions/
       model/auctions-search-params.schema.ts
       model/parse-auctions-search-params.ts
       model/build-auction-list-request.ts
       model/filters-ui.store.ts
-      ui/filters-sheet.component.tsx
     set-bet/
       model/set-bet.schema.ts
-      ui/set-bet-form.component.tsx
+      ui/SetBetForm.tsx
       api/use-set-bet-mutation.ts
     prefetch-auction/
       model/use-prefetch-auction.ts
@@ -108,7 +106,7 @@ tests/
 
 **Files:**
 
-- Create: `package.json`, `vite.config.ts`, `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`, `vitest.config.ts`, `index.html`, `eslint.config.js`, `.gitignore`, `src/main.tsx`, `src/app/styles.css`, `src/app/App.providers.component.tsx`, `src/shared/lib/cn.ts`, `src/shared/api/base-url.ts`
+- Create: `package.json`, `vite.config.ts`, `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`, `vitest.config.ts`, `index.html`, `eslint.config.js`, `.gitignore`, `src/main.tsx`, `src/app/styles.css`, `src/app/AppProviders.tsx`, `src/shared/lib/cn.ts`, `src/shared/api/base-url.ts`
 - Create: empty FSD dirs with `.gitkeep` where needed
 - Modify: copy/keep `openapi.auctions.v0.json` at repo root
 
@@ -360,7 +358,7 @@ git commit -m "feat(api): add typed http client and ApiError"
 - Produces:
   - `type AuctionsSearchParams` — validated filters
   - `parseAuctionsSearchParams(input: Record<string, unknown>): AuctionsSearchParams`
-  - defaults: `page=1`, `per_page=20`
+  - defaults: `page=1`, `per_page` из `DEFAULT_AUCTIONS_LIST_SEARCH`
 - Consumes: Zod
 
 - [ ] **Step 1: Write failing tests**
@@ -372,10 +370,7 @@ import { parseAuctionsSearchParams } from '@/features/filter-auctions/model/pars
 
 describe('parseAuctionsSearchParams', () => {
   it('falls back to defaults for empty input', () => {
-    expect(parseAuctionsSearchParams({})).toEqual({
-      page: 1,
-      per_page: 20,
-    })
+    expect(parseAuctionsSearchParams({})).toEqual(DEFAULT_AUCTIONS_LIST_SEARCH)
   })
 
   it('parses known filters and drops invalid enum values', () => {
@@ -428,7 +423,7 @@ import {
 export const parseAuctionsSearchParams = (input: Record<string, unknown>): AuctionsSearchParams => {
   const parsed = auctionsSearchParamsSchema.safeParse(input)
   if (parsed.success) return parsed.data
-  return { page: 1, per_page: 20 }
+  return DEFAULT_SEARCH_PARAMS
 }
 ```
 
@@ -689,7 +684,7 @@ git commit -m "feat(entities): add auction/bet mappers and queries"
 
 **Files:**
 
-- Create: `src/features/set-bet/model/set-bet.schema.ts`, `src/features/set-bet/api/use-set-bet-mutation.ts`, `src/features/set-bet/ui/set-bet-form.component.tsx`
+- Create: `src/features/set-bet/model/set-bet.schema.ts`, `src/features/set-bet/api/use-set-bet-mutation.ts`, `src/features/set-bet/ui/SetBetForm.tsx`
 - Test: `tests/features/set-bet/set-bet.schema.test.ts`
 
 **Interfaces:**
@@ -753,7 +748,7 @@ git commit -m "feat(set-bet): add validation schema form and mutation"
 **Files:**
 
 - Create: route tree under `src/app/routes/` (TanStack file routing) OR manual `router.tsx` with 4 routes
-- Create: all `pages/**/*.component.tsx` and `widgets/**/*.component.tsx`
+- Create: all `pages/**/ui/*.tsx` and `widgets/**/ui/*.tsx`
 - Create: `src/features/prefetch-auction/model/use-prefetch-auction.ts`
 - Create: `src/features/filter-auctions/model/filters-ui.store.ts` (`filtersOpen` boolean)
 - Create: filters UI + sheet
@@ -826,7 +821,7 @@ git commit -m "docs: add README and AI_USAGE"
 
 | Spec requirement                   | Task       |
 | ---------------------------------- | ---------- |
-| FSD + `*.component.tsx`            | 1, 8       |
+| FSD                                | 1, 8       |
 | openapi-typescript DTO             | 1, 6       |
 | URL filters + Zod                  | 3          |
 | request builder                    | 4          |

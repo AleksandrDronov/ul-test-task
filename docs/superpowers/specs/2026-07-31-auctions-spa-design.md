@@ -46,7 +46,6 @@ src/
 - UI работает только с ViewModel, не с DTO.
 - DTO живут в `entities/*/api` и входe мапперов.
 - Мапперы: `mapAuctionListItemDtoToVm`, `mapAuctionDetailDtoToVm`, `mapBetItemDtoToVm`.
-- Все React-компоненты именуются `*.component.tsx`.
 - Без `any` и небезопасных приведений типов.
 
 ## Маршруты
@@ -123,7 +122,7 @@ id, даты, цены с/без НДС, перевозчик, place, is_win, is
 - `load_date_from`, `load_date_to` (ISO date-time)
 - `is_available`, `is_bidder` (boolean)
 - `current_price_from`, `current_price_to` (number)
-- `page`, `per_page` (defaults: 1 и 20)
+- `page`, `per_page` (defaults в `DEFAULT_AUCTIONS_LIST_SEARCH` / парсере URL)
 
 Request builder строит `AuctionListRequest` только из валидных полей, без выдуманных ключей.
 
@@ -179,7 +178,6 @@ Vitest:
 ## Критерии приёмки
 
 - `vite build` успешен, нет ошибок TypeScript и ESLint
-- Компоненты только `*.component.tsx`
 - OpenAPI-контракт соблюдён
 - DTO не в UI, нет `any`
 - FSD-слои соблюдены
