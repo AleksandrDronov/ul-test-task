@@ -22,11 +22,7 @@ export const DetailFieldsFromConfig = <T, C = undefined>({
     {fields
       .filter((field) => !field.hidden?.(data, context))
       .map((field) => (
-        <DetailField
-          key={field.label}
-          label={field.label}
-          value={field.getValue(data, context)}
-        />
+        <DetailField key={field.label} label={field.label} value={field.getValue(data, context)} />
       ))}
   </>
 )

@@ -8,11 +8,7 @@ export {
   formatYesNo,
 } from './format'
 export { useDebouncedFilterField } from './use-debounced-filter-field'
-export {
-  isoToDate,
-  dateToIsoRangeStart,
-  dateToIsoRangeEnd,
-} from './date-input'
+export { isoToDate, dateToIsoRangeStart, dateToIsoRangeEnd } from './date-input'
 export {
   computeNextAvailablePrice,
   getBetStepDirection,

@@ -38,9 +38,7 @@ export const AuctionBetsContent = ({ auction, auctionUuid }: AuctionBetsContentP
         >
           {(data) => (
             <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
-                Участников: {data.participantsCount}
-              </p>
+              <p className="text-sm text-muted-foreground">Участников: {data.participantsCount}</p>
               <BetsTable bets={data.items} />
             </div>
           )}

@@ -37,7 +37,6 @@ export const AuctionBetPage = () => {
                 canSetBet={auction.canSetBet}
               />
             </div>
-
           </div>
         )}
       </AsyncQueryView>

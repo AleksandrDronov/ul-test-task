@@ -1,11 +1,6 @@
 import type { AuctionDetailTradingVm } from '@/entities/auction'
 import { BID_MEASUREMENT_TYPE_RU_LABEL } from '@/shared/config'
-import {
-  formatDateTime,
-  formatPrice,
-  formatPricePerKm,
-  formatYesNo,
-} from '@/shared/lib'
+import { formatDateTime, formatPrice, formatPricePerKm, formatYesNo } from '@/shared/lib'
 import { DetailFieldsFromConfig, type DetailFieldConfig } from '../detail-field-config'
 import { DetailSection } from '../DetailSection'
 
@@ -13,9 +8,7 @@ const TRADING_FIELDS: DetailFieldConfig<AuctionDetailTradingVm>[] = [
   {
     label: 'Единица измерения ставки',
     getValue: (trading) =>
-      trading.bidMeasurementType
-        ? BID_MEASUREMENT_TYPE_RU_LABEL[trading.bidMeasurementType]
-        : '—',
+      trading.bidMeasurementType ? BID_MEASUREMENT_TYPE_RU_LABEL[trading.bidMeasurementType] : '—',
   },
   {
     label: 'Начало торгов',

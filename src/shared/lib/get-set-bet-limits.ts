@@ -31,8 +31,7 @@ export const isBetPriceOnStep = (
 ): boolean => {
   if (step <= 0) return true
 
-  const steps =
-    direction === 'decreasing' ? (reference - price) / step : (price - reference) / step
+  const steps = direction === 'decreasing' ? (reference - price) / step : (price - reference) / step
 
   return Math.abs(steps - Math.round(steps)) < FLOAT_EPSILON
 }
@@ -53,9 +52,8 @@ export const computeNextAvailablePrice = (
   return ceiling !== null ? Math.min(raw, ceiling) : raw
 }
 
-export const getBetStepDirection = (
-  aucType: AuctionType | null | undefined,
-): BetStepDirection => (aucType === 'Up' ? 'increasing' : 'decreasing')
+export const getBetStepDirection = (aucType: AuctionType | null | undefined): BetStepDirection =>
+  aucType === 'Up' ? 'increasing' : 'decreasing'
 
 const downRequestMax = (price: SetBetPriceInput, min: number | null | undefined): number | null => {
   if (typeof price.available === 'number') {

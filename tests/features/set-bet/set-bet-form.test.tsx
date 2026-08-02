@@ -67,8 +67,7 @@ const renderForm = (overrides: Partial<ComponentProps<typeof SetBetForm>> = {}) 
 
 const getPriceInput = () => screen.getByLabelText('Ваша ставка')
 const getSubmitButton = () => screen.getByRole('button', { name: /сделать ставку/i })
-const getAvailablePriceButton = () =>
-  screen.getByRole('button', { name: /45\s?000\s?₽/i })
+const getAvailablePriceButton = () => screen.getByRole('button', { name: /45\s?000\s?₽/i })
 
 describe('SetBetForm', () => {
   beforeEach(() => {

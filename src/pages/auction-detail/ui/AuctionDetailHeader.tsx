@@ -21,14 +21,10 @@ export const AuctionDetailHeader = ({ auction, auctionUuid }: AuctionDetailHeade
       </h1>
       <div className="mt-2 flex flex-wrap gap-2">
         {auction.trading.status && (
-          <Badge variant="secondary">
-            {AUCTION_STATUS_RU_LABEL[auction.trading.status]}
-          </Badge>
+          <Badge variant="secondary">{AUCTION_STATUS_RU_LABEL[auction.trading.status]}</Badge>
         )}
         {auction.trading.statusMobile && (
-          <Badge variant="outline">
-            {TRADING_STATUS_RU_LABEL[auction.trading.statusMobile]}
-          </Badge>
+          <Badge variant="outline">{TRADING_STATUS_RU_LABEL[auction.trading.statusMobile]}</Badge>
         )}
       </div>
     </div>

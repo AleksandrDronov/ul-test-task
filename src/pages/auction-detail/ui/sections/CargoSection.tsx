@@ -1,7 +1,4 @@
-import type {
-  AuctionDetailCarRequirementsVm,
-  AuctionDetailCargoVm,
-} from '@/entities/auction'
+import type { AuctionDetailCarRequirementsVm, AuctionDetailCargoVm } from '@/entities/auction'
 import { formatNumber, formatYesNo } from '@/shared/lib'
 import { DetailFieldsFromConfig, type DetailFieldConfig } from '../detail-field-config'
 import { DetailSection } from '../DetailSection'
@@ -59,11 +56,7 @@ type CargoSectionProps = {
 
 export const CargoSection = ({ cargo, noViewCargoPrice }: CargoSectionProps) => (
   <DetailSection title="Груз и требования к транспорту">
-    <DetailFieldsFromConfig
-      fields={CARGO_FIELDS}
-      data={cargo}
-      context={{ noViewCargoPrice }}
-    />
+    <DetailFieldsFromConfig fields={CARGO_FIELDS} data={cargo} context={{ noViewCargoPrice }} />
     {cargo.car && <DetailFieldsFromConfig fields={CAR_FIELDS} data={cargo.car} />}
   </DetailSection>
 )

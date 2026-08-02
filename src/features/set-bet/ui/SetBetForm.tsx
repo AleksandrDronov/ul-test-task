@@ -16,7 +16,6 @@ export type SetBetFormProps = {
 const CANNOT_BID_MESSAGE = 'Ставки по этому аукциону недоступны.'
 
 export const SetBetForm = ({ auctionUuid, price, aucType, canSetBet }: SetBetFormProps) => {
-
   const {
     inputId,
     hintId,
@@ -41,11 +40,7 @@ export const SetBetForm = ({ auctionUuid, price, aucType, canSetBet }: SetBetFor
       </h2>
 
       {submitError !== null && (
-        <ApiErrorState
-          error={submitError}
-          onRetry={handleRetrySubmit}
-          className="p-4"
-        />
+        <ApiErrorState error={submitError} onRetry={handleRetrySubmit} className="p-4" />
       )}
 
       <form

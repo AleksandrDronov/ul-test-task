@@ -4,11 +4,7 @@ import fsd from '@feature-sliced/steiger-plugin'
 export default defineConfig([
   ...fsd.configs.recommended,
   {
-    ignores: [
-      '**/routeTree.gen.ts',
-      '**/openapi.d.ts',
-      '**/mockServiceWorker.js',
-    ],
+    ignores: ['**/routeTree.gen.ts', '**/openapi.d.ts', '**/mockServiceWorker.js'],
   },
   {
     rules: {

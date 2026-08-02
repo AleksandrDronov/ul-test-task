@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  computeNextAvailablePrice,
-  getSetBetLimits,
-  isBetPriceOnStep,
-} from '@/shared/lib'
+import { computeNextAvailablePrice, getSetBetLimits, isBetPriceOnStep } from '@/shared/lib'
 
 const DOWN_PRICE = {
   min: 30000,
